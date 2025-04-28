@@ -5,16 +5,17 @@ public class Emily extends NPC {
     private String name;
 
     public Emily() {
-        super(new ArrayList<>(List.of("Legend")), new ArrayList<>(List.of("Angler", "Crimsonfish", "Glacierfish")), new ArrayList<>());
+        super(
+            new ArrayList<>(), 
+            new ArrayList<>(List.of("Catfish", "Salmon", "Sardine")), 
+            new ArrayList<>(List.of("Coal", "Wood")));
         this.name = "Emily";
     }
 
     public void giftCheck(String item) {
-        for(String brg : lovedItems){
-            if(item.equals(brg)){
-                setAffection(25);
-                return;
-            }
+        if(item.equals("Seed")){
+            setAffection(25);
+            return;
         }
         for(String brg : likedItems){
             if(item.equals(brg)){

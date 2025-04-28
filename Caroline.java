@@ -5,7 +5,10 @@ public class Caroline extends NPC {
     private String name;
 
     public Caroline() {
-        super(new ArrayList<>(List.of("Legend")), new ArrayList<>(List.of("Angler", "Crimsonfish", "Glacierfish")), new ArrayList<>());
+        super(
+            new ArrayList<>(List.of("Firewood", "Coal")), 
+            new ArrayList<>(List.of("Potato", "Wheat")), 
+            new ArrayList<>(List.of("Hot Pepper")));
         this.name = "Caroline";
     }
 

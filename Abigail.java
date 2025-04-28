@@ -5,7 +5,10 @@ public class Abigail extends NPC {
     private String name;
 
     public Abigail() {
-        super(new ArrayList<>(List.of("Legend")), new ArrayList<>(List.of("Angler", "Crimsonfish", "Glacierfish")), new ArrayList<>());
+        super(
+            new ArrayList<>(List.of("Blueberry", "Melon", "Grape", "Pumpkin", "Cranberry")), 
+            new ArrayList<>(List.of("Baguette", "Pumpkin Pie", "Wine")),  
+            new ArrayList<>(List.of("Hot Pepper", "Cauliflower", "Parsnip", "Wheat")));
         this.name = "Abigail";
     }
 

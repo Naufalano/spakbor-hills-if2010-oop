@@ -5,7 +5,10 @@ public class MayorTadi extends NPC {
     private String name;
 
     public MayorTadi() {
-        super(new ArrayList<>(List.of("Legend")), new ArrayList<>(List.of("Angler", "Crimsonfish", "Glacierfish")), new ArrayList<>());
+        super(
+            new ArrayList<>(List.of("Legend")), 
+            new ArrayList<>(List.of("Angler", "Crimsonfish", "Glacierfish")), 
+            new ArrayList<>());
         this.name = "Mayor Tadi";
     }
 
@@ -22,12 +25,7 @@ public class MayorTadi extends NPC {
                 return;
             }
         }
-        for(String brg : hatedItems){
-            if(item.equals(brg)){
-                setAffection(-25);
-                return;
-            }
-        }
+        setAffection(-25);
     }
 
     public void chat() throws InterruptedException {

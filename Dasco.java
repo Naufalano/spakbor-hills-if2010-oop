@@ -5,7 +5,10 @@ public class Dasco extends NPC {
     private String name;
 
     public Dasco() {
-        super(new ArrayList<>(List.of("Legend")), new ArrayList<>(List.of("Angler", "Crimsonfish", "Glacierfish")), new ArrayList<>());
+        super(
+            new ArrayList<>(List.of("The Legends of Spakbor", "Cooked Pig's Head", "Wine", "Fugu", "Spakbor Salad")), 
+            new ArrayList<>(List.of("Fish Sandwich", "Fish Stew", "Baguette", "Fish n Chips")), 
+            new ArrayList<>(List.of("Legend", "Grape", "Cauliflower", "Wheat", "Pufferfish", "Salmon")));
         this.name = "Dasco";
     }
 

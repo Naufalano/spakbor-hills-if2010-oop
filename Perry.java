@@ -5,7 +5,10 @@ public class Perry extends NPC {
     private String name;
 
     public Perry() {
-        super(new ArrayList<>(List.of("Legend")), new ArrayList<>(List.of("Angler", "Crimsonfish", "Glacierfish")), new ArrayList<>());
+        super(
+            new ArrayList<>(List.of("Cranberry", "Blueberry")), 
+            new ArrayList<>(List.of("Wine")), 
+            new ArrayList<>());
         this.name = "Perry";
     }
 
@@ -22,11 +25,8 @@ public class Perry extends NPC {
                 return;
             }
         }
-        for(String brg : hatedItems){
-            if(item.equals(brg)){
-                setAffection(-25);
-                return;
-            }
+        if(item.equals("Fish")){
+            setAffection(-25);
         }
     }
 
