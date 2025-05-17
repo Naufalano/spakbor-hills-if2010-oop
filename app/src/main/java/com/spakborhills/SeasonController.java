@@ -1,3 +1,4 @@
+package com.spakborhills;
 public class SeasonController {
     private Season season;
 

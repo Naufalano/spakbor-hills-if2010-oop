@@ -1,3 +1,4 @@
+package com.spakborhills;
 public class Season {
     private SeasonType currentSeason;
     private int currentDayInSeason; // 1 - 10
