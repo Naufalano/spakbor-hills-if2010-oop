@@ -22,6 +22,24 @@ public class NPC {
     // Contoh cara inisiasi:
     // new Buku(new ArrayList<>(List.of("Tere Liye", "Andrea Hirata", "Dee Lestari")));
 
+    public void showStats() {
+        System.out.println(name);
+        System.out.println(heartPoints);
+        System.out.println(relationshipStatus);
+        for(String item : lovedItems){
+            System.out.print(item + " ");
+        }
+        System.out.println("");
+        for(String item : likedItems){
+            System.out.print(item + " ");
+        }
+        System.out.println("");
+        for(String item : hatedItems){
+            System.out.print(item + " ");
+        }
+        System.out.println("");
+    }
+
     public String getName() {
         return this.name;
     }
@@ -32,6 +50,9 @@ public class NPC {
 
     public void setAffection(int point) {
         this.heartPoints += point;
+        if(heartPoints > MAX_HEART){
+            heartPoints = MAX_HEART;
+        }
     }
 
     public String getStatus() {
@@ -46,13 +67,17 @@ public class NPC {
         return this.engaged;
     }
 
+    public void setEngaged(int num) {
+        engaged = num;
+    }
+
     public boolean proposeCheck() {
         return getAffection() == MAX_HEART;
     }
 
     public void propose() {
         if(proposeCheck()){
-            setStatus("Spouse");
+            setStatus("Fiance");
         } else {
             System.out.println("Unable to propose  yet!");
         }
@@ -77,6 +102,8 @@ public class NPC {
             setAffection(20);
         } else if(hatedItems.contains(name)){
             setAffection(-25);
+        } else {
+            setAffection(0);
         }
     }
 

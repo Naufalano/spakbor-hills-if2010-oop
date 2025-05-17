@@ -12,4 +12,8 @@ public class NPCView {
     public String getAction() {
         return this.action;
     }
+
+    public void showAction() {
+        System.out.println(action);
+    }
 }
