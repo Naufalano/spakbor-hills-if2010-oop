@@ -1,21 +1,16 @@
-import java.util.List;
 import java.util.Scanner;
 
 public class Driver {
     public static void main(String[] args) throws InterruptedException {
         // 2. Inisialisasi NPC
-        NPC Dasco = new NPC(
-            "Dasco", 
-            List.of("The Legends of Spakbor", "Cooked Pig's Head", "Wine", "Fugu", "Spakbor Salad"),
-            List.of("Fish Sandwich", "Fish Stew", "Baguette", "Fish n Chips"),
-            List.of("Legend", "Grape", "Cauliflower", "Wheat", "Pufferfish", "Salmon")
-        );
+        NPCFactory test = new NPCFactory();
+        NPC perry = test.getNPC("Perry");
 
         // 3. View awal: perintah dari pemain
         NPCView view = new NPCView("");
 
         // 4. Controller yang menghubungkan view dan model
-        NPCController controller = new NPCController(Dasco, view);
+        NPCController controller = new NPCController(perry, view);
 
         // 5. Scanner untuk input dari pemain
         Scanner scanner = new Scanner(System.in);
@@ -48,11 +43,11 @@ public class Driver {
                     controller.propose(); // Simulasi sukses propose
                     break;
                 case "Marry":
-                    Dasco.setEngaged(1);        // Sudah memenuhi syarat nikah
+                    perry.setEngaged(1);        // Sudah memenuhi syarat nikah
                     controller.marriage();
                     break;
                 case "Status":
-                    Dasco.showStats();
+                    perry.showStats();
                     view.showAction();
                     break;
                 default:

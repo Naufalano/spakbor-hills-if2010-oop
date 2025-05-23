@@ -17,7 +17,7 @@ public class NPC {
         lovedItems = love;
         likedItems = like;
         hatedItems = hate;
-        engaged = 0;
+        engaged = -1;
     }
     // Contoh cara inisiasi:
     // new Buku(new ArrayList<>(List.of("Tere Liye", "Andrea Hirata", "Dee Lestari")));
@@ -78,6 +78,7 @@ public class NPC {
     public void propose() {
         if(proposeCheck()){
             setStatus("Fiance");
+            setEngaged(0);
         } else {
             System.out.println("Unable to propose  yet!");
         }
@@ -88,20 +89,26 @@ public class NPC {
     }
 
     public void marry() {
-        if(marriageCheck() && getEngaged() >= 1){
+        if(marriageCheck() && getEngaged() == 1){
             setStatus("Spouse");
         } else {
             System.out.println("Unable to marry yet!");
         }
     }
 
-    public void giftCheck(String name) {
-        if(lovedItems.contains(name)){
+    public void giftCheck(Item item) {
+        if(lovedItems.contains(item)){
             setAffection(25);
-        } else if(likedItems.contains(name)){
+        } else if(likedItems.contains(item)){
             setAffection(20);
-        } else if(hatedItems.contains(name)){
+        } else if(hatedItems.contains(item) && !getName().equals("MayorTadi") && !getName().equals("Perry")){
             setAffection(-25);
+        } else if(getName().equals("MayorTadi")){
+            setAffection(-25);
+        } else if(getName().equals("Perry")){
+            if(item instanceof Fish){
+                setAffection(-25);
+            }
         } else {
             setAffection(0);
         }
