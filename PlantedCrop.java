@@ -1,10 +1,6 @@
-// Make sure you have a Crop.java and Seeds.java as per previous discussions
-// For example, Seeds should have getDaysToHarvest() and getSeason()
-// Crop should have getAmountPerHarvest()
-
 public class PlantedCrop {
-    private String resultingCropName; // Store the name of the crop this plant will yield
-    private int yieldAmountPerHarvest; // Store the amount per harvest for this specific plant type
+    private String resultingCropName;
+    private int yieldAmountPerHarvest;
     private int daysToMature;
     private int growthDays;
     private boolean wateredToday;
@@ -12,22 +8,20 @@ public class PlantedCrop {
     private boolean canSurviveOutOfSeason;
 
     public PlantedCrop(Seeds seed) {
-        // Derive the crop name from the seed name (e.g., "Parsnip Seeds" -> "Parsnip")
         this.resultingCropName = seed.getName().replace(" Seeds", "");
         this.daysToMature = seed.getDaysToHarvest();
         this.seasonToGrowIn = seed.getSeason().toUpperCase();
         this.growthDays = 0;
         this.wateredToday = false;
-        this.canSurviveOutOfSeason = false; // Default
+        this.canSurviveOutOfSeason = false;
 
-        // Get the definitive yield amount from the CropDataRegistry
         Crop cropDefinition = CropDataRegistry.getCropByName(this.resultingCropName);
         if (cropDefinition != null) {
             this.yieldAmountPerHarvest = cropDefinition.getYieldAmount();
         } else {
             System.err.println("Warning: No crop definition found in registry for: " + this.resultingCropName +
                                ". Defaulting yield to 1.");
-            this.yieldAmountPerHarvest = 1; // Fallback
+            this.yieldAmountPerHarvest = 1;
         }
     }
 
@@ -46,15 +40,14 @@ public class PlantedCrop {
      * @return true if the crop should be removed (e.g., died), false otherwise.
      */
     public boolean grow(SeasonType currentSeason) {
-        // Check for season compatibility
         if (!this.seasonToGrowIn.equalsIgnoreCase("ANY") && !this.seasonToGrowIn.equals(currentSeason.toString().toUpperCase())) {
             if (!canSurviveOutOfSeason) {
                 System.out.println("Info: " + resultingCropName + " cannot survive in " + currentSeason + " and has withered.");
-                return true; // Signal removal
+                return true;
             } else {
                 // System.out.println("Info: " + cropType.getName() + " is out of season and will not grow.");
-                wateredToday = false; // Reset water status as it won't be used
-                return false; // Doesn't grow, but survives
+                wateredToday = false;
+                return false; 
             }
         }
 
@@ -66,8 +59,8 @@ public class PlantedCrop {
         } else {
             // System.out.println("Info: " + cropType.getName() + " was not watered and did not grow.");
         }
-        wateredToday = false; // Reset water status for the next day cycle
-        return false; // Doesn't die
+        wateredToday = false; 
+        return false;
     }
 
     public boolean isMature() {
@@ -87,7 +80,7 @@ public class PlantedCrop {
         this.wateredToday = watered;
     }
 
-    public boolean isWateredToday() { // For external checks, if needed
+    public boolean isWateredToday() {
         return wateredToday;
     }
 }

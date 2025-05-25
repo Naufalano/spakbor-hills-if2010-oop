@@ -5,9 +5,9 @@ import java.util.Random;
 public class MountainMap implements GameMap {
     public static final int MAP_WIDTH = 25;
     public static final int MAP_HEIGHT = 20;
-    public static final String MOUNTAIN_WALL_ID = "MountainWall"; // Impassable terrain
-    public static final String LAKE_WATER_ID = "LakeWater";     // For fishing
-    public static final String MINE_ENTRANCE_ID = "MineEntrance"; // Potential future feature
+    public static final String MOUNTAIN_WALL_ID = "MountainWall"; 
+    public static final String LAKE_WATER_ID = "LakeWater";
+    public static final String MINE_ENTRANCE_ID = "MineEntrance"; 
 
     private List<Tile> tiles;
     private Random random = new Random();
@@ -17,7 +17,7 @@ public class MountainMap implements GameMap {
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = new Tile(x, y);
-                tile.setState(TileState.DEFAULT); // Mountain ground, not usually tillable
+                tile.setState(TileState.DEFAULT);
                 tiles.add(tile);
             }
         }
@@ -25,8 +25,7 @@ public class MountainMap implements GameMap {
     }
 
     private void generateLayout() {
-        // Create a lake area (e.g., a 6x4 rectangle)
-        int lakeStartX = random.nextInt(MAP_WIDTH - 8) + 2; // Ensure some border
+        int lakeStartX = random.nextInt(MAP_WIDTH - 8) + 2;
         int lakeStartY = random.nextInt(MAP_HEIGHT - 6) + 2;
         for (int y = lakeStartY; y < lakeStartY + 4; y++) {
             for (int x = lakeStartX; x < lakeStartX + 6; x++) {
@@ -34,19 +33,17 @@ public class MountainMap implements GameMap {
             }
         }
 
-        // Surround edges with mountain walls, leaving an entry point
         for (int x = 0; x < MAP_WIDTH; x++) {
-            if (getTileAtPosition(x, 0).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, x, 0); // Top
-            if (getTileAtPosition(x, MAP_HEIGHT - 1).getObjectOnTile() == null && x != MAP_WIDTH / 2) { // Bottom with entry gap
+            if (getTileAtPosition(x, 0).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, x, 0);
+            if (getTileAtPosition(x, MAP_HEIGHT - 1).getObjectOnTile() == null && x != MAP_WIDTH / 2) {
                  placeObjectOnTile(MOUNTAIN_WALL_ID, x, MAP_HEIGHT - 1);
             }
         }
         for (int y = 1; y < MAP_HEIGHT - 1; y++) {
-            if (getTileAtPosition(0, y).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, 0, y); // Left
-            if (getTileAtPosition(MAP_WIDTH - 1, y).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, MAP_WIDTH - 1, y); // Right
+            if (getTileAtPosition(0, y).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, 0, y); 
+            if (getTileAtPosition(MAP_WIDTH - 1, y).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, MAP_WIDTH - 1, y);
         }
 
-        // Optional: Place a Mine Entrance
         placeObjectOnTile(MINE_ENTRANCE_ID, random.nextInt(MAP_WIDTH - 4) + 2, 2);
     }
 
@@ -68,13 +65,13 @@ public class MountainMap implements GameMap {
                     charToDisplay = 'P';
                 } else if (tile.isOccupied()) {
                     Object obj = tile.getObjectOnTile();
-                    if (MOUNTAIN_WALL_ID.equals(obj)) charToDisplay = 'M'; // Mountain
-                    else if (LAKE_WATER_ID.equals(obj)) charToDisplay = '~'; // Water
-                    else if (MINE_ENTRANCE_ID.equals(obj)) charToDisplay = 'E'; // Entrance
+                    if (MOUNTAIN_WALL_ID.equals(obj)) charToDisplay = 'M';
+                    else if (LAKE_WATER_ID.equals(obj)) charToDisplay = '~';
+                    else if (MINE_ENTRANCE_ID.equals(obj)) charToDisplay = 'E';
                     else if (obj instanceof NPC) charToDisplay = 'N';
                     else charToDisplay = 'X';
                 } else {
-                    charToDisplay = '^'; // Mountain ground
+                    charToDisplay = '^'; 
                 }
                 System.out.print(" " + charToDisplay + " ");
             }
@@ -94,7 +91,6 @@ public class MountainMap implements GameMap {
         Tile tile = getTileAtPosition(x, y);
         if (tile != null) {
             tile.setObjectOnTile(obj);
-            // Mountain walls, lake water are obstacles
             if (MOUNTAIN_WALL_ID.equals(obj) || LAKE_WATER_ID.equals(obj) || MINE_ENTRANCE_ID.equals(obj)) {
                  tile.setOccupied(true);
             } else {
@@ -103,11 +99,10 @@ public class MountainMap implements GameMap {
         }
     }
     @Override
-    public void removeObjectFromTile(int x, int y) { /* ... */ } // Implement if needed
+    public void removeObjectFromTile(int x, int y) {}
 
     @Override
     public String getExitDestination(int attemptedOutOfBoundX, int attemptedOutOfBoundY) {
-        // Keluar dari bawah tengah (tempat ada celah di dinding gunung) kembali ke Farm
         if (attemptedOutOfBoundY >= MAP_HEIGHT && attemptedOutOfBoundX == MAP_WIDTH / 2) return "Farm";
         return null;
     }
@@ -117,6 +112,6 @@ public class MountainMap implements GameMap {
         if ("Farm".equals(comingFromMapName)) {
             return new int[]{MAP_WIDTH / 2, MAP_HEIGHT - 1};
         }
-        return new int[]{MAP_WIDTH / 2, MAP_HEIGHT - 1}; // Default masuk dari bawah tengah
+        return new int[]{MAP_WIDTH / 2, MAP_HEIGHT - 1};
     }
 }

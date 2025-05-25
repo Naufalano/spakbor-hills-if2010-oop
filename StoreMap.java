@@ -2,35 +2,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// Diasumsikan Tile.java, TileState.java, Player.java, GameMap.java, NPC.java, NPCFactory.java dapat diakses
-
 public class StoreMap implements GameMap {
     public static final int MAP_WIDTH = 15;
     public static final int MAP_HEIGHT = 10;
     public static final String WALL_ID = "StoreWall";
     public static final String COUNTER_ID = "StoreCounter";
     public static final String SHELF_ID = "StoreShelf";
-    public static final String DOOR_ID = "StoreDoor_ExitToTown"; // Pintu keluar kembali ke Town
+    public static final String DOOR_ID = "StoreDoor_ExitToTown";
 
     private List<Tile> tiles;
     private Random random = new Random();
-    private NPC shopkeeper; // Emily akan menjadi penjaga toko
+    private NPC shopkeeper; 
 
-    public StoreMap(NPCFactory npcFactory) { // Menerima NPCFactory untuk mendapatkan Emily
+    public StoreMap(NPCFactory npcFactory) {
         this.tiles = new ArrayList<>();
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = new Tile(x, y);
-                tile.setState(TileState.DEFAULT); // Lantai toko
+                tile.setState(TileState.DEFAULT);
                 tiles.add(tile);
             }
         }
-        this.shopkeeper = npcFactory.getNPC("Emily"); // Mengambil Emily dari factory
+        this.shopkeeper = npcFactory.getNPC("Emily");
         generateLayout();
     }
 
     private void generateLayout() {
-        // Dinding luar
         for (int x = 0; x < MAP_WIDTH; x++) {
             placeObjectOnTile(WALL_ID, x, 0);
             placeObjectOnTile(WALL_ID, x, MAP_HEIGHT - 1);
@@ -40,21 +37,17 @@ public class StoreMap implements GameMap {
             placeObjectOnTile(WALL_ID, MAP_WIDTH - 1, y);
         }
 
-        // Pintu keluar
         int doorX = MAP_WIDTH / 2;
-        removeObjectFromTile(doorX, MAP_HEIGHT - 1); // Hapus dinding untuk pintu
+        removeObjectFromTile(doorX, MAP_HEIGHT - 1); 
         placeObjectOnTile(DOOR_ID, doorX, MAP_HEIGHT - 1);
 
-        // Meja kasir/Counter
         for (int x = 3; x < MAP_WIDTH - 3; x++) {
             placeObjectOnTile(COUNTER_ID, x, 3);
         }
 
-        // Tempatkan Emily (shopkeeper) di belakang meja kasir
         if (shopkeeper != null) {
-            // Pastikan posisi ini valid dan tidak tertimpa objek lain
             int shopkeeperX = MAP_WIDTH / 2;
-            int shopkeeperY = 2; // Di belakang counter
+            int shopkeeperY = 2;
             Tile shopkeeperTile = getTileAtPosition(shopkeeperX, shopkeeperY);
             if (shopkeeperTile != null && !shopkeeperTile.isOccupied()) {
                  placeObjectOnTile(shopkeeper, shopkeeperX, shopkeeperY);
@@ -63,7 +56,6 @@ public class StoreMap implements GameMap {
             }
         }
 
-        // Rak-rak barang
         for (int y = 5; y < MAP_HEIGHT - 2; y++) {
             placeObjectOnTile(SHELF_ID, 2, y);
             placeObjectOnTile(SHELF_ID, MAP_WIDTH - 3, y);
@@ -82,7 +74,7 @@ public class StoreMap implements GameMap {
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = getTileAtPosition(x, y);
-                char charToDisplay = ' '; // Lantai toko
+                char charToDisplay = ' ';
 
                 if (tile == null) { System.out.print("[?]"); continue; }
 
@@ -137,7 +129,6 @@ public class StoreMap implements GameMap {
 
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
-        // Pemain masuk dari "Town" dan muncul di dekat pintu
         int doorX = MAP_WIDTH / 2;
         int entryY = MAP_HEIGHT - 2;
         return new int[]{doorX, entryY};

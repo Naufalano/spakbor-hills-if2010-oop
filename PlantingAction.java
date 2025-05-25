@@ -16,7 +16,6 @@ public class PlantingAction extends Action {
             System.out.println("Validation Failed: " + seedToPlant.getName() + " not found in inventory or quantity is zero.");
             return false;
         }
-         // Assuming player is on their farm
         if (!(currentPlayersMap instanceof FarmMap) || !currentPlayersMap.getMapName().equals(playersActualFarmMap.getMapName())) {
              System.out.println("Validation Failed: Planting can only be done on the farm.");
              return false;
@@ -37,7 +36,6 @@ public class PlantingAction extends Action {
             System.out.println("Validation Failed: " + seedToPlant.getName() + " cannot be planted in " + farm.getCurrentSeason().toString() + ".");
             return false;
         }
-        // Add energy check if planting has a cost
         // if (player.getEnergy() < PLANTING_ENERGY_COST) return false;
         return true;
     }
@@ -52,14 +50,12 @@ public class PlantingAction extends Action {
         FarmMap farmMap = farm.getFarmMap();
         Tile currentTile = farmMap.getTileAtPosition(player.getX(), player.getY());
 
-        PlantedCrop newPlant = new PlantedCrop(this.seedToPlant); // Create the PlantedCrop instance
-        currentTile.setObjectOnTile(newPlant); // Assign it to the tile
+        PlantedCrop newPlant = new PlantedCrop(this.seedToPlant); 
+        currentTile.setObjectOnTile(newPlant);
         currentTile.setState(TileState.PLANTED);
-        // currentTile.setOccupied(true); // If setObjectOnTile doesn't handle this
+        // currentTile.setOccupied(true); 
 
         System.out.println(player.getName() + " planted " + seedToPlant.getName() + " at (" + player.getX() + "," + player.getY() + ").");
-        // A newly planted crop is NOT watered yet for its first growth cycle.
-        // The player needs to perform a WateringAction on it today for it to grow tomorrow.
         farmMap.display(player);
     }
 }

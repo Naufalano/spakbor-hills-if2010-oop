@@ -2,38 +2,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Assuming Food.java and Item.java are accessible
-
 public class FoodDataRegistry {
     private static final List<Food> ALL_FOOD_ITEMS = new ArrayList<>();
 
     static {
-        // Data from food_criteria.pdf
-        // No, Nama Makanan, Energi, Harga Beli, Harga Jual
-
-        // 1. Fish n' Chips
         ALL_FOOD_ITEMS.add(new Food("Fish n' Chips", 50, 150, 135));
-        // 2. Baguette
         ALL_FOOD_ITEMS.add(new Food("Baguette", 25, 100, 80));
-        // 3. Sashimi
         ALL_FOOD_ITEMS.add(new Food("Sashimi", 70, 300, 275));
-        // 4. Fugu (Harga Beli not specified, using 0)
         ALL_FOOD_ITEMS.add(new Food("Fugu", 50, 0, 135));
-        // 5. Wine
         ALL_FOOD_ITEMS.add(new Food("Wine", 20, 100, 90));
-        // 6. Pumpkin Pie
         ALL_FOOD_ITEMS.add(new Food("Pumpkin Pie", 35, 120, 100));
-        // 7. Veggie Soup
         ALL_FOOD_ITEMS.add(new Food("Veggie Soup", 40, 140, 120));
-        // 8. Fish Stew
         ALL_FOOD_ITEMS.add(new Food("Fish Stew", 70, 280, 260));
-        // 9. Spakbor Salad (Harga Beli not specified, using 0)
         ALL_FOOD_ITEMS.add(new Food("Spakbor Salad", 70, 0, 250));
-        // 10. Fish Sandwich
         ALL_FOOD_ITEMS.add(new Food("Fish Sandwich", 50, 200, 180));
-        // 11. The Legends of Spakbor (Harga Beli not specified, using 0)
         ALL_FOOD_ITEMS.add(new Food("The Legends of Spakbor", 100, 0, 2000));
-        // 12. Cooked Pig's Head
         ALL_FOOD_ITEMS.add(new Food("Cooked Pig's Head", 100, 1000, 0)); // Sell price is 0g
     }
 
@@ -43,7 +26,7 @@ public class FoodDataRegistry {
      * @return A new list containing all food definitions.
      */
     public static List<Food> getAllFoodItems() {
-        return new ArrayList<>(ALL_FOOD_ITEMS); // Return a copy
+        return new ArrayList<>(ALL_FOOD_ITEMS);
     }
 
     /**
@@ -54,7 +37,7 @@ public class FoodDataRegistry {
     public static Food getFoodByName(String name) {
         for (Food food : ALL_FOOD_ITEMS) {
             if (food.getName().equalsIgnoreCase(name)) {
-                return food; // Return a reference to the prototype food object
+                return food;
             }
         }
         System.err.println("Warning: Food with name '" + name + "' not found in FoodDataRegistry.");

@@ -1,5 +1,3 @@
-// Assuming Player, Farm, GameMap, FarmMap, InteractionHelper, Item are accessible
-
 public class SellingAction extends Action {
     private Item itemToSell;
 
@@ -18,13 +16,12 @@ public class SellingAction extends Action {
             return false;
         }
 
-        // Must be on the Farm to use the Farm's shipping bin
         if (!player.getCurrentLocationName().equals("Farm")) {
             System.out.println("Validation Failed: You can only use the shipping bin on your farm.");
             return false;
         }
-        GameMap currentMap = farm.getCurrentMap(); // Should be FarmMap instance here
-        if (!(currentMap instanceof FarmMap)) { // Should not happen if location check passes
+        GameMap currentMap = farm.getCurrentMap();
+        if (!(currentMap instanceof FarmMap)) {
             System.out.println("Validation Error: Not on the farm map.");
             return false;
         }
@@ -44,19 +41,16 @@ public class SellingAction extends Action {
 
     @Override
     public void execute(Player player, Farm farm) {
-        // Selling logic remains the same (adds item to farm.getShippingBin() and removes from player inventory)
-        // Time cost is applied after interaction.
-
         if (player.getInventory().hasItem(itemToSell) && player.getInventory().getItemQuantity(itemToSell) > 0) {
-            Item itemInstanceInInventory = null; // Find the actual instance to remove
+            Item itemInstanceInInventory = null;
             for(Item it : player.getInventory().getInventoryMap().keySet()){
-                 if(it.equals(itemToSell)){ // Use .equals() for items
+                 if(it.equals(itemToSell)){ 
                     itemInstanceInInventory = it;
                     break;
                 }
             }
             
-            if(itemInstanceInInventory == null) { // Fallback if .equals didn't match but name does (less robust)
+            if(itemInstanceInInventory == null) {
                  for(Item it : player.getInventory().getInventoryMap().keySet()){
                     if(it.getName().equals(itemToSell.getName())){
                         itemInstanceInInventory = it;
@@ -71,7 +65,6 @@ public class SellingAction extends Action {
                 return;
             }
 
-            // The farm's logical shipping bin
             if (farm.getShippingBin().addItem(itemInstanceInInventory)) {
                 player.getInventory().useItem(itemInstanceInInventory, 1);
                 System.out.println(itemInstanceInInventory.getName() + " placed in the Shipping Bin.");
@@ -82,7 +75,7 @@ public class SellingAction extends Action {
             System.out.println("Item " + itemToSell.getName() + " not found in inventory or quantity zero (should have been caught by validate).");
         }
 
-        farm.advanceGameTime(15); // 15 minutes after selling interaction
+        farm.advanceGameTime(15);
         System.out.println("Selling action finished. Time advanced by 15 minutes.");
     }
 }

@@ -9,21 +9,18 @@ public class ShippingBin {
         items = new ArrayList<>();
     }
 
-    // Menambah item ke ShippingBin
     public boolean addItem(Item item) {
         if (items.size() < MAX_SLOTS) {
             items.add(item);
             return true;
         }
-        return false;  // Jika sudah penuh
+        return false; 
     }
 
-    // Menghapus item dari ShippingBin
     public boolean removeItem(Item item) {
         return items.remove(item);
     }
 
-    // Mengecek apakah item ada di ShippingBin
     public boolean hasItem(Item item) {
         return items.contains(item);
     }
@@ -32,7 +29,6 @@ public class ShippingBin {
         return items;
     }
 
-    // Mendapatkan kapasitas maksimal
     public int getMaxSlots() {
         return MAX_SLOTS;
     }

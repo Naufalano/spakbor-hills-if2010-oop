@@ -1,5 +1,5 @@
 public class Food extends Item implements EdibleItem {
-    private int energyRestoration; // Corresponds to "Energi" in PDF
+    private int energyRestoration;
     private int buyPrice;
     private int sellPrice;
 
@@ -15,14 +15,13 @@ public class Food extends Item implements EdibleItem {
         return sellPrice;
     }
 
-    public int getBuyPrice() { // Added getter for buy price
+    public int getBuyPrice() { 
         return buyPrice;
     }
 
     @Override
     public void use() {
         System.out.println("Eating " + getName() + ", +" + this.energyRestoration + " Energy.");
-        // Actual energy addition handled by EatingAction
     }
 
     @Override

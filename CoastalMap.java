@@ -6,7 +6,7 @@ public class CoastalMap implements GameMap {
     public static final int MAP_WIDTH = 30;
     public static final int MAP_HEIGHT = 12;
     public static final String OCEAN_WATER_ID = "OceanWater";
-    public static final String SAND_ID = "Sand"; // For display, tile state might also work
+    public static final String SAND_ID = "Sand"; 
 
     private List<Tile> tiles;
     private Random random = new Random();
@@ -24,7 +24,6 @@ public class CoastalMap implements GameMap {
     }
 
     private void generateLayout() {
-        // Ocean covers bottom half, sand on top half
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 if (y < MAP_HEIGHT / 2) {
@@ -32,7 +31,6 @@ public class CoastalMap implements GameMap {
                 }
             }
         }
-        // Add some beach debris or features if desired
     }
 
     @Override
@@ -52,14 +50,14 @@ public class CoastalMap implements GameMap {
                 if (player != null && player.getX() == x && player.getY() == y && player.getCurrentLocationName().equals(getMapName())) {
                     charToDisplay = 'P';
                 } else if (tile.isOccupied() && OCEAN_WATER_ID.equals(tile.getObjectOnTile())) {
-                    charToDisplay = '~'; // Ocean
+                    charToDisplay = '~'; 
                 } else if (tile.isOccupied() && tile.getObjectOnTile() instanceof NPC) {
                     charToDisplay = 'N';
-                } else if (tile.isOccupied()){ // Other obstacles
+                } else if (tile.isOccupied()){
                     charToDisplay = 'X';
                 }
                 else {
-                    charToDisplay = ';'; // Sand/Beach ground
+                    charToDisplay = ';';
                 }
                 System.out.print(" " + charToDisplay + " ");
             }
@@ -78,7 +76,7 @@ public class CoastalMap implements GameMap {
         Tile tile = getTileAtPosition(x, y);
         if (tile != null) {
             tile.setObjectOnTile(obj);
-            if (OCEAN_WATER_ID.equals(obj)) { // Ocean is an obstacle for movement
+            if (OCEAN_WATER_ID.equals(obj)) {
                 tile.setOccupied(true);
             } else {
                 tile.setOccupied(obj != null);
@@ -86,11 +84,10 @@ public class CoastalMap implements GameMap {
         }
     }
     @Override
-    public void removeObjectFromTile(int x, int y) { /* ... */ }
+    public void removeObjectFromTile(int x, int y) {}
 
     @Override
     public String getExitDestination(int attemptedOutOfBoundX, int attemptedOutOfBoundY) {
-        // Keluar dari atas tengah kembali ke Farm
         if (attemptedOutOfBoundY < 0 && attemptedOutOfBoundX == MAP_WIDTH / 2) return "Farm";
         return null;
     }
@@ -98,8 +95,8 @@ public class CoastalMap implements GameMap {
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
         if ("Farm".equals(comingFromMapName)) {
-            return new int[]{MAP_WIDTH / 2, 0}; // Masuk dari bawah tengah (sesuaikan dengan layout FarmMap)
+            return new int[]{MAP_WIDTH / 2, 0};
         }
-        return new int[]{MAP_WIDTH / 2, 0}; // Default masuk dari atas tengah
+        return new int[]{MAP_WIDTH / 2, 0};
     }
 }

@@ -1,19 +1,16 @@
 import java.util.Map;
 
 public class Recipe {
-    private String recipeId; // e.g., "recipe_1"
-    private String cookedItemName; // Name of the food produced, e.g., "Fish n' Chips"
-    private Map<String, Integer> ingredients; // Key: Item Name (String), Value: Quantity (Integer)
-    private Food resultItem; // The Food item that is the result of cooking
-    private String unlockConditionDescription; // Textual description of how to unlock
+    private String recipeId; 
+    private String cookedItemName; 
+    private Map<String, Integer> ingredients; 
+    private Food resultItem;
+    private String unlockConditionDescription;
 
-    // Constants for special ingredient types
     public static final String ANY_FISH_INGREDIENT = "Any Fish";
-    // public static final String ANY_CROP_INGREDIENT = "Any Crop"; // If needed in future
+    // public static final String ANY_CROP_INGREDIENT = "Any Crop"; 
 
-    // Duration of cooking is 1 hour (60 minutes) for all recipes as per PDF
     public static final int COOKING_DURATION_MINUTES = 60;
-    // Energy cost for initiating cooking is 10
     public static final int COOKING_INITIATION_ENERGY = 10;
 
 
@@ -22,7 +19,7 @@ public class Recipe {
         this.recipeId = recipeId;
         this.cookedItemName = cookedItemName;
         this.ingredients = ingredients;
-        this.resultItem = resultItem; // This Food object contains its own energy, sell price etc.
+        this.resultItem = resultItem;
         this.unlockConditionDescription = unlockConditionDescription;
     }
 
@@ -35,11 +32,11 @@ public class Recipe {
     }
 
     public Map<String, Integer> getIngredients() {
-        return ingredients; // Returns the map of required ingredient names and quantities
+        return ingredients;
     }
 
     public Food getResultItem() {
-        return resultItem; // Returns the Food object that is created
+        return resultItem;
     }
 
     public String getUnlockConditionDescription() {
@@ -56,7 +53,7 @@ public class Recipe {
                "recipeId='" + recipeId + '\'' +
                ", cookedItemName='" + cookedItemName + '\'' +
                ", ingredients=" + ingredients +
-               ", resultItem=" + resultItem.getName() + // Just show name for brevity
+               ", resultItem=" + resultItem.getName() + 
                ", unlock='" + unlockConditionDescription + '\'' +
                '}';
     }

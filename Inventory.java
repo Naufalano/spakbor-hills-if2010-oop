@@ -54,15 +54,11 @@ public class Inventory {
     }
 
     public Map<Item, Integer> getInventoryMap() {
-        // Option 1: Return a copy to prevent external modification
         return new HashMap<>(this.inventory);
-
-        // Option 2: Return an unmodifiable view (safer if you don't want copies made often)
-        // return Collections.unmodifiableMap(this.inventory);
     }
 
     public Item getItemByName(String name) {
-        for (Item item : this.inventory.keySet()) { // this.inventory is Map<Item, Integer>
+        for (Item item : this.inventory.keySet()) {
             if (item.getName().equalsIgnoreCase(name) && this.inventory.get(item) > 0) {
                 return item;
             }

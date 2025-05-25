@@ -7,33 +7,32 @@ public class GenericInteriorMap implements GameMap {
     public static final int MAP_HEIGHT = 10;
     public static final String WALL_ID = "HouseWall";
     public static final String FURNITURE_ID = "Furniture";
-    public static final String DOOR_ID = "HouseDoor_ExitToTown"; // Titik keluar
+    public static final String DOOR_ID = "HouseDoor_ExitToTown"; 
 
     private List<Tile> tiles;
     private Random random = new Random();
-    private String mapDisplayName; // Misalnya "Emily's House", "Dasco's Hideout"
-    private NPC resident; // NPC yang tinggal di sini (opsional)
+    private String mapDisplayName; 
+    private NPC resident; 
 
     public GenericInteriorMap(String mapDisplayName, NPC resident) {
         this.mapDisplayName = mapDisplayName;
-        this.resident = resident; // Bisa null jika hanya interior umum
+        this.resident = resident; 
         this.tiles = new ArrayList<>();
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = new Tile(x, y);
-                tile.setState(TileState.DEFAULT); // Lantai rumah
+                tile.setState(TileState.DEFAULT);
                 tiles.add(tile);
             }
         }
         generateLayout();
     }
-     public GenericInteriorMap(String mapDisplayName) { // Konstruktor tanpa NPC spesifik
+     public GenericInteriorMap(String mapDisplayName) { 
         this(mapDisplayName, null);
     }
 
 
     private void generateLayout() {
-        // Dinding luar
         for (int x = 0; x < MAP_WIDTH; x++) {
             placeObjectOnTile(WALL_ID, x, 0);
             placeObjectOnTile(WALL_ID, x, MAP_HEIGHT - 1);
@@ -43,22 +42,18 @@ public class GenericInteriorMap implements GameMap {
             placeObjectOnTile(WALL_ID, MAP_WIDTH - 1, y);
         }
 
-        // Pintu keluar
         int doorX = MAP_WIDTH / 2;
         removeObjectFromTile(doorX, MAP_HEIGHT - 1);
         placeObjectOnTile(DOOR_ID, doorX, MAP_HEIGHT - 1);
 
-        // Beberapa perabotan sederhana
-        placeObjectOnTile(FURNITURE_ID, 2, 2); // Misal, meja
-        placeObjectOnTile(FURNITURE_ID, MAP_WIDTH - 3, 2); // Misal, kursi
-        placeObjectOnTile(FURNITURE_ID, 2, MAP_HEIGHT - 3); // Misal, tempat tidur
+        placeObjectOnTile(FURNITURE_ID, 2, 2);
+        placeObjectOnTile(FURNITURE_ID, MAP_WIDTH - 3, 2);
+        placeObjectOnTile(FURNITURE_ID, 2, MAP_HEIGHT - 3);
 
-        // Tempatkan NPC penghuni jika ada
         if (resident != null) {
-            // Pilih posisi acak yang tidak terisi untuk NPC
             int npcX, npcY;
             do {
-                npcX = random.nextInt(MAP_WIDTH - 2) + 1; // Hindari dinding
+                npcX = random.nextInt(MAP_WIDTH - 2) + 1;
                 npcY = random.nextInt(MAP_HEIGHT - 2) + 1;
             } while (getTileAtPosition(npcX, npcY) == null || getTileAtPosition(npcX, npcY).isOccupied());
             placeObjectOnTile(resident, npcX, npcY);
@@ -77,7 +72,7 @@ public class GenericInteriorMap implements GameMap {
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = getTileAtPosition(x, y);
-                char charToDisplay = ' '; // Lantai
+                char charToDisplay = ' ';
 
                 if (tile == null) { System.out.print("[?]"); continue; }
 
@@ -102,7 +97,7 @@ public class GenericInteriorMap implements GameMap {
     @Override
     public int getHeight() { return MAP_HEIGHT; }
     @Override
-    public String getMapName() { return this.mapDisplayName; } // Menggunakan nama yang diberikan saat inisialisasi
+    public String getMapName() { return this.mapDisplayName; }
 
     @Override
     public void placeObjectOnTile(Object obj, int x, int y) {
@@ -117,14 +112,13 @@ public class GenericInteriorMap implements GameMap {
         }
     }
     @Override
-    public void removeObjectFromTile(int x, int y) { /* ... */ }
+    public void removeObjectFromTile(int x, int y) {}
 
     @Override
     public String getExitDestination(int attemptedOutOfBoundX, int attemptedOutOfBoundY) { return null; }
 
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
-        // Pemain masuk dari "Town" dan muncul di dekat pintu
         int doorX = MAP_WIDTH / 2;
         int entryY = MAP_HEIGHT - 2;
         return new int[]{doorX, entryY};

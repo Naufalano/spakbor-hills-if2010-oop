@@ -27,7 +27,7 @@ public class Season {
                 currentSeason = SeasonType.WINTER;
                 break;
             case WINTER:
-                currentSeason = SeasonType.SPRING; // Loop back
+                currentSeason = SeasonType.SPRING;
                 break;
         }
     }

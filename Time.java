@@ -1,9 +1,9 @@
 public class Time {
-    private int hour;   // 0 - 23
-    private int minute; // 0 - 59
+    private int hour; 
+    private int minute;
 
     public Time() {
-        this.hour = 6; // Start at 06:00
+        this.hour = 6;
         this.minute = 0;
     }
 

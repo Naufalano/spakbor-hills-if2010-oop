@@ -5,7 +5,7 @@ public class SleepingAction extends Action {
      * Konstruktor untuk aksi tidur manual (dipicu oleh pemain).
      */
     public SleepingAction() {
-        this(false); // Tidur manual secara default
+        this(false);
     }
 
     /**
@@ -22,7 +22,6 @@ public class SleepingAction extends Action {
             return true;
         }
 
-        // Validasi untuk tidur manual (pemain memilih untuk tidur)
         if (!player.getCurrentLocationName().equals("Player's House")) {
             System.out.println("Validasi Gagal: Anda hanya bisa tidur (manual) di dalam rumah Anda.");
             return false;

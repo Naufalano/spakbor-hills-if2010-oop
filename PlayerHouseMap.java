@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-// Diasumsikan Tile.java, TileState.java, Player.java, GameMap.java dapat diakses
-
 public class PlayerHouseMap implements GameMap {
     public static final int MAP_WIDTH = 10;
     public static final int MAP_HEIGHT = 8;
@@ -11,10 +9,10 @@ public class PlayerHouseMap implements GameMap {
     public static final String FLOOR_ID = "HouseFloor";
     public static final String BED_ID = "Bed";
     public static final String STOVE_ID = "Stove";
-    public static final String DOOR_TO_FARM_ID = "HouseDoor_ExitToFarm"; // Satu pintu keluar
+    public static final String DOOR_TO_FARM_ID = "HouseDoor_ExitToFarm";
 
     private List<Tile> tiles;
-    // private Random random = new Random(); // Tidak terlalu dibutuhkan untuk layout tetap
+    // private Random random = new Random();
 
     public PlayerHouseMap() {
         this.tiles = new ArrayList<>();
@@ -29,35 +27,28 @@ public class PlayerHouseMap implements GameMap {
     }
 
     private void generateLayout() {
-        // 1. Dinding luar
         for (int x = 0; x < MAP_WIDTH; x++) {
-            placeObjectOnTile(WALL_ID, x, 0); // Dinding atas
-            if (x != MAP_WIDTH / 2) { // Sisakan ruang untuk pintu di dinding bawah
+            placeObjectOnTile(WALL_ID, x, 0);
+            if (x != MAP_WIDTH / 2) { 
                  placeObjectOnTile(WALL_ID, x, MAP_HEIGHT - 1);
             }
         }
-        for (int y = 1; y < MAP_HEIGHT - 1; y++) { // Mulai dari y=1 karena y=0 sudah dinding
-            placeObjectOnTile(WALL_ID, 0, y); // Dinding kiri
-            placeObjectOnTile(WALL_ID, MAP_WIDTH - 1, y); // Dinding kanan
+        for (int y = 1; y < MAP_HEIGHT - 1; y++) {
+            placeObjectOnTile(WALL_ID, 0, y);
+            placeObjectOnTile(WALL_ID, MAP_WIDTH - 1, y);
         }
 
-        // 2. Pintu keluar (di tengah dinding bawah)
         int doorX = MAP_WIDTH / 2;
-        int doorY = MAP_HEIGHT - 1; // Pintu di dinding bawah
-        // Hapus dinding jika ada, lalu tempatkan pintu
+        int doorY = MAP_HEIGHT - 1;
         Tile doorTile = getTileAtPosition(doorX, doorY);
         if(doorTile != null && WALL_ID.equals(doorTile.getObjectOnTile())){
-            removeObjectFromTile(doorX, doorY); // Hapus dinding
+            removeObjectFromTile(doorX, doorY); 
         }
         placeObjectOnTile(DOOR_TO_FARM_ID, doorX, doorY);
 
+        placeObjectOnTile(BED_ID, 1, 1);
+        if (MAP_WIDTH > 2) placeObjectOnTile(BED_ID, 2, 1); 
 
-        // 3. Tempatkan Kasur (Bed), misalnya di pojok kiri atas
-        // Kasur bisa 1 tile interaktif atau 2 tile visual
-        placeObjectOnTile(BED_ID, 1, 1); // Titik interaksi kasur
-        if (MAP_WIDTH > 2) placeObjectOnTile(BED_ID, 2, 1); // Bagian visual kedua kasur jika muat
-
-        // 4. Tempatkan Kompor (Stove), misalnya di dinding atas bagian kanan
         placeObjectOnTile(STOVE_ID, MAP_WIDTH - 2, 1);
     }
 

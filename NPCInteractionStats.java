@@ -1,14 +1,14 @@
 // Diasumsikan NPC.java sudah ada
 public class NPCInteractionStats {
     private String npcName;
-    private String currentRelationshipStatus; // Diambil dari NPC.getStatus()
+    private String currentRelationshipStatus; 
     private int chatFrequency;
     private int giftFrequency;
-    // private int visitFrequency; // "Visiting Frequency" perlu aksi "VisitNPC" yang jelas
+    // private int visitFrequency;
 
     public NPCInteractionStats(String npcName) {
         this.npcName = npcName;
-        this.currentRelationshipStatus = "Single"; // Status awal
+        this.currentRelationshipStatus = "Single";
         this.chatFrequency = 0;
         this.giftFrequency = 0;
         // this.visitFrequency = 0;

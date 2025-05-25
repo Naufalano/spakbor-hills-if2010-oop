@@ -1,12 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
-// Assuming other necessary imports are present:
-// Player, NPCFactory, Item, Tile, PlantedCrop, GameMap, FarmMap, ForestMap, MountainMap, CoastalMap, TownMap,
-// TimeController, SeasonController, WeatherController, House, ShippingBin,
-// SeasonType, WeatherType, NPC (for NPCFactory.getAllNPCs())
 
 public class Farm {
-    private String name; // Name of the player's farm (e.g., "Player's Farm")
+    private String name; 
     private Player player;
     private NPCFactory npcFactory;
     private int totalGold;
@@ -20,12 +16,12 @@ public class Farm {
     private int days = 0;
 
     // World map management
-    private Map<String, GameMap> worldMaps; // Stores all maps, keyed by their unique name
-    private GameMap currentMap;             // The map the player is currently on
+    private Map<String, GameMap> worldMaps; 
+    private GameMap currentMap;
 
     // Components specific to the player's farm (logical instances)
-    private House house; // Represents player's house data/upgrades
-    private ShippingBin shippingBin; // Represents the logical shipping bin for selling items
+    private House house;
+    private ShippingBin shippingBin;
 
     // Flags for managing automatic sleep at 2 AM
     private boolean automaticSleepScheduled = false;
@@ -78,15 +74,11 @@ public class Farm {
         }
 
 
-        this.house = new House(0, 0, 0, 0); // Objek logis rumah
+        this.house = new House(0, 0, 0, 0);
         this.shippingBin = new ShippingBin();
 
-        // Set peta awal dan posisi pemain
-        loadMap(playerFarmMap.getMapName(), null); // Ini akan memanggil getEntryPoint dari FarmMap
-
-        // getEntryPoint FarmMap sekarang akan mencoba menempatkan pemain di luar rumah
-        // Jika Anda ingin memastikan posisi awal game adalah di luar rumah:
-        int[] initialSpawnPoint = playerFarmMap.getEntryPoint(null); // null karena ini spawn awal game
+        loadMap(playerFarmMap.getMapName(), null); 
+        int[] initialSpawnPoint = playerFarmMap.getEntryPoint(null); 
         this.player.setLocation(initialSpawnPoint[0], initialSpawnPoint[1]);
         this.player.setCurrentLocationName(playerFarmMap.getMapName());
     }
@@ -119,7 +111,7 @@ public class Farm {
      * @return The player's FarmMap instance, or null if not found (initialization error).
      */
     public FarmMap getFarmMap() {
-        GameMap playerOwnedFarm = worldMaps.get("Farm"); // Assumes "Farm" is the key for FarmMap
+        GameMap playerOwnedFarm = worldMaps.get("Farm"); 
         if (playerOwnedFarm instanceof FarmMap) {
             return (FarmMap) playerOwnedFarm;
         }
@@ -139,7 +131,6 @@ public class Farm {
      * Advances the game to the next day, processing daily events.
      */
     public void nextDay() {
-        // 1. Process Shipping Bin earnings
         int earningsToday = 0;
         for (Item item : shippingBin.getItems()) {
             earningsToday += item.getSellPrice();
@@ -149,37 +140,30 @@ public class Farm {
         if (earningsToday > 0) {
             System.out.println("Earnings from Shipping Bin: " + earningsToday + "g.");
         }
-        shippingBin.getItems().clear(); // Empty the bin
+        shippingBin.getItems().clear(); 
 
-        // 2. Advance season and weather
         seasonController.nextDay();
-        weatherController.nextDay(); // Consider making weather generation season-dependent
+        weatherController.nextDay(); 
 
-        // 3. Reset game time to morning
         timeController.resetTime();
 
         System.out.println("\n--- A new day has begun! ---");
         System.out.println("Date: " + getCurrentSeason().toString() + ", Day " + getCurrentDayInSeason());
         System.out.println("Weather: " + getCurrentWeather().toString());
-        // Player energy is typically restored by the SleepingAction that triggers nextDay.
 
-        // 4. Update Crop Growth on the player's FarmMap
         FarmMap playerOwnedFarm = getFarmMap();
         if (playerOwnedFarm != null) {
             updateCropGrowthOnMap(playerOwnedFarm);
         }
 
-        // 5. Update NPC states (e.g., marriage proposal cooldowns, daily dialogues)
         if (npcFactory != null && npcFactory.getAllNPCs() != null) {
             for (NPC npc : npcFactory.getAllNPCs()) {
                 if ("Fiance".equals(npc.getStatus()) && npc.getEngaged() == 0) {
-                    npc.setEngaged(1); // Increment days engaged
+                    npc.setEngaged(1);
                 }
-                // Reset other daily NPC flags here if needed
             }
         }
         
-        // 6. Reset automatic sleep flags
         clearAutomaticSleepSchedule();
         days++;
     }
@@ -224,7 +208,6 @@ public class Farm {
      */
     public void advanceGameTime(int minutes) {
         this.timeController.getGameTime().advanceMinutes(minutes);
-        // Check for automatic sleep if an action causes time to pass 2 AM
         if (this.timeController.getGameTime().getHour() == 2 && !isSleepingScheduled()) {
             System.out.println("\nIt's 2:00 AM due to your actions! Time to sleep automatically.");
             scheduleAutomaticSleep();
@@ -232,7 +215,6 @@ public class Farm {
         }
     }
 
-    // --- Getters for game state controllers and other components ---
     public Player getPlayer() { return player; }
     public int getGold() { return totalGold; }
     public int getCrop() { return croppedCrop; }
@@ -241,18 +223,16 @@ public class Farm {
     public SeasonController getSeasonController() { return seasonController; }
     public Weather getWeatherController() { return weatherController; }
     public NPCFactory getNpcFactory() { return npcFactory; }
-    public House getHouse() { return house; } // Returns the logical House object
-    public ShippingBin getShippingBin() { return shippingBin; } // Returns the logical ShippingBin object
-    public String getName() { return name; } // Returns the name of the player's farm
+    public House getHouse() { return house; }
+    public ShippingBin getShippingBin() { return shippingBin; }
+    public String getName() { return name; } 
 
-    // Convenience getters for current time, date, and weather for display
     public String getFormattedTime() { return timeController.getFormattedTime(); }
     public SeasonType getCurrentSeason() { return seasonController.getCurrentSeason(); }
     public int getCurrentDayInSeason() { return seasonController.getCurrentDayInSeason(); }
     public WeatherType getCurrentWeather() { return weatherController.getTodayWeather(); }
     public int getTotalDaysPassed() { return this.days; }
 
-    // --- Automatic Sleep Logic ---
     public void scheduleAutomaticSleep() {
         if (!this.isCurrentlySleeping && !this.automaticSleepScheduled) {
             this.automaticSleepScheduled = true;
@@ -262,7 +242,7 @@ public class Farm {
     public boolean isSleepingScheduled() { return this.isCurrentlySleeping || this.automaticSleepScheduled; }
     public void clearAutomaticSleepSchedule() {
         this.automaticSleepScheduled = false;
-        this.isCurrentlySleeping = false; // Reset this when sleep action (manual or auto) completes
+        this.isCurrentlySleeping = false;
     }
     public void setCurrentlySleeping(boolean status) {
         this.isCurrentlySleeping = status;

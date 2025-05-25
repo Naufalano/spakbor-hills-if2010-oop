@@ -10,18 +10,16 @@ public class Weather {
 
     public Weather() {
         this.dayIndex = 0;
-        this.seasonWeather = generateWeather(); // untuk 10 hari
+        this.seasonWeather = generateWeather();
         this.todayWeather = seasonWeather.get(dayIndex);
     }
 
     private List<WeatherType> generateWeather() {
         List<WeatherType> weatherForecast = new ArrayList<>(Collections.nCopies(10, WeatherType.SUNNY));
 
-        // Ensure at least 2 rainy days
         weatherForecast.set(2, WeatherType.RAINY);
         weatherForecast.set(7, WeatherType.RAINY);
 
-        // Optional: randomly convert some more days to RAINY
         Random random = new Random();
         for (int i = 0; i < weatherForecast.size(); i++) {
             if (weatherForecast.get(i) == WeatherType.SUNNY && random.nextDouble() < 0.2) {
@@ -29,7 +27,7 @@ public class Weather {
             }
         }
 
-        Collections.shuffle(weatherForecast); // Randomize order
+        Collections.shuffle(weatherForecast);
         return weatherForecast;
     }
 

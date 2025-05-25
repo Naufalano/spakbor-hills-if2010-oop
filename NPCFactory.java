@@ -76,9 +76,6 @@ public class NPCFactory {
     }
 
     public List<NPC> getAllNPCs() {
-        // npcMap.values() returns a Collection<NPC> view of the values contained in this map.
-        // We create a new ArrayList from this collection to avoid potential issues
-        // if the original map's value collection is modified elsewhere, and to return a List.
         return new ArrayList<>(npcMap.values());
     }
 }

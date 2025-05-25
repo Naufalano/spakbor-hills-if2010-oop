@@ -5,16 +5,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// Assumes Fish.java, FishRarity.java, SeasonType.java, WeatherType.java are defined and accessible
-
 public class FishDataRegistry {
     private static final List<Fish> ALL_FISH = new ArrayList<>();
 
-    // Helper static methods for parsing
     private static Set<SeasonType> parseSeasons(String seasonStr, String fishNameForLogging) {
         Set<SeasonType> seasons = new HashSet<>();
         if (seasonStr.equalsIgnoreCase("Any")) {
-            seasons.add(SeasonType.ANY); // Directly use the ANY enum member
+            seasons.add(SeasonType.ANY);
         } else {
             for (String s : seasonStr.split(",\\s*")) {
                 try {
@@ -24,9 +21,9 @@ public class FishDataRegistry {
                 }
             }
         }
-        if (seasons.isEmpty() && !seasonStr.equalsIgnoreCase("Any")) { // If parsing failed for specific seasons
+        if (seasons.isEmpty() && !seasonStr.equalsIgnoreCase("Any")) {
              System.err.println("Warning: No valid seasons parsed for '" + seasonStr + "' for fish: " + fishNameForLogging + ". Defaulting to ANY.");
-             seasons.add(SeasonType.ANY); // Fallback if specific parsing fails but wasn't "Any"
+             seasons.add(SeasonType.ANY);
         }
         return seasons;
     }
@@ -34,7 +31,7 @@ public class FishDataRegistry {
     private static List<Fish.TimeWindow> parseTimes(String timeStr, String fishNameForLogging) {
         List<Fish.TimeWindow> windows = new ArrayList<>();
         if (timeStr.equalsIgnoreCase("Any")) {
-            windows.add(new Fish.TimeWindow(0, 0)); // Special marker for "Any" time
+            windows.add(new Fish.TimeWindow(0, 0));
         } else {
             for (String part : timeStr.split(",\\s*")) {
                 try {
@@ -61,7 +58,7 @@ public class FishDataRegistry {
     private static Set<WeatherType> parseWeathers(String weatherStr, String fishNameForLogging) {
         Set<WeatherType> weathers = new HashSet<>();
         if (weatherStr.equalsIgnoreCase("Any")) {
-            weathers.add(WeatherType.ANY); // Directly use the ANY enum member
+            weathers.add(WeatherType.ANY);
         } else {
             for (String s : weatherStr.split(",\\s*")) {
                 try {
@@ -82,7 +79,6 @@ public class FishDataRegistry {
         return new HashSet<>(Arrays.asList(locStr.split(",\\s*")));
     }
 
-    // Static initializer block to populate the fish list
     static {
         String currentFish = "Bullhead";
         ALL_FISH.add(new Fish(currentFish, FishRarity.COMMON,
@@ -183,7 +179,7 @@ public class FishDataRegistry {
     }
 
     public static List<Fish> getAllFish() {
-        return new ArrayList<>(ALL_FISH); // Return a copy
+        return new ArrayList<>(ALL_FISH);
     }
 
     public static List<Fish> getAvailableFish(SeasonType currentSeason, int currentHour, WeatherType currentWeather, String currentLocation) {

@@ -63,9 +63,4 @@ public interface GameMap {
      * @return An array [x, y] representing the entry coordinates on this map.
      */
     int[] getEntryPoint(String comingFromMapName);
-
-    // Optional: Add other common map functionalities if needed, for example:
-    // List<NPC> getNpcsOnMap();
-    // List<Item> getGroundItemsOnMap();
-    // boolean isTilePassable(int x, int y, Player player);
 }

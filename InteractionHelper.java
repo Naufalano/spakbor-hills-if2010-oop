@@ -1,6 +1,3 @@
-// Assumes Tile.java, Player.java, GameMap.java, FarmMap.java (with its public static PlacedObject & specific water/object IDs),
-// ForestMap.java, MountainMap.java, CoastalMap.java (with their specific water/object IDs) are accessible.
-
 public class InteractionHelper {
 
     /**
@@ -17,7 +14,6 @@ public class InteractionHelper {
         int px = player.getX();
         int py = player.getY();
 
-        // Check tiles in all four adjacent directions
         int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}}; // Up, Down, Left, Right
 
         for (int[] dir : directions) {
@@ -28,11 +24,10 @@ public class InteractionHelper {
             if (adjacentTile != null && adjacentTile.isOccupied() && adjacentTile.getObjectOnTile() instanceof String) {
                 String objectId = (String) adjacentTile.getObjectOnTile();
 
-                // Check against known interactable object IDs that are interacted with from an adjacent tile
-                if (FarmMap.SHIPPING_BIN_ID.equals(objectId) || // Shipping Bin on Farm
-                    FarmMap.POND_ID.equals(objectId) ||         // Pond on Farm
-                    FarmMap.HOUSE_ENTRANCE_EXTERIOR_ID.equals(objectId) || // Pintu masuk rumah dari FarmMap
-                    PlayerHouseMap.DOOR_TO_FARM_ID.equals(objectId) || // Pintu keluar dari rumah ke FarmMap
+                if (FarmMap.SHIPPING_BIN_ID.equals(objectId) ||
+                    FarmMap.POND_ID.equals(objectId) ||
+                    FarmMap.HOUSE_ENTRANCE_EXTERIOR_ID.equals(objectId) || 
+                    PlayerHouseMap.DOOR_TO_FARM_ID.equals(objectId) ||
                     PlayerHouseMap.BED_ID.equals(objectId) ||
                     PlayerHouseMap.STOVE_ID.equals(objectId) ||
                     ForestMap.RIVER_WATER_ID.equals(objectId) ||
@@ -47,11 +42,11 @@ public class InteractionHelper {
                     StoreMap.DOOR_ID.equals(objectId) ||
                     (objectId != null && objectId.startsWith("HouseDoor_Exit"))
                     ) {
-                    return objectId; // Return the ID of the found interactable object
+                    return objectId; 
                 }
             }
         }
-        return null; // Not adjacent to any specified interactable object
+        return null;
     }
 
     /**
@@ -72,30 +67,26 @@ public class InteractionHelper {
      */
     public static boolean isPlayerAdjacentToStructure(Player player, GameMap map, FarmMap.PlacedObject structure) {
         if (player == null || map == null || structure == null) return false;
-        // Ensure player is on the same map as the structure for this check to be relevant
         if (!player.getCurrentLocationName().equals(map.getMapName())) return false;
 
         int px = player.getX();
         int py = player.getY();
-        int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}}; // Adjacent tiles
+        int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
 
         for (int[] dir : directions) {
             int adjX = px + dir[0];
             int adjY = py + dir[1];
 
-            // Check if the adjacent tile (adjX, adjY) falls within the structure's bounding box
             if (adjX >= structure.x && adjX < (structure.x + structure.width) &&
                 adjY >= structure.y && adjY < (structure.y + structure.height)) {
                 
-                // Optional: Verify that the specific tile of the structure is indeed part of the structure
-                // This is useful if structures are not perfect rectangles or have internal empty spaces.
                 Tile structureTilePart = map.getTileAtPosition(adjX, adjY);
                 if (structureTilePart != null && structureTilePart.isOccupied() &&
                     structure.id.equals(structureTilePart.getObjectOnTile())) {
-                    return true; // Player is adjacent to a tile that is part of the specified structure
+                    return true;
                 }
             }
         }
-        return false; // Player is not adjacent to the specified structure
+        return false;
     }
 }

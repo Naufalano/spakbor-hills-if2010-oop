@@ -1,7 +1,6 @@
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-// Assuming all necessary classes are imported/accessible
 
 public class FishingAction extends Action {
     private Item fishingRod;
@@ -34,7 +33,6 @@ public class FishingAction extends Action {
             return false;
         }
 
-        // Validate if the adjacent water type matches the current map's expected fishing spot
         String playerLocationName = player.getCurrentLocationName();
         boolean validSpotForMap = false;
         if (FarmMap.POND_ID.equals(actualFishingSpotObjectId) && playerLocationName.equals("Farm")) {
@@ -55,7 +53,6 @@ public class FishingAction extends Action {
         return true;
     }
 
-    // getActualFishingSpotName maps the object ID to the generic location name for FishDataRegistry
     private String getActualFishingSpotName(String objectIdOnTile) {
         if (FarmMap.POND_ID.equals(objectIdOnTile)) return "Pond";
         if (ForestMap.RIVER_WATER_ID.equals(objectIdOnTile)) return "Forest River";
@@ -78,8 +75,7 @@ public class FishingAction extends Action {
 
         if (fishingLocationName == null) {
             System.out.println("Could not determine the fishing spot. Action failed.");
-            player.setEnergy(player.getEnergy() + ENERGY_COST); // Refund energy
-            // Consider refunding time if possible, or just note it.
+            player.setEnergy(player.getEnergy() + ENERGY_COST);
             return;
         }
         System.out.println(player.getName() + " casts the line into the " + fishingLocationName + "... Energy: " + player.getEnergy());
