@@ -71,7 +71,7 @@ public class MountainMap implements GameMap {
                     else if (obj instanceof NPC) charToDisplay = 'N';
                     else charToDisplay = 'X';
                 } else {
-                    charToDisplay = '^'; 
+                    charToDisplay = '.'; 
                 }
                 System.out.print(" " + charToDisplay + " ");
             }

@@ -382,7 +382,7 @@ public class FarmMap implements GameMap {
     public String getExitDestination(int attemptedOutOfBoundX, int attemptedOutOfBoundY) {
         if (attemptedOutOfBoundY < 0 && attemptedOutOfBoundX == 0) return "Mountain Area"; 
         if (attemptedOutOfBoundX < 0 && attemptedOutOfBoundY == 0) return "Forest Zone"; 
-        if (attemptedOutOfBoundY >= MAP_HEIGHT && attemptedOutOfBoundX == 0) return "Coastal Region";
+        if (attemptedOutOfBoundY < 0 && attemptedOutOfBoundX == MAP_WIDTH - 1) return "Coastal Region";
         if (attemptedOutOfBoundX >= MAP_WIDTH && attemptedOutOfBoundY == 0) return "Town";  
         return null;
     }

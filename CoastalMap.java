@@ -50,14 +50,16 @@ public class CoastalMap implements GameMap {
                 if (player != null && player.getX() == x && player.getY() == y && player.getCurrentLocationName().equals(getMapName())) {
                     charToDisplay = 'P';
                 } else if (tile.isOccupied() && OCEAN_WATER_ID.equals(tile.getObjectOnTile())) {
-                    charToDisplay = '~'; 
+                    charToDisplay = 'W'; 
                 } else if (tile.isOccupied() && tile.getObjectOnTile() instanceof NPC) {
                     charToDisplay = 'N';
                 } else if (tile.isOccupied()){
                     charToDisplay = 'X';
+                } else if (x == MAP_WIDTH / 2 && y == MAP_HEIGHT - 1) {
+                    charToDisplay = 'F';
                 }
                 else {
-                    charToDisplay = ';';
+                    charToDisplay = '.';
                 }
                 System.out.print(" " + charToDisplay + " ");
             }
@@ -88,14 +90,14 @@ public class CoastalMap implements GameMap {
 
     @Override
     public String getExitDestination(int attemptedOutOfBoundX, int attemptedOutOfBoundY) {
-        if (attemptedOutOfBoundY < 0 && attemptedOutOfBoundX == MAP_WIDTH / 2) return "Farm";
+        if (attemptedOutOfBoundY >= MAP_HEIGHT && attemptedOutOfBoundX == MAP_WIDTH / 2) return "Farm";
         return null;
     }
 
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
         if ("Farm".equals(comingFromMapName)) {
-            return new int[]{MAP_WIDTH / 2, 0};
+            return new int[]{MAP_WIDTH / 2, MAP_HEIGHT - 1};
         }
         return new int[]{MAP_WIDTH / 2, 0};
     }

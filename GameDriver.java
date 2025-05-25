@@ -91,11 +91,11 @@ public class GameDriver {
         System.out.println("\n--- Memulai Game Baru ---");
         System.out.print("Masukkan Nama Pemain: ");
         String playerName = scanner.nextLine();
-        if (playerName.isEmpty()) playerName = "Asep Spakbor";
+        if (playerName.isEmpty()) playerName = "Asep";
 
         System.out.print("Masukkan Gender Pemain: ");
         String playerGender = scanner.nextLine();
-        if (playerGender.isEmpty()) playerGender = "Pria";
+        if (playerGender.isEmpty()) playerGender = "Attack Helicopter";
 
         System.out.print("Masukkan Nama Farm: ");
         String farmName = scanner.nextLine();
@@ -158,6 +158,7 @@ public class GameDriver {
                 System.out.println("\nMemproses tidur otomatis karena sudah larut malam...");
                 player.performAction(new SleepingAction(true), farm); 
                 farm.clearAutomaticSleepSchedule();
+                farm.loadMap("Farm", null);
                 displayFullStatus();
             }
 
@@ -211,6 +212,9 @@ public class GameDriver {
                             if (seedItem instanceof Seeds) { actionToPerform = new PlantingAction((Seeds) seedItem); }
                             else { System.out.println("'" + seedName + "' bukan benih valid atau tidak ada di inventaris."); }
                         } else { System.out.println("Format: plant [nama_benih]");}
+                        break;
+                    case "recover": // Atau "pulihkanlahan"
+                        actionToPerform = new RecoverLandAction();
                         break;
                     case "water": actionToPerform = new WateringAction(); break;
                     case "harvest": actionToPerform = new HarvestingAction(); break;
@@ -539,6 +543,7 @@ public class GameDriver {
         System.out.println("  interact             - Berinteraksi dengan objek sekitar atau struktur yang dimasuki.");
         System.out.println("  till                 - Mencangkul petak saat ini (butuh Cangkul).");
         System.out.println("  plant [nama_benih]   - Menanam benih di tanah yang dicangkul (butuh benih).");
+        System.out.println("  recover              - Mengembalikan tanah dicangkul menjadi normal atau mencabut benih.");
         System.out.println("  water                - Menyiram petak yang ditanami (butuh Penyiram Air).");
         System.out.println("  harvest              - Memanen tanaman dewasa.");
         System.out.println("  eat [nama_makanan]   - Mengonsumsi item makanan dari inventaris.");

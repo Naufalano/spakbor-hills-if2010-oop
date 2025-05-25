@@ -23,7 +23,7 @@ public class TownMap implements GameMap {
     public static final char ROAD_CHAR = '#';
     public static final char BUILDING_CHAR = 'B';
     public static final char DOOR_CHAR = 'D';
-    public static final char GROUND_CHAR = ',';
+    public static final char GROUND_CHAR = '.';
 
 
     private List<Tile> tiles;
@@ -187,7 +187,7 @@ public class TownMap implements GameMap {
                         charToDisplay = 'X';
                     }
                 }
-                System.out.print("[" + charToDisplay + "]");
+                System.out.print(" " + charToDisplay + " ");
             }
             System.out.println();
         }

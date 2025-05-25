@@ -123,8 +123,6 @@ public class PlayerHouseMap implements GameMap {
 
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
-        int doorX = MAP_WIDTH / 2;
-        int entryY = MAP_HEIGHT - 2;
-        return new int[]{doorX, entryY};
+        return new int[]{MAP_WIDTH / 2, MAP_HEIGHT - 2};
     }
 }

@@ -7,7 +7,7 @@ public class ForestMap implements GameMap {
     public static final int MAP_HEIGHT = 18; 
     public static final String TREE_ID = "Tree"; 
     public static final String RIVER_WATER_ID = "RiverWater"; 
-    public static final String FOREST_GROUND_CHAR = "-";
+    public static final String FOREST_GROUND_CHAR = ".";
     public static final String TREE_CHAR = "T";
     public static final String RIVER_CHAR = "~";
 
