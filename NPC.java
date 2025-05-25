@@ -10,6 +10,11 @@ public class NPC {
     protected List<String> hatedItems = new ArrayList<>();
     private String relationshipStatus;
     private int engaged; // Tambah variabel menyatakan proposal di hari tersebut. Jika true, setiap NPC dengan status fiance akan menambah engaged sebanyak 1 untuk validasi marrigae 
+    private static List<String> fish = List.of(
+        "Bullhead", "Carp", "Chub", "Largemouth Bass", "Rainbow Trout",
+        "Sturgeon", "Midnight Carp", "Flounder", "Halibut", "Octopus", "Pufferfish",
+        "Sardine", "Super Cucumber", "Catfish", "Salmon", "Angler", "Crimsonfish", "Glacierfish", "Legend"
+        );
     
     public NPC(String name, List<String> love, List<String> like, List<String> hate) {
         this.name = name;
@@ -72,7 +77,7 @@ public class NPC {
     }
 
     public boolean proposeCheck() {
-        return getAffection() == MAX_HEART;
+        return getAffection() == MAX_HEART && getStatus().equals("Single");
     }
 
     public void propose() {
@@ -80,24 +85,52 @@ public class NPC {
             setStatus("Fiance");
             setEngaged(0);
         } else {
-            System.out.println("Unable to propose  yet!");
+            if(getAffection() < MAX_HEART){
+                System.out.println("Unable to propose yet!");
+            } else {
+                System.out.println("\"What do you mean I will be your fiance? I already am you i-idiot!\" >///<");
+            }
         }
     }
 
     public boolean marriageCheck() {
-        return getStatus().equals("Fiance");
+        return getStatus().equals("Fiance") && getEngaged() > 0;
     }
 
     public void marry() {
         if(marriageCheck() && getEngaged() == 1){
             setStatus("Spouse");
         } else {
-            System.out.println("Unable to marry yet!");
+            if(!getStatus().equals("Fiance")){
+                System.out.println("Unable to marry yet!");
+            } else {
+                System.out.println("\"I-I'm not ready yet. Let's m-marry tomorrow okay?\"");
+            }
         }
     }
 
     public void giftCheck(Item item) {
-        if(lovedItems.contains(item)){
+        if(lovedItems.contains(item.getName()) && !getName().equals("Emily")){
+            setAffection(25);
+        } else if(getName().equals("Emily") && item instanceof Seeds){
+            setAffection(25);
+        } else if(likedItems.contains(item.getName())){
+            setAffection(20);
+        } else if(hatedItems.contains(item.getName()) && !getName().equals("MayorTadi") && !getName().equals("Perry")){
+            setAffection(-25);
+        } else if(getName().equals("MayorTadi")){
+            setAffection(-25);
+        } else if(getName().equals("Perry") && item instanceof Fish){
+                setAffection(-25);
+        } else {
+            setAffection(0);
+        }
+    }
+
+    public void giftCheck(String item) {
+        if(lovedItems.contains(item) && !getName().equals("Emily")){
+            setAffection(25);
+        } else if(getName().equals("Emily") && item.contains("Seeds")){
             setAffection(25);
         } else if(likedItems.contains(item)){
             setAffection(20);
@@ -105,17 +138,24 @@ public class NPC {
             setAffection(-25);
         } else if(getName().equals("MayorTadi")){
             setAffection(-25);
-        } else if(getName().equals("Perry")){
-            if(item instanceof Fish){
+        } else if(getName().equals("Perry") && item.equals(itemFinder(item, NPC.fish))){
                 setAffection(-25);
-            }
         } else {
             setAffection(0);
         }
     }
 
+    public String itemFinder(String name, List<String> list){
+        for(String a : list){
+            if(a.equals(name)){
+                return a;
+            }
+        }
+        return null;
+    }
+
     public void chat() throws InterruptedException {
-        System.out.print("Chatting with " + getName() + ".");
+        System.out.print("Chatting with " + getName() + " .");
         for(int i = 0; i < 3; i++){
             NPC.chatDelay();
             System.out.print(".");

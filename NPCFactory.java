@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class NPCFactory {
             case "Emily":
                 npc = new NPC(
                     "Emily", 
-                    List.of("seeds"),
+                    List.of(),
                     List.of("Catfish", "Salmon", "Sardine"),
                     List.of("Coal", "Wood")
                 ); return npc;
@@ -29,7 +30,7 @@ public class NPCFactory {
                 npc = new NPC(
                     "Dasco", 
                     List.of("The Legends of Spakbor", "Cooked Pig's Head", "Wine", "Fugu", "Spakbor Salad"),
-                    List.of("Fish Sandwich", "Fish Stew", "Baguette", "Fish n Chips"),
+                    List.of("Fish Sandwich", "Fish Stew", "Baguette", "Fish n' Chips"),
                     List.of("Legend", "Grape", "Cauliflower", "Wheat", "Pufferfish", "Salmon")
                 ); return npc;
             
@@ -38,7 +39,7 @@ public class NPCFactory {
                     "Perry", 
                     List.of("Cranberry", "Blueberry"),
                     List.of("Wine"),
-                    List.of("fish")
+                    List.of()
                 ); return npc;
             
             case "Caroline":
@@ -72,5 +73,12 @@ public class NPCFactory {
 
     public NPC getNPC(String name){
         return this.npcMap.get(name);
+    }
+
+    public List<NPC> getAllNPCs() {
+        // npcMap.values() returns a Collection<NPC> view of the values contained in this map.
+        // We create a new ArrayList from this collection to avoid potential issues
+        // if the original map's value collection is modified elsewhere, and to return a List.
+        return new ArrayList<>(npcMap.values());
     }
 }

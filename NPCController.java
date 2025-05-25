@@ -19,9 +19,15 @@ public class NPCController {
         }
     }
 
-    public void gift(String name) {
+    public void gift(Item item) {
         if(this.command.getAction().equals("Gift")){
-            npc.giftCheck(name);
+            npc.giftCheck(item);
+        }
+    }
+
+    public void gift(String item) {
+        if(this.command.getAction().equals("Gift")){
+            npc.giftCheck(item);
         }
     }
 

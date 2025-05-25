@@ -4,7 +4,7 @@ public class Driver {
     public static void main(String[] args) throws InterruptedException {
         // 2. Inisialisasi NPC
         NPCFactory test = new NPCFactory();
-        NPC perry = test.getNPC("Perry");
+        NPC perry = test.getNPC("Emily");
 
         // 3. View awal: perintah dari pemain
         NPCView view = new NPCView("");
