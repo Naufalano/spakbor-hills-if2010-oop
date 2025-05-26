@@ -103,6 +103,7 @@ public class MovingAction extends Action {
                 } else if (destinationMapName.equals("Player's House")) {
                     String oldLocationName = player.getCurrentLocationName();
                     farm.loadMap(destinationMapName, oldLocationName); 
+                    return;
                 } else {
                     System.out.println("...tapi tidak punya cukup energi (" + VISIT_ENERGY_COST + ") untuk melanjutkan.");
                     break;
