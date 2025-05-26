@@ -17,6 +17,7 @@ public class Player extends Entity {
 
     public final int screenX;
     public final int screenY;
+    int hasKey = 0;
 
     public Player(GamePanel gp, KeyHandler keyH){
 
@@ -27,6 +28,8 @@ public class Player extends Entity {
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
         solidArea = new Rectangle(8, 16, 32, 32);
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
 
         setDefaultValues();
         getPlayerImage();
@@ -73,6 +76,9 @@ public class Player extends Entity {
         collisionOn  = false;
         gp.checker.checkTile(this);
 
+        int Idx = gp.checker.checkObject(this, true);
+        pickUpObject(Idx);
+
         if(!collisionOn){
 
         switch (direction) {
@@ -103,6 +109,27 @@ public class Player extends Entity {
         }
         }
     }
+    public void pickUpObject(int i){
+        if(i != 999){
+            String itemName = gp.items[i].name; 
+            switch (itemName) {
+                case "Key":
+                    hasKey++;
+                    gp.items[i] = null;
+                    System.out.println("KEY: " + hasKey);
+                    break;
+                case "Door":
+                    if(hasKey > 0) {
+                        gp.items[i] = null;
+                        hasKey--;
+                        System.out.println("KEY: " + hasKey);
+                    }
+                    break;
+            }
+        }
+    }
+
+
     public void draw(Graphics2D g2){
         // g2.setColor(Color.white);
 

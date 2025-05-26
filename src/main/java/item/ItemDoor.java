@@ -11,5 +11,6 @@ public class ItemDoor extends SuperItem {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        collision = true;
     }
 }
