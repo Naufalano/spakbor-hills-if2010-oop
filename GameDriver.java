@@ -289,6 +289,7 @@ public class GameDriver {
                     case "toggletime": timeDisplayEnabled = !timeDisplayEnabled; System.out.println("Tampilan jam periodik " + (timeDisplayEnabled ? "diaktifkan." : "dinonaktifkan.")); break;
                     case "help": displayInGameHelp(); break;
                     case "quit": currentGameState = GameState.EXITING; inGamePlaying = false; break;
+                    case "nd": farm.nextDay(); displayFullStatus(); break;
                     default: System.out.println("Perintah tidak dikenal. Ketik 'help' untuk opsi."); break;
                 }
 
