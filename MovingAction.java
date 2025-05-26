@@ -1,4 +1,3 @@
-import java.util.List;
 
 enum Direction { UP, DOWN, LEFT, RIGHT }
 
@@ -25,29 +24,31 @@ public class MovingAction extends Action {
 
     @Override
     public void execute(Player player, Farm farm) {
-        GameMap currentActiveMap = farm.getCurrentMap();
-        FarmMap house = farm.getFarmMap();
-        if (currentActiveMap == null) {
-            System.err.println("Tidak ada peta aktif saat mencoba bergerak.");
+        GameMap initialMap = farm.getCurrentMap(); 
+        if (initialMap == null) {
+            System.err.println("Kesalahan: Peta saat ini null di MovingAction.execute.");
             return;
         }
 
-        int mapWidth = currentActiveMap.getWidth();
-        int mapHeight = currentActiveMap.getHeight();
-
         int currentX = player.getX();
         int currentY = player.getY();
-        int newX = currentX;
-        int newY = currentY;
-
-        boolean movedThisAction = false;
+        
+        int finalXOnThisMap = currentX;
+        int finalYOnThisMap = currentY;
 
         for (int i = 0; i < steps; i++) {
-            int prevStepX = newX;
-            int prevStepY = newY;
+            GameMap activeMapForStep = farm.getCurrentMap(); 
+            if (activeMapForStep == null) {
+                System.err.println("Kesalahan: Peta aktif menjadi null di tengah langkah.");
+                player.setLocation(finalXOnThisMap, finalYOnThisMap);
+                return;
+            }
+            
+            int mapWidth = activeMapForStep.getWidth();
+            int mapHeight = activeMapForStep.getHeight();
 
-            int attemptedNextX = newX;
-            int attemptedNextY = newY;
+            int attemptedNextX = finalXOnThisMap; 
+            int attemptedNextY = finalYOnThisMap;
 
             switch (direction) {
                 case UP:    attemptedNextY--; break;
@@ -56,72 +57,60 @@ public class MovingAction extends Action {
                 case RIGHT: attemptedNextX++; break;
             }
 
+            String destinationMapName = null;
+            boolean isTransitionViaEdge = false;
+
             if (attemptedNextX < 0 || attemptedNextX >= mapWidth ||
                 attemptedNextY < 0 || attemptedNextY >= mapHeight) {
-
-                String destinationMapName = currentActiveMap.getExitDestination(attemptedNextX, attemptedNextY);
-
-                if (destinationMapName != null) {
-                    System.out.println(player.getName() + " mencapai tepi " + currentActiveMap.getMapName() + " menuju " + destinationMapName + "...");
-                    if (player.getEnergy() >= VISIT_ENERGY_COST) {
-                        player.setEnergy(player.getEnergy() - VISIT_ENERGY_COST);
-                        farm.advanceGameTime(VISIT_TIME_COST_MINUTES);
-
-                        String oldLocationName = player.getCurrentLocationName();
-                        farm.loadMap(destinationMapName, oldLocationName);
-                    } else {
-                        System.out.println("...tapi tidak punya cukup energi (" + VISIT_ENERGY_COST + ") untuk melanjutkan perjalanan.");
-                        player.setLocation(prevStepX, prevStepY);
+                destinationMapName = activeMapForStep.getExitDestination(attemptedNextX, attemptedNextY);
+                isTransitionViaEdge = true;
+            }
+            else if (activeMapForStep instanceof FarmMap) {
+                if (attemptedNextX == ((FarmMap) activeMapForStep).gethouseDoorX() && attemptedNextY == ((FarmMap) activeMapForStep).gethouseDoorY() - 1) {
+                    destinationMapName = "Player's House";
+                }
+            }
+            else {
+                Tile targetTileForDoorCheck = activeMapForStep.getTileAtPosition(attemptedNextX, attemptedNextY);
+                if (targetTileForDoorCheck != null && targetTileForDoorCheck.getObjectOnTile() instanceof String) {
+                    String objectIdOnTarget = (String) targetTileForDoorCheck.getObjectOnTile();
+                    
+                    if (activeMapForStep instanceof TownMap) {
+                        TownMap.DoorInfo doorInfo = ((TownMap) activeMapForStep).getDoorInfo(objectIdOnTarget);
+                        if (doorInfo != null && doorInfo.x == attemptedNextX && doorInfo.y == attemptedNextY) {
+                            destinationMapName = doorInfo.destinationMapName;
+                        }
+                    } else if (activeMapForStep instanceof PlayerHouseMap && PlayerHouseMap.DOOR_TO_FARM_ID.equals(objectIdOnTarget)) {
+                        destinationMapName = "Farm";
+                    } else if (activeMapForStep instanceof StoreMap && StoreMap.DOOR_ID.equals(objectIdOnTarget)) {
+                        destinationMapName = "Town";
+                    } else if (activeMapForStep instanceof GenericInteriorMap && GenericInteriorMap.DOOR_ID.equals(objectIdOnTarget)) {
+                        destinationMapName = "Town";
                     }
-                    return;
+                }
+            }
+
+            if (destinationMapName != null) {
+                String transitionType = isTransitionViaEdge ? "tepi peta" : "pintu";
+                System.out.println(player.getName() + " mencapai " + transitionType + " di " + activeMapForStep.getMapName() + " menuju " + destinationMapName + "...");
+                
+                if (player.getEnergy() >= VISIT_ENERGY_COST) {
+                    player.setEnergy(player.getEnergy() - VISIT_ENERGY_COST);
+                    farm.advanceGameTime(VISIT_TIME_COST_MINUTES);
+                    String oldLocationName = player.getCurrentLocationName();
+                    farm.loadMap(destinationMapName, oldLocationName); 
+                    return; 
+                } else if (destinationMapName.equals("Player's House")) {
+                    String oldLocationName = player.getCurrentLocationName();
+                    farm.loadMap(destinationMapName, oldLocationName); 
                 } else {
-                    System.out.println("Tidak bisa bergerak lebih jauh: Tepi peta " + currentActiveMap.getMapName() + ".");
+                    System.out.println("...tapi tidak punya cukup energi (" + VISIT_ENERGY_COST + ") untuk melanjutkan.");
                     break;
                 }
-            } else if (attemptedNextX == house.getHouseEntranceX() && attemptedNextY == house.getHouseEntranceY() && currentActiveMap instanceof FarmMap) {
-                String oldLocationName = player.getCurrentLocationName();
-                farm.loadMap("Player's House", oldLocationName);
-                attemptedNextX = player.getX(); attemptedNextY = player.getY();
-            } else if (currentActiveMap instanceof PlayerHouseMap) {
-                if (attemptedNextX == currentActiveMap.getWidth() / 2 && attemptedNextY == currentActiveMap.getHeight() - 1) {
-                    farm.loadMap("Farm", null);
-                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
-                }
-            }
-            else if (currentActiveMap instanceof TownMap) {
-                if (attemptedNextX <= 0 && attemptedNextY == currentActiveMap.getHeight() / 2) {
-                    farm.loadMap("Farm", player.getCurrentLocationName());
-                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
-                } else {
-                    TownMap some = new TownMap();
-                    List<TownMap.DoorInfo> points = some.getAllDoors();
-                    for (int j = 0;j < points.size(); j++) {
-                        if (attemptedNextX == points.get(j).x && attemptedNextY == points.get(j).y) {
-                            farm.loadMap(points.get(j).destinationMapName, "Town");
-                            attemptedNextX = player.getX(); attemptedNextY = player.getY();
-                            break;
-                        }
-                    }
-                }
-            }
-            else if (currentActiveMap instanceof StoreMap) {
-                StoreMap some = new StoreMap(farm.getNpcFactory());
-                if (attemptedNextX == some.getWidth() / 2 && attemptedNextY == some.getHeight() - 1) {
-                    farm.loadMap("Town", "Store");
-                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
-                }
-            }
-            else if (currentActiveMap instanceof GenericInteriorMap) {
-                GenericInteriorMap some = new GenericInteriorMap("");
-                if (attemptedNextX == some.getWidth() / 2 && attemptedNextY == some.getHeight() - 1) {
-                    farm.loadMap("Town", player.getCurrentLocationName());
-                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
-                }
             }
 
-            Tile targetTile = currentActiveMap.getTileAtPosition(attemptedNextX, attemptedNextY);
+            Tile targetTile = activeMapForStep.getTileAtPosition(attemptedNextX, attemptedNextY);
             boolean canMoveToTarget = false;
-
             if (targetTile != null) {
                 if (!targetTile.isOccupied()) {
                     canMoveToTarget = true;
@@ -134,18 +123,23 @@ public class MovingAction extends Action {
             }
 
             if (canMoveToTarget) {
-                newX = attemptedNextX;
-                newY = attemptedNextY;
-                movedThisAction = true;
+                finalXOnThisMap = attemptedNextX;
+                finalYOnThisMap = attemptedNextY;
+            } else {
+                String reason = "jalur terhalang";
+                if (targetTile != null && targetTile.getObjectOnTile() != null) {
+                    Object occupant = targetTile.getObjectOnTile();
+                    if (occupant instanceof String) reason += " oleh " + occupant;
+                    else reason += " oleh " + occupant.getClass().getSimpleName();
+                }
+                System.out.println("Tidak bisa bergerak lebih jauh ke arah itu. " + reason + " di (" + attemptedNextX + "," + attemptedNextY + ").");
+                break;
             }
         }
 
-        if (movedThisAction) {
-            player.setLocation(newX, newY); 
-            // System.out.println(player.getName() + " bergerak ke (" + newX + "," + newY + ") di " + player.getCurrentLocationName() + ".");
-            // currentActiveMap.display(player);
-        } else if (steps > 0 && currentX == newX && currentY == newY) {
-            // System.out.println(player.getName() + " tidak bisa bergerak dari (" + currentX + "," + currentY + ").");
+        if (finalXOnThisMap != currentX || finalYOnThisMap != currentY) {
+            player.setLocation(finalXOnThisMap, finalYOnThisMap);
+            // System.out.println(player.getName() + " bergerak ke (" + finalXOnThisMap + "," + finalYOnThisMap + ") di " + player.getCurrentLocationName() + ".");
         }
     }
 }
