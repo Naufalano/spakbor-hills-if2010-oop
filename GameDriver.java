@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 enum GameState {
     MAIN_MENU,
@@ -18,7 +16,8 @@ public class GameDriver {
     private static Farm farm;
     private static NPCFactory npcFactory;
     private static Scanner scanner = new Scanner(System.in);
-    private static Timer gameTimer;
+    private static Thread gameTimeThread;
+    private static volatile boolean gameIsPlaying = true;
     private static volatile boolean timeDisplayEnabled = false;
     private static GameState currentGameState = GameState.MAIN_MENU;
     private static boolean milestoneReachedGold = false;
@@ -122,33 +121,65 @@ public class GameDriver {
     }
 
     private static void startGameTimer() {
-        if (gameTimer != null) { gameTimer.cancel(); gameTimer.purge(); }
-        gameTimer = new Timer(true);
-        gameTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (currentGameState != GameState.IN_GAME || farm == null || farm.getTimeController() == null) {
-                    return;
-                }
-                farm.getTimeController().updateTime();
-                Time currentTime = farm.getTimeController().getGameTime();
-                if (currentTime.getHour() == 2 && currentTime.getMinute() >= 0 && !farm.isSleepingScheduled()) {
-                    System.out.println("\nSudah jam 2:00 PAGI! Waktunya tidur otomatis. (Tekan enter)");
-                    farm.scheduleAutomaticSleep();
-                }
-                if (timeDisplayEnabled) {
-                    System.out.println("[Jam Real-time: " + farm.getFormattedTime() + "]");
+        if (gameTimeThread != null && gameTimeThread.isAlive()) {
+            return;
+        }
+
+        gameIsPlaying = true;
+        gameTimeThread = new Thread(() -> {
+            System.out.println("Game Time Thread dimulai.");
+            long lastTickTime = System.currentTimeMillis();
+
+            while (gameIsPlaying && currentGameState == GameState.IN_GAME) {
+                try {
+                    Thread.sleep(1000);
+
+                    if (!gameIsPlaying || currentGameState != GameState.IN_GAME || farm == null || farm.getTimeController() == null) {
+                        continue;
+                    }
+
+                    farm.getTimeController().updateTime();
+
+                    Time currentTime = farm.getTimeController().getGameTime();
+
+                    // Logika tidur otomatis
+                    if (currentTime.getHour() == 2 && currentTime.getMinute() == 0 && !farm.isSleepingScheduled()) {
+                        System.out.println("\nSudah jam 2:00 PAGI! Waktunya turu cik. (Tekan enter)");
+                        farm.scheduleAutomaticSleep();
+                    }
+                    if (timeDisplayEnabled) {
+                        System.out.println("[Jam Real-time (Thread): " + farm.getFormattedTime() + "]");
+                    }
+
+                } catch (InterruptedException e) {
+                    System.out.println("Game Time Thread diinterupsi.");
+                    Thread.currentThread().interrupt();
+                    gameIsPlaying = false;
+                } catch (Exception e) {
+                    System.err.println("Kesalahan di Game Time Thread: " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
-        }, 0, 1000);
+            System.out.println("Game Time Thread berhenti.");
+        });
+
+        gameTimeThread.setDaemon(true);
+        gameTimeThread.setName("GameTimeUpdater");
+        gameTimeThread.start();
     }
 
     private static void stopGameTimer() {
-        if (gameTimer != null) {
-            gameTimer.cancel();
-            gameTimer.purge();
-            gameTimer = null;
+        gameIsPlaying = false;
+        if (gameTimeThread != null && gameTimeThread.isAlive()) {
+            try {
+                gameTimeThread.interrupt();
+                gameTimeThread.join(1500);
+            } catch (InterruptedException e) {
+                System.err.println("Interupsi saat menunggu Game Time Thread berhenti.");
+                Thread.currentThread().interrupt();
+            }
         }
+        gameTimeThread = null;
     }
 
     private static void inGameLoop() throws IOException{
