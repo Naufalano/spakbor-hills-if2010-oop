@@ -13,6 +13,10 @@ public class MiscDataRegistry {
         ALL_MISC_ITEMS.add(new Misc("Coal", 20, 15));
 
         ALL_MISC_ITEMS.add(new Misc("Proposal Ring", 10000, 2000));
+
+        ALL_MISC_ITEMS.add(new RecipeItem("Resep Fish n' Chips", 200, "recipe_1"));
+
+        ALL_MISC_ITEMS.add(new RecipeItem("Resep Fish Sandwich", 150, "recipe_10"));
     }
 
     /**
@@ -34,7 +38,6 @@ public class MiscDataRegistry {
                 return item;
             }
         }
-        System.err.println("Peringatan: Item Misc. dengan nama '" + name + "' tidak ditemukan di MiscDataRegistry.");
         return null;
     }
 

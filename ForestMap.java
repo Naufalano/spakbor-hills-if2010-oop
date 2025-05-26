@@ -9,7 +9,7 @@ public class ForestMap implements GameMap {
     public static final String RIVER_WATER_ID = "RiverWater"; 
     public static final String FOREST_GROUND_CHAR = ".";
     public static final String TREE_CHAR = "T";
-    public static final String RIVER_CHAR = "~";
+    public static final String RIVER_CHAR = "W";
 
     private List<Tile> tiles;
     private Random random = new Random();

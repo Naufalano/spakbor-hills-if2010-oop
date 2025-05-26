@@ -10,15 +10,15 @@ public class GiftingAction extends Action {
     @Override
     public boolean validate(Player player, Farm farm) {
         if (targetNpc == null || giftItem == null) {
-            System.out.println("Validation Failed: NPC or gift item not specified.");
+            System.out.println("NPC or gift item not specified.");
             return false;
         }
         if (!player.getInventory().hasItem(giftItem) || player.getInventory().getItemQuantity(giftItem) <= 0) {
-            System.out.println("Validation Failed: " + giftItem.getName() + " not found in inventory or quantity is zero.");
+            System.out.println(giftItem.getName() + " tidak ada di inventory.");
             return false;
         }
         if (player.getEnergy() < 5) {
-            System.out.println("Validation Failed: Not enough energy to give a gift.");
+            System.out.println("Ga ada tenaga buat kasih hadiah.");
             return false;
         }
         return true;
@@ -34,8 +34,8 @@ public class GiftingAction extends Action {
         targetNpc.giftCheck(giftItem);
         player.getInventory().useItem(giftItem, 1); 
 
-        System.out.println(player.getName() + " gave " + giftItem.getName() + " to " + targetNpc.getName() + ".");
-        System.out.println(targetNpc.getName() + "'s affection changed from " + oldAffection + " to " + targetNpc.getAffection() + ".");
-        System.out.println("Player energy: " + player.getEnergy());
+        System.out.println(player.getName() + " memberi " + giftItem.getName() + " ke " + targetNpc.getName() + ".");
+        System.out.println(targetNpc.getName() + " jadi nambah suka dari " + oldAffection + " ke " + targetNpc.getAffection() + ".");
+        System.out.println("Energi: " + player.getEnergy());
     }
 }

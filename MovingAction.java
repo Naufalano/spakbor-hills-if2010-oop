@@ -17,7 +17,7 @@ public class MovingAction extends Action {
     @Override
     public boolean validate(Player player, Farm farm) {
         if (farm.getCurrentMap() == null) {
-            System.out.println("Validasi Gagal: Tidak ada peta aktif untuk bergerak.");
+            System.out.println("Tidak ada peta aktif untuk bergerak.");
             return false;
         }
         return true;
@@ -28,7 +28,7 @@ public class MovingAction extends Action {
         GameMap currentActiveMap = farm.getCurrentMap();
         FarmMap house = farm.getFarmMap();
         if (currentActiveMap == null) {
-            System.err.println("Kesalahan: Tidak ada peta aktif saat mencoba bergerak.");
+            System.err.println("Tidak ada peta aktif saat mencoba bergerak.");
             return;
         }
 
@@ -92,14 +92,15 @@ public class MovingAction extends Action {
                 if (attemptedNextX <= 0 && attemptedNextY == currentActiveMap.getHeight() / 2) {
                     farm.loadMap("Farm", player.getCurrentLocationName());
                     attemptedNextX = player.getX(); attemptedNextY = player.getY();
-                }
-                TownMap some = new TownMap();
-                List<TownMap.DoorInfo> points = some.getAllDoors();
-                for (int j = 0;j < points.size(); j++) {
-                    if (attemptedNextX == points.get(j).x && attemptedNextY == points.get(j).y) {
-                        farm.loadMap(points.get(j).destinationMapName, "Town");
-                        attemptedNextX = player.getX(); attemptedNextY = player.getY();
-                        break;
+                } else {
+                    TownMap some = new TownMap();
+                    List<TownMap.DoorInfo> points = some.getAllDoors();
+                    for (int j = 0;j < points.size(); j++) {
+                        if (attemptedNextX == points.get(j).x && attemptedNextY == points.get(j).y) {
+                            farm.loadMap(points.get(j).destinationMapName, "Town");
+                            attemptedNextX = player.getX(); attemptedNextY = player.getY();
+                            break;
+                        }
                     }
                 }
             }

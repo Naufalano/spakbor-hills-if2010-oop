@@ -82,24 +82,23 @@ public class FishDataRegistry {
     static {
         String currentFish = "Bullhead";
         ALL_FISH.add(new Fish(currentFish, FishRarity.COMMON,
-                parseSeasons("Any", currentFish), parseTimes("Any", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Mountain Lake")));
+        parseSeasons("Any", currentFish), parseTimes("Any", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Mountain Lake")));
 
         currentFish = "Carp";
         ALL_FISH.add(new Fish(currentFish, FishRarity.COMMON,
-                parseSeasons("Any", currentFish), parseTimes("Any", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Mountain Lake, Pond")));
+        parseSeasons("Any", currentFish), parseTimes("Any", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Mountain Lake, Pond")));
 
         currentFish = "Chub";
         ALL_FISH.add(new Fish(currentFish, FishRarity.COMMON,
-                parseSeasons("Any", currentFish), parseTimes("Any", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Forest River, Mountain Lake")));
+        parseSeasons("Any", currentFish), parseTimes("Any", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Forest River, Mountain Lake")));
 
-        // --- REGULAR FISH ---
         currentFish = "Largemouth Bass";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Any", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Mountain Lake")));
+        parseSeasons("Any", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Mountain Lake")));
 
         currentFish = "Rainbow Trout";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
@@ -108,74 +107,74 @@ public class FishDataRegistry {
 
         currentFish = "Sturgeon";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Summer, Winter", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Mountain Lake")));
+        parseSeasons("Summer, Winter", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Mountain Lake")));
 
         currentFish = "Midnight Carp";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Winter, Fall", currentFish), parseTimes("20.00-02.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Mountain Lake, Pond")));
+        parseSeasons("Winter, Fall", currentFish), parseTimes("20.00-02.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Mountain Lake, Pond")));
 
         currentFish = "Flounder";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Spring, Summer", currentFish), parseTimes("06.00-22.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Ocean")));
+        parseSeasons("Spring, Summer", currentFish), parseTimes("06.00-22.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Ocean")));
 
         currentFish = "Halibut";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Any", currentFish), parseTimes("06.00-11.00,19.00-02.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Ocean")));
+        parseSeasons("Any", currentFish), parseTimes("06.00-11.00,19.00-02.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Ocean")));
 
         currentFish = "Octopus";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Summer", currentFish), parseTimes("06.00-22.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Ocean")));
+        parseSeasons("Summer", currentFish), parseTimes("06.00-22.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Ocean")));
 
         currentFish = "Pufferfish";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Summer", currentFish), parseTimes("00.00-16.00", currentFish), parseWeathers("Sunny", currentFish),
-                parseLocations("Ocean")));
+        parseSeasons("Summer", currentFish), parseTimes("00.00-16.00", currentFish), parseWeathers("Sunny", currentFish),
+        parseLocations("Ocean")));
 
         currentFish = "Sardine";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Any", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Ocean")));
+        parseSeasons("Any", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Ocean")));
 
         currentFish = "Super Cucumber";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Summer, Fall, Winter", currentFish), parseTimes("18.00-02.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Ocean")));
+        parseSeasons("Summer, Fall, Winter", currentFish), parseTimes("18.00-02.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Ocean")));
 
         currentFish = "Catfish";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Spring, Summer, Fall", currentFish), parseTimes("06.00-22.00", currentFish), parseWeathers("Rainy", currentFish),
-                parseLocations("Forest River, Pond")));
+        parseSeasons("Spring, Summer, Fall", currentFish), parseTimes("06.00-22.00", currentFish), parseWeathers("Rainy", currentFish),
+        parseLocations("Forest River, Pond")));
 
         currentFish = "Salmon";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Fall", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Forest River")));
+        parseSeasons("Fall", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Forest River")));
 
         // --- LEGENDARY FISH ---
         currentFish = "Angler";
         ALL_FISH.add(new Fish(currentFish, FishRarity.LEGENDARY,
-                parseSeasons("Fall", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Pond")));
+        parseSeasons("Fall", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Pond")));
 
         currentFish = "Crimsonfish";
         ALL_FISH.add(new Fish(currentFish, FishRarity.LEGENDARY,
-                parseSeasons("Summer", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Ocean")));
+        parseSeasons("Summer", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Ocean")));
 
         currentFish = "Glacierfish";
         ALL_FISH.add(new Fish(currentFish, FishRarity.LEGENDARY,
-                parseSeasons("Winter", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Any", currentFish),
-                parseLocations("Forest River")));
+        parseSeasons("Winter", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Any", currentFish),
+        parseLocations("Forest River")));
 
         currentFish = "Legend";
         ALL_FISH.add(new Fish(currentFish, FishRarity.LEGENDARY,
-                parseSeasons("Spring", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Rainy", currentFish),
-                parseLocations("Mountain Lake")));
+        parseSeasons("Spring", currentFish), parseTimes("08.00-20.00", currentFish), parseWeathers("Rainy", currentFish),
+        parseLocations("Mountain Lake")));
     }
 
     public static List<Fish> getAllFish() {
@@ -183,8 +182,15 @@ public class FishDataRegistry {
     }
 
     public static List<Fish> getAvailableFish(SeasonType currentSeason, int currentHour, WeatherType currentWeather, String currentLocation) {
-        return ALL_FISH.stream()
-                .filter(fish -> fish.canCatch(currentSeason, currentHour, currentWeather, currentLocation))
-                .collect(Collectors.toList());
+        return ALL_FISH.stream().filter(fish -> fish.canCatch(currentSeason, currentHour, currentWeather, currentLocation)).collect(Collectors.toList());
+    }
+
+    public static Fish getFishByName(String name) {
+        for (Fish fish : ALL_FISH) {
+            if (fish.getName().equalsIgnoreCase(name)) {
+                return fish;
+            }
+        }
+        return null;
     }
 }

@@ -5,29 +5,29 @@ public class HarvestingAction extends Action {
         GameMap currentPlayersMap = farm.getCurrentMap();
         FarmMap playersActualFarmMap = farm.getFarmMap();
         if (!(currentPlayersMap instanceof FarmMap) || !currentPlayersMap.getMapName().equals(playersActualFarmMap.getMapName())) {
-            System.out.println("Harvesting can only be done on your farm.");
+            System.out.println("Harvesting hanya bisa di farm.");
             return false;
         }
 
         Tile currentTile = farm.getFarmMap().getTileAtPosition(player.getX(), player.getY());
         if (currentTile == null) {
-            System.out.println("Invalid tile position.");
+            System.out.println("Posisi tidak valid.");
             return false;
         }
 
         if (currentTile.getState() != TileState.HARVESTABLE || !(currentTile.getObjectOnTile() instanceof PlantedCrop)) {
-            System.out.println("Nothing to harvest on this tile, or plant not ready.");
+            System.out.println("Ga bisa harvest. Belom siap panen juga mungkin.");
             return false;
         }
 
         PlantedCrop plant = (PlantedCrop) currentTile.getObjectOnTile();
         if (!plant.isMature()) {
-            System.out.println("This plant is not yet mature for harvesting.");
+            System.out.println("Belom siap panen oi.");
             return false;
         }
 
         if (player.getEnergy() < 5) { 
-            System.out.println("Not enough energy to harvest.");
+            System.out.println("Tidak ada energi buat panen.");
             return false;
         }
         return true;
@@ -45,17 +45,18 @@ public class HarvestingAction extends Action {
         Crop cropToHarvest = CropDataRegistry.getCropByName(cropName); 
 
         if (cropToHarvest == null) {
-            System.err.println("Error: Could not find crop '" + cropName + "' in registry during harvest. Aborting harvest.");
+            // System.err.println("Could not find crop '" + cropName + "' in registry during harvest. Aborting harvest.");
             player.setEnergy(player.getEnergy() + 5);
             return;
         }
 
         int amountHarvested = plant.getYieldAmountPerHarvest();
-        player.getInventory().addItem(cropToHarvest, amountHarvested);
+        player.obtainItem(cropToHarvest, amountHarvested); 
+        player.recordCropHarvested(cropToHarvest.getName(), amountHarvested);
         farm.addCropped(amountHarvested);
 
-        System.out.println(player.getName() + " harvested " + amountHarvested + " " + cropToHarvest.getName() + ".");
-        System.out.println("Energy: " + player.getEnergy());
+        System.out.println(player.getName() + " manen " + amountHarvested + " " + cropToHarvest.getName() + ".");
+        System.out.println("Energi: " + player.getEnergy());
 
         currentTile.setObjectOnTile(null);
         currentTile.setState(TileState.TILLED);

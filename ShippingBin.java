@@ -32,4 +32,12 @@ public class ShippingBin {
     public int getMaxSlots() {
         return MAX_SLOTS;
     }
+
+    public int getMaxCapacity() {
+        return MAX_SLOTS;
+    }
+
+    public int getCurrentSize() {
+        return items.size();
+    }
 }

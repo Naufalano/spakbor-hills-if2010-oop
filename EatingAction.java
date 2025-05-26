@@ -4,7 +4,7 @@ public class EatingAction extends Action {
 
     public EatingAction(Item item) {
         if (!(item instanceof EdibleItem)) {
-            throw new IllegalArgumentException("Item is not edible.");
+            throw new IllegalArgumentException("Ga bisa didahar.");
         }
         this.itemInstance = item;
         this.foodToEat = (EdibleItem) item;
@@ -13,11 +13,11 @@ public class EatingAction extends Action {
     @Override
     public boolean validate(Player player, Farm farm) {
         if (!player.getInventory().hasItem(itemInstance) || player.getInventory().getItemQuantity(itemInstance) <= 0) {
-            System.out.println("Validation Failed: " + itemInstance.getName() + " not found in inventory or quantity is zero.");
+            System.out.println(itemInstance.getName() + " tidak ada di inventory.");
             return false;
         }
         if (player.getEnergy() == Player.MAX_ENERGY) {
-            System.out.println("Validation Failed: Player energy is already full.");
+            System.out.println("Dah wareg cik.");
             return false;
         }
         return true;
@@ -30,7 +30,7 @@ public class EatingAction extends Action {
         player.getInventory().useItem(itemInstance, 1); // Consume the item
         farm.advanceGameTime(5); // [cite: 1]
 
-        System.out.println(player.getName() + " ate " + itemInstance.getName() + " and restored " + energyRestored + " energy.");
-        System.out.println("Current energy: " + player.getEnergy() + "/" + Player.MAX_ENERGY);
+        System.out.println(player.getName() + " dahar " + itemInstance.getName() + " dan dapet " + energyRestored + " energi.");
+        System.out.println("Energi: " + player.getEnergy() + "/" + Player.MAX_ENERGY);
     }
 }

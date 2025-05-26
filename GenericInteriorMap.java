@@ -72,7 +72,7 @@ public class GenericInteriorMap implements GameMap {
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = getTileAtPosition(x, y);
-                char charToDisplay = ' ';
+                char charToDisplay = '.';
 
                 if (tile == null) { System.out.print("[?]"); continue; }
 

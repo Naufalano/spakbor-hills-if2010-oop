@@ -14,38 +14,38 @@ public class RecoverLandAction extends Action {
         FarmMap playersActualFarmMap = farm.getFarmMap();
 
         if (currentPlayersMap == null || playersActualFarmMap == null) {
-            System.out.println("Validasi Gagal: Data peta tidak tersedia.");
+            System.out.println("Data peta tidak tersedia.");
             return false;
         }
         if (currentPlayersMap != playersActualFarmMap) {
-             System.out.println("Validasi Gagal: Pemulihan lahan hanya bisa dilakukan di kebun utama Anda (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
+             System.out.println("Pemulihan lahan hanya bisa dilakukan di kebun utama Anda (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
              return false;
         }
 
-        Item pickaxeInInventory = player.getInventory().getItemByName("Pickaxe");
-        if (pickaxeInInventory == null || !(pickaxeInInventory instanceof Equipment)) {
-            System.out.println("Validasi Gagal: Pickaxe tidak ditemukan di inventaris.");
+        Item heldItem = player.getHeldItem();
+        if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Pickaxe")) {
+            System.out.println("Anda harus memegang Pickaxe untuk memulihkan lahan.");
             return false;
         }
 
         if (player.getEnergy() < ENERGY_COST_PER_TILE) {
-            System.out.println("Validasi Gagal: Energi tidak cukup untuk memulihkan lahan (-" + ENERGY_COST_PER_TILE + " energi).");
+            System.out.println("Energi tidak cukup untuk memulihkan lahan (-" + ENERGY_COST_PER_TILE + " energi).");
             return false;
         }
 
         Tile currentTile = currentPlayersMap.getTileAtPosition(player.getX(), player.getY());
         if (currentTile == null) {
-            System.out.println("Validasi Gagal: Pemain tidak berada di tile yang valid.");
+            System.out.println("Pemain tidak berada di tile yang valid.");
             return false;
         }
 
         if (currentTile.getState() != TileState.TILLED && currentTile.getState() != TileState.PLANTED) {
-            System.out.println("Validasi Gagal: Tile ini tidak dalam kondisi tercangkul (soil) atau ditanami.");
+            System.out.println("Tile ini tidak dalam kondisi tilled atau planted.");
             return false;
         }
 
         if (currentTile.isOccupied() && !(currentTile.getObjectOnTile() instanceof PlantedCrop)) {
-             System.out.println("Validasi Gagal: Tile ini ditempati oleh objek yang tidak bisa dihilangkan dengan pickaxe.");
+             System.out.println("Tile ini ditempati oleh objek yang tidak bisa dihilangkan dengan pickaxe.");
              return false;
         }
 
@@ -61,7 +61,7 @@ public class RecoverLandAction extends Action {
         Tile currentTile = currentMap.getTileAtPosition(player.getX(), player.getY());
 
         if (currentTile == null) { // Pengecekan keamanan tambahan
-            System.err.println("Kesalahan saat eksekusi RecoverLand: tile pemain tidak valid.");
+            System.err.println("Tile pemain tidak valid.");
             player.setEnergy(player.getEnergy() + ENERGY_COST_PER_TILE);
             // farm.advanceGameTime(-TIME_COST_PER_TILE_MINUTES);
             return;
@@ -78,10 +78,10 @@ public class RecoverLandAction extends Action {
             currentTile.setObjectOnTile(null); 
             currentTile.setOccupied(false);
             currentTile.setState(TileState.TILLED);
-            message = player.getName() + " menghilangkan " + plantName + " dan tanah kembali menjadi soil (tercangkul) di (" + player.getX() + "," + player.getY() + ").";
+            message = player.getName() + " menghilangkan " + plantName + " dan tanah kembali menjadi soil.";
         } else if (currentTile.getState() == TileState.TILLED) {
             currentTile.setState(TileState.TILLABLE); 
-            message = player.getName() + " memulihkan soil menjadi land (siap cangkul) di (" + player.getX() + "," + player.getY() + ").";
+            message = player.getName() + " memulihkan soil menjadi land.";
         }
 
         System.out.println(message);

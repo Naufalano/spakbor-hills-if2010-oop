@@ -16,12 +16,13 @@ public class FishingAction extends Action {
 
     @Override
     public boolean validate(Player player, Farm farm) {
-        if (!player.getInventory().hasItem(fishingRod)) {
-            System.out.println("Fishing Rod not found in inventory.");
+        Item heldItem = player.getHeldItem();
+        if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Fishing Rod")) {
+            System.out.println("Anda harus memegang Fishing Rod untuk memancing.");
             return false;
         }
         if (player.getEnergy() < ENERGY_COST) {
-            System.out.println("Not enough energy to fish (-" + ENERGY_COST + " energy).");
+            System.out.println("Energi tidak cukup untuk memancing.");
             return false;
         }
 
@@ -29,7 +30,7 @@ public class FishingAction extends Action {
         String actualFishingSpotObjectId = InteractionHelper.getAdjacentInteractableObject(player, currentMap);
 
         if (actualFishingSpotObjectId == null) {
-            System.out.println("You are not near a valid fishing spot (Pond, River, Lake, Ocean).");
+            System.out.println("Tidak ada perairan valid.");
             return false;
         }
 
@@ -74,11 +75,11 @@ public class FishingAction extends Action {
         String fishingLocationName = getActualFishingSpotName(adjacentWaterObjectId);
 
         if (fishingLocationName == null) {
-            System.out.println("Could not determine the fishing spot. Action failed.");
+            // System.out.println("Could not determine the fishing spot. Action failed.");
             player.setEnergy(player.getEnergy() + ENERGY_COST);
             return;
         }
-        System.out.println(player.getName() + " casts the line into the " + fishingLocationName + "... Energy: " + player.getEnergy());
+        // System.out.println(player.getName() + " casts the line into the " + fishingLocationName + "... Energy: " + player.getEnergy());
 
 
         SeasonType currentSeason = farm.getCurrentSeason();
@@ -88,16 +89,14 @@ public class FishingAction extends Action {
         List<Fish> availableFish = FishDataRegistry.getAvailableFish(currentSeason, currentHour, currentWeather, fishingLocationName);
 
         if (availableFish.isEmpty()) {
-            System.out.println("Nothing seems to be biting here at this time...");
+            System.out.println("Ni ikan pada wareg apa gimana ya ga ada yang gigit...");
             return;
         }
 
         Fish fishToCatchPrototype = availableFish.get(random.nextInt(availableFish.size()));
-        Fish caughtFishInstance = new Fish(fishToCatchPrototype.getName(), fishToCatchPrototype.getRarity(),
-                                           fishToCatchPrototype.getAvailableSeasons(), fishToCatchPrototype.getAvailableTimeWindows(),
-                                           fishToCatchPrototype.getAvailableWeathers(), fishToCatchPrototype.getLocations());
+        Fish caughtFishInstance = new Fish(fishToCatchPrototype.getName(), fishToCatchPrototype.getRarity(), fishToCatchPrototype.getAvailableSeasons(), fishToCatchPrototype.getAvailableTimeWindows(), fishToCatchPrototype.getAvailableWeathers(), fishToCatchPrototype.getLocations());
 
-        System.out.println("You feel a tug... It might be a " + caughtFishInstance.getName() + " (" + caughtFishInstance.getRarity() + ").");
+        System.out.println("Blablabla blebleble blublublu. Waduh kayaknya dapet " + caughtFishInstance.getName() + " (" + caughtFishInstance.getRarity() + ").");
 
         int numberToGuess;
         int maxGuesses;
@@ -109,12 +108,12 @@ public class FishingAction extends Action {
         }
         numberToGuess = random.nextInt(range) + 1;
         boolean caught = false;
-        System.out.println("Guess the number between 1 and " + range + ". You have " + maxGuesses + " tries.");
+        System.out.println("Tebak antara 1 sampe " + range + ". " + maxGuesses + " percobaan.");
 
         for (int i = 0; i < maxGuesses; i++) {
-            System.out.print("Attempt " + (i + 1) + "/" + maxGuesses + ": Your guess? ");
+            System.out.print("Attempt " + (i + 1) + "/" + maxGuesses + ": Berapa coba? ");
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number. Fishing attempt failed.");
+                System.out.println("Masukkan angka valid. Mancing gagal.");
                 if (scanner.hasNextLine()) scanner.nextLine();
                 caught = false;
                 break;
@@ -126,23 +125,22 @@ public class FishingAction extends Action {
                 caught = true;
                 break;
             } else if (guess < numberToGuess) {
-                System.out.println("Too low!");
+                System.out.println("Kekecilan!");
             } else {
-                System.out.println("Too high!");
+                System.out.println("Kegedean!");
             }
             if (i < maxGuesses - 1) {
-                 System.out.println((maxGuesses - 1 - i) + " tries left.");
+                 System.out.println((maxGuesses - 1 - i) + " kali coba lagi.");
              }
         }
-
+        
         if (caught) {
-            player.getInventory().addItem(caughtFishInstance, 1);
-            player.recordFishCaught(caughtFishInstance.getRarity());
-            System.out.println("Congratulations! You caught a " + caughtFishInstance.getName() + "!");
-            System.out.println(caughtFishInstance.getName() + " is worth " + caughtFishInstance.getSellPrice() + "g.");
+            player.recordFishCaught(caughtFishInstance.getRarity(), caughtFishInstance.getName());
+            System.out.println("Glepak glepak! Mata pancing yes dapet " + caughtFishInstance.getName() + "!");
+            System.out.println(caughtFishInstance.getName() + " cuan " + caughtFishInstance.getSellPrice() + "g.");
             farm.addFish();
         } else {
-            System.out.println("Oh no, the fish got away! The number was " + numberToGuess + ".");
+            System.out.println("Ikannya kabur. Nebak angka " + numberToGuess + " aja susah amat cih.");
         }
     }
 }

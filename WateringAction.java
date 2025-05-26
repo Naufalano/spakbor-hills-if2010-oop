@@ -7,19 +7,20 @@ public class WateringAction extends Action {
 
     @Override
     public boolean validate(Player player, Farm farm) {
-        if (!player.getInventory().hasItem(this.wateringCan)) {
-            System.out.println("Validation Failed: Watering Can not found in inventory.");
+        Item heldItem = player.getHeldItem();
+        if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Watering Can")) {
+            System.out.println("Anda harus memegang Watering Can untuk menyiram.");
             return false;
         }
         if (player.getEnergy() < 5) { 
-            System.out.println("Validation Failed: Not enough energy to water.");
+            System.out.println("Energi tidak cukup.");
             return false;
         }
 
         GameMap currentPlayersMap = farm.getCurrentMap();
         FarmMap playersActualFarmMap = farm.getFarmMap();
         if (!(currentPlayersMap instanceof FarmMap) || !currentPlayersMap.getMapName().equals(playersActualFarmMap.getMapName())) {
-             System.out.println("Validation Failed: Watering can only be done on the farm.");
+             System.out.println("Watering hanya bisa dilakukan di farm.");
              return false;
         }
 
@@ -27,11 +28,11 @@ public class WateringAction extends Action {
         Tile currentTile = farmMap.getTileAtPosition(player.getX(), player.getY());
 
         if (currentTile == null) {
-            System.out.println("Validation Failed: Player is not on a valid tile.");
+            System.out.println("Tile player tidak valid.");
             return false;
         }
         if (currentTile.getState() != TileState.PLANTED) {
-            System.out.println("Validation Failed: Tile is not planted or does not need watering.");
+            System.out.println("Tile tidak ditanami atau sudah disiram.");
             return false;
         }
         // if (!((PlantedCrop)currentTile.getObjectOnTile()).isWateredToday()) {}
@@ -48,11 +49,11 @@ public class WateringAction extends Action {
         if (currentTile.getObjectOnTile() instanceof PlantedCrop) {
             PlantedCrop plant = (PlantedCrop) currentTile.getObjectOnTile();
             plant.setWateredToday(true);
-            System.out.println(player.getName() + " watered the plant at (" + player.getX() + "," + player.getY() + ").");
+            // System.out.println(player.getName() + " watered the plant at (" + player.getX() + "," + player.getY() + ").");
         } else {
-            System.out.println("Nothing to water here that requires it in this way.");
+            // System.out.println("Nothing to water here that requires it in this way.");
         }
-        System.out.println(player.getName() + " watered the plant at (" + player.getX() + "," + player.getY() + "). Energy: " + player.getEnergy());
+        // System.out.println(player.getName() + " watered the plant at (" + player.getX() + "," + player.getY() + "). Energy: " + player.getEnergy());
         farmMap.display(player);
     }
 }

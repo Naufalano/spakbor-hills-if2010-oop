@@ -9,15 +9,15 @@ public class TillingAction extends Action {
     @Override
     public boolean validate(Player player, Farm farm) {
         GameMap currentPlayersMap = farm.getCurrentMap();
-        FarmMap playersActualFarmMap = farm.getFarmMap(); 
+        FarmMap playersActualFarmMap = farm.getFarmMap();
 
         if (currentPlayersMap == null || playersActualFarmMap == null) {
-            System.out.println("Validasi Gagal: Data peta tidak tersedia.");
+            System.out.println("Data peta tidak tersedia.");
             return false;
         }
 
         if (!(currentPlayersMap instanceof FarmMap) || !currentPlayersMap.getMapName().equals(playersActualFarmMap.getMapName())) {
-             System.out.println("Validasi Gagal: Tilling hanya bisa dilakukan di kebun utama Anda (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
+             System.out.println("Tilling hanya bisa dilakukan di kebun utama Anda (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
              return false;
         }
         // if (!player.getCurrentLocationName().equals(farm.getName())) {
@@ -26,28 +26,29 @@ public class TillingAction extends Action {
         // }
 
 
-        if (!player.getInventory().hasItem(this.hoe)) {
-            System.out.println("Validasi Gagal: Cangkul (Hoe) tidak ditemukan di inventaris.");
+        Item heldItem = player.getHeldItem();
+        if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Hoe")) {
+            System.out.println("Anda harus memegang Hoe untuk tilling.");
             return false;
         }
 
         if (player.getEnergy() < 5) {
-            System.out.println("Validasi Gagal: Energi tidak cukup untuk mencangkul.");
+            System.out.println("Energi tidak cukup untuk mencangkul.");
             return false;
         }
 
         Tile currentTile = currentPlayersMap.getTileAtPosition(player.getX(), player.getY());
 
         if (currentTile == null) {
-            System.out.println("Validasi Gagal: Pemain tidak berada di tile yang valid.");
+            System.out.println("Pemain tidak berada di tile yang valid.");
             return false;
         }
         if (currentTile.getState() != TileState.TILLABLE && currentTile.getState() != TileState.DEFAULT) {
-            System.out.println("Validasi Gagal: Tile ini tidak bisa dicangkul (status saat ini: " + currentTile.getState() + ").");
+            System.out.println("Tile ini tidak bisa dicangkul (status saat ini: " + currentTile.getState() + ").");
             return false;
         }
         if (currentTile.isOccupied()) {
-            System.out.println("Validasi Gagal: Tile ini sedang ditempati.");
+            System.out.println("Tile ini sedang ditempati.");
             return false;
         }
         return true;
@@ -65,7 +66,7 @@ public class TillingAction extends Action {
             System.out.println(player.getName() + " mencangkul tanah di (" + player.getX() + "," + player.getY() + "). Energi: " + player.getEnergy());
             currentMap.display(player);
         } else {
-            System.err.println("Kesalahan saat eksekusi Tilling: tile pemain tidak valid.");
+            System.err.println("Tile pemain tidak valid.");
         }
     }
 }

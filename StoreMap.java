@@ -74,7 +74,7 @@ public class StoreMap implements GameMap {
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = getTileAtPosition(x, y);
-                char charToDisplay = ' ';
+                char charToDisplay = '.';
 
                 if (tile == null) { System.out.print("[?]"); continue; }
 
@@ -86,7 +86,7 @@ public class StoreMap implements GameMap {
                     else if (COUNTER_ID.equals(obj)) charToDisplay = '=';
                     else if (SHELF_ID.equals(obj)) charToDisplay = '|';
                     else if (DOOR_ID.equals(obj)) charToDisplay = 'D';
-                    else if (obj instanceof NPC) charToDisplay = ((NPC) obj).getName().charAt(0); // Inisial NPC
+                    else if (obj instanceof NPC) charToDisplay = ((NPC) obj).getName().charAt(0);
                     else charToDisplay = 'X';
                 }
                 System.out.print(" " + charToDisplay + " ");
@@ -110,7 +110,7 @@ public class StoreMap implements GameMap {
             if (WALL_ID.equals(obj) || COUNTER_ID.equals(obj) || SHELF_ID.equals(obj) || obj instanceof NPC) {
                 tile.setOccupied(true);
             } else {
-                tile.setOccupied(obj != null && !DOOR_ID.equals(obj)); // Pintu tidak solid
+                tile.setOccupied(obj != null && !DOOR_ID.equals(obj)); 
             }
         }
     }

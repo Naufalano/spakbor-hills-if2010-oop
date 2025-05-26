@@ -95,11 +95,11 @@ public class Farm {
             this.player.setLocation(entryPoint[0], entryPoint[1]);
             // System.out.println("[DEBUG Farm.loadMap] Pemain ditempatkan di peta '" + this.currentMap.getMapName() + "' pada koordinat: (" + player.getX() + "," + player.getY() + ")");
 
-            System.out.println("\nTransitioned to " + this.currentMap.getMapName() + ".");
-            System.out.println("Player at (" + player.getX() + "," + player.getY() + ")");
+            System.out.println("\nPindah ke " + this.currentMap.getMapName() + ".");
+            System.out.println("Player di (" + player.getX() + "," + player.getY() + ")");
             // this.currentMap.display(this.player);
         } else {
-            System.err.println("Error: Map '" + mapName + "' not found in worldMaps! Player remains on: " + (currentMap != null ? currentMap.getMapName() : "undefined map"));
+            System.err.println("Map '" + mapName + "' ga ada di worldMaps! Player tetap di: " + (currentMap != null ? currentMap.getMapName() : "undefined map"));
         }
     }
 
@@ -114,7 +114,7 @@ public class Farm {
         if (playerOwnedFarm instanceof FarmMap) {
             return (FarmMap) playerOwnedFarm;
         }
-        System.err.println("Error: Player's FarmMap instance not found in worldMaps with key 'Farm'.");
+        System.err.println("'Farm' tidak ditemukan.");
         return null;
     }
 
@@ -137,7 +137,7 @@ public class Farm {
         player.setGold(player.getGold() + earningsToday);
         totalGold += earningsToday;
         if (earningsToday > 0) {
-            System.out.println("Earnings from Shipping Bin: " + earningsToday + "g.");
+            System.out.println("Dapet gold dari Shipping Bin: " + earningsToday + "g.");
         }
         shippingBin.getItems().clear(); 
 

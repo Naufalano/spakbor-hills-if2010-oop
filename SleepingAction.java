@@ -23,13 +23,13 @@ public class SleepingAction extends Action {
         }
 
         if (!player.getCurrentLocationName().equals("Player's House")) {
-            System.out.println("Validasi Gagal: Anda hanya bisa tidur (manual) di dalam rumah Anda.");
+            System.out.println("Anda hanya bisa tidur di dalam rumah.");
             return false;
         }
 
         String adjacentObject = InteractionHelper.getAdjacentInteractableObject(player, farm.getCurrentMap());
         if (!PlayerHouseMap.BED_ID.equals(adjacentObject)) {
-            System.out.println("Validasi Gagal: Anda harus berada di sebelah kasur untuk tidur (manual).");
+            System.out.println("Harus berada di sebelah kasur untuk tidur.");
             return false;
         }
         return true;
@@ -38,9 +38,9 @@ public class SleepingAction extends Action {
     @Override
     public void execute(Player player, Farm farm) {
         if (isAutomaticSleep) {
-            System.out.println(player.getName() + " pingsan karena kelelahan dan tidur hingga pagi...");
+            System.out.println(player.getName() + " tepar ampe pagi...");
         } else {
-            System.out.println(player.getName() + " pergi tidur...");
+            System.out.println(player.getName() + " turu...");
         }
 
         farm.setCurrentlySleeping(true);
@@ -52,13 +52,10 @@ public class SleepingAction extends Action {
         } else {
             player.setEnergy(Player.MAX_ENERGY);
         }
-
-        System.out.println(player.getName() + " is sleeping...");
         farm.nextDay();
 
-        System.out.println("Good morning! Energy is now " + player.getEnergy() + "/" + Player.MAX_ENERGY);
-        System.out.println("It is now Day " + farm.getCurrentDayInSeason() + " of " + farm.getCurrentSeason().toString() +
-                           ", Weather: " + farm.getCurrentWeather().toString());
+        System.out.println("Wilujeng enjing! Energi " + player.getEnergy() + "/" + Player.MAX_ENERGY);
+        System.out.println("Sekarang hari " + farm.getCurrentDayInSeason() + " musim " + farm.getCurrentSeason().toString() + ", Cuaca: " + farm.getCurrentWeather().toString());
         farm.setCurrentlySleeping(false);
     }
 }

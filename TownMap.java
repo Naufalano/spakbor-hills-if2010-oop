@@ -248,13 +248,7 @@ public class TownMap implements GameMap {
 
     @Override
     public String getExitDestination(int attemptedOutOfBoundX, int attemptedOutOfBoundY) {
-        Tile edgeTile = null;
-        if (attemptedOutOfBoundX < 0) edgeTile = getTileAtPosition(0, attemptedOutOfBoundY);
-        else if (attemptedOutOfBoundX >= MAP_WIDTH) edgeTile = getTileAtPosition(MAP_WIDTH-1, attemptedOutOfBoundY);
-        else if (attemptedOutOfBoundY < 0) edgeTile = getTileAtPosition(attemptedOutOfBoundX, 0);
-        else if (attemptedOutOfBoundY >= MAP_HEIGHT) edgeTile = getTileAtPosition(attemptedOutOfBoundX, MAP_HEIGHT-1);
-
-        if(edgeTile != null && TOWN_EXIT_TO_FARM_ID.equals(edgeTile.getObjectOnTile())) {
+        if(attemptedOutOfBoundX < 0 && attemptedOutOfBoundY == MAP_HEIGHT / 2) {
             return "Farm";
         }
         return null;
@@ -311,6 +305,15 @@ public class TownMap implements GameMap {
                 }
                 break;
             case "Abigail's Room":
+                for (int k = 0; k < checker.size(); k++) {
+                    if (checker.get(k).destinationMapName.equals(comingFromMapName)) {
+                        doorX = checker.get(k).x;
+                        entryY = checker.get(k).y + 1;
+                        break;
+                    }
+                }
+                break;
+            case "Store":
                 for (int k = 0; k < checker.size(); k++) {
                     if (checker.get(k).destinationMapName.equals(comingFromMapName)) {
                         doorX = checker.get(k).x;

@@ -12,30 +12,30 @@ public class CookingAction extends Action {
     @Override
     public boolean validate(Player player, Farm farm) {
         if (recipeToCook == null) {
-            System.out.println("No recipe selected for cooking.");
+            System.out.println("Pilih resep.");
             return false;
         }
 
         GameMap map = farm.getCurrentMap();
         String adjacentObjectId = InteractionHelper.getAdjacentInteractableObject(player, map);
         if (!player.getCurrentLocationName().equals("Player's House") && !PlayerHouseMap.STOVE_ID.equals(adjacentObjectId)) {
-            System.out.println("Validation Failed: Cooking can only be done on your stove.");
+            System.out.println("Cooking hanya valid di kompor rumah.");
             return false;
         }
 
         FarmMap farmMap = farm.getFarmMap();
         if (farmMap == null) {
-            System.out.println("Validation Failed: Farm map data not available.");
+            System.out.println("Farm map data tidak ada.");
             return false;
         }
         FarmMap.PlacedObject houseStructure = farmMap.getHouseStructureLocation();
         if (houseStructure == null) {
-            System.out.println("Validation Failed: House location not found on farm map.");
+            System.out.println("House tidak ditemukan di map.");
             return false;
         }
 
         if (farm.getHouse() == null) {
-            System.out.println("Validation Failed: Your house can't cook!");
+            System.out.println("Ga bisa masak T_T");
             return false;
         }
 
@@ -50,7 +50,7 @@ public class CookingAction extends Action {
                 }
             }
             if(!foundSufficient){
-                 System.out.println("Missing ingredient: " + entry.getValue() + "x " + entry.getKey());
+                 System.out.println("Kurang bahan: " + entry.getValue() + "x " + entry.getKey());
                  return false;
             }
         }
@@ -63,13 +63,13 @@ public class CookingAction extends Action {
             if(COAL_NAME.equalsIgnoreCase(itemInInv.getName()) && player.getInventory().getItemQuantity(itemInInv) > 0) hasCoal = true;
         }
         if (!hasFirewood && !hasCoal) {
-            System.out.println("No fuel (Firewood or Coal) available for cooking.");
+            System.out.println("Butuh bahan bakar buat masak (Coal atau Firewood).");
             return false;
         }
 
         // 6. Check energy for initiation
         if (player.getEnergy() < 10) {
-            System.out.println("Not enough energy to start cooking (-10 energy).");
+            System.out.println("Masak butuh tenaga coy (-10 energy).");
             return false;
         }
         return true;
@@ -90,7 +90,7 @@ public class CookingAction extends Action {
             if (ingredientItem != null) {
                 player.getInventory().useItem(ingredientItem, entry.getValue());
             } else {
-                 System.err.println("Error: Ingredient " + entry.getKey() + " validated but not found during execution. Cooking might be incorrect.");
+                //  System.err.println("Ingredient " + entry.getKey() + " validated but not found during execution. Cooking might be incorrect.");
             }
         }
 
@@ -105,16 +105,16 @@ public class CookingAction extends Action {
 
         if (coalItemInstance != null && player.getInventory().getItemQuantity(coalItemInstance) > 0) {
             player.getInventory().useItem(coalItemInstance, 1);
-            System.out.println("Used 1 Coal.");
+            System.out.println("Pakai 1 Coal.");
             fuelConsumed = true;
         } else if (firewoodItemInstance != null && player.getInventory().getItemQuantity(firewoodItemInstance) > 0) {
             player.getInventory().useItem(firewoodItemInstance, 1);
-            System.out.println("Used 1 Firewood.");
+            System.out.println("Pakai 1 Firewood.");
             fuelConsumed = true;
         }
 
         if (!fuelConsumed) {
-             System.out.println("Error: Fuel was validated but not found/used during execution. Cooking failed.");
+            //  System.out.println("Fuel was validated but not found/used during execution. Cooking failed.");
              player.setEnergy(player.getEnergy() + 10);
              return;
         }
@@ -122,9 +122,9 @@ public class CookingAction extends Action {
         farm.advanceGameTime(recipeToCook.getTimeToCookMinutes());
 
         Food cookedFood = recipeToCook.getResultItem();
-        player.getInventory().addItem(cookedFood, 1);
+        player.obtainItem(cookedFood, 1);
 
-        System.out.println(player.getName() + " cooked " + cookedFood.getName() + "!");
-        System.out.println("It took " + recipeToCook.getTimeToCookMinutes() + " minutes. Energy: " + player.getEnergy());
+        System.out.println(player.getName() + " memasak " + cookedFood.getName() + "!");
+        System.out.println("Butuh " + recipeToCook.getTimeToCookMinutes() + " menit. Fyuh. Energi: " + player.getEnergy());
     }
 }
