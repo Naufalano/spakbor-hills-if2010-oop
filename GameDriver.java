@@ -264,21 +264,6 @@ public class GameDriver {
                     case "unequip":
                         player.unequipItem();
                         break;
-                    case "sell":
-                         if (parts.length == 2) {
-                            String itemName = combineParts(parts, 1);
-                            Item itemToSell = player.getInventory().getItemByName(itemName);
-                            if (itemToSell != null) { actionToPerform = new SellingAction(itemToSell, 1); }
-                            else { System.out.println("Item '" + itemName + "' tidak ditemukan di inventaris.");}
-                        } else if (parts.length > 2 ) {
-                            String itemName = combineParts(parts, 1, parts.length - 2);
-                            Item itemToSell = player.getInventory().getItemByName(itemName);
-                            String itemAmt = combineParts(parts, parts.length - 1);
-                            int amt = Integer.parseInt(itemAmt);
-                            if (itemToSell != null) { actionToPerform = new SellingAction(itemToSell, amt); }
-                            else { System.out.println("Item '" + itemName + "' tidak ditemukan di inventaris.");}
-                        } else { System.out.println("Format: sell [nama_item]");}
-                        break;
                     case "viewbin":
                         displayShippingBinContents();
                         break;
@@ -455,14 +440,46 @@ public class GameDriver {
         String adjacentObjectId = InteractionHelper.getAdjacentInteractableObject(player, currentMap);
         if (adjacentObjectId != null) {
             if (FarmMap.SHIPPING_BIN_ID.equals(adjacentObjectId) && player.getCurrentLocationName().equals("Farm")) {
-                System.out.println("Berinteraksi dengan Kotak Pengiriman.");
-                System.out.print("Masukkan nama item untuk dijual (atau 'batal'): ");
+                System.out.println("Anda bisa melihat isi bin dengan 'viewbin' atau menjual item.");
+                System.out.print("Masukkan nama item untuk dijual (atau ketik 'lihat' untuk isi bin, 'batal' untuk keluar): ");
                 String itemToSellName = scanner.nextLine().trim();
-                int amt = scanner.nextInt();
+
                 if (itemToSellName.equalsIgnoreCase("batal")) return;
+                if (itemToSellName.equalsIgnoreCase("lihat")) {
+                    displayShippingBinContents();
+                    return;
+                }
+
                 Item itemToSell = player.getInventory().getItemByName(itemToSellName);
-                if (itemToSell != null) { player.performAction(new SellingAction(itemToSell, amt), farm); }
-                else { System.out.println("Item '" + itemToSellName + "' tidak ditemukan di inventaris."); }
+                if (itemToSell != null) {
+                    int availableQty = player.getInventory().getItemQuantity(itemToSell);
+                    System.out.println("Anda memiliki " + availableQty + " " + itemToSell.getName() + ".");
+                    System.out.print("Berapa banyak yang ingin dijual? (1-" + availableQty + ", atau 'semua'): ");
+                    String qtyInput = scanner.nextLine().trim().toLowerCase();
+                    int quantityToSell = 0;
+
+                    if (qtyInput.equals("semua")) {
+                        quantityToSell = availableQty;
+                    } else {
+                        try {
+                            quantityToSell = Integer.parseInt(qtyInput);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Input jumlah tidak valid.");
+                            return;
+                        }
+                    }
+
+                    if (quantityToSell > 0 && quantityToSell <= availableQty) {
+                        player.performAction(new SellingAction(itemToSell, quantityToSell), farm);
+                    } else if (quantityToSell > availableQty) {
+                        System.out.println("Tidak memiliki " + itemToSell.getName() + " untuk dijual sebanyak itu.");
+                    } else {
+                        System.out.println("Jumlah yang dimasukkan tidak valid.");
+                    }
+                } else {
+                    System.out.println("Item '" + itemToSellName + "' tidak ditemukan di inventory Anda.");
+                }
+                return;
             }
             else if ((FarmMap.POND_ID.equals(adjacentObjectId) && player.getCurrentLocationName().equals("Farm")) ||
                      (ForestMap.RIVER_WATER_ID.equals(adjacentObjectId) && player.getCurrentLocationName().equals("Forest Zone")) ||
