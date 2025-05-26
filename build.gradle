@@ -1,0 +1,37 @@
+plugins {
+    id 'application'
+    id 'java'
+}
+
+group = 'com.spakbor.hills'
+version = '1.0'
+
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'main.Main'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
