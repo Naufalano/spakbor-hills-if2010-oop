@@ -2,8 +2,11 @@ package main;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.rmi.server.UID;
 import java.awt.Graphics;
 import java.awt.Color;
+
+import javax.sound.midi.Soundbank;
 import javax.swing.JPanel;
 
 import entity.Player;
@@ -33,7 +36,10 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;
 
     TileManager tileM = new TileManager(this);
+    Sound music = new Sound();
+    Sound SE = new Sound();
     KeyHandler keyH = new KeyHandler();
+    public UI ui = new UI(this);
     Thread gameThread;
     public CollisionChecker checker = new CollisionChecker(this);
     public AssetSetter setter = new AssetSetter(this);
@@ -50,6 +56,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setUpGame(){
         setter.setItem();
+        playMusic(5);
     }
 
     public void startGameThread(){
@@ -131,6 +138,24 @@ public class GamePanel extends JPanel implements Runnable{
 
         player.draw(g2);
 
+        ui.draw(g2);
+
         g2.dispose();
+    }
+
+    public void playMusic(int i){
+        music.setFile(i);
+        music.play();
+        music.loop();
+    }
+
+    public void stopMusic(){
+        music.stop();
+        
+    }
+
+    public void playSE(int i){
+        SE.setFile(i);
+        SE.play();
     }
 }
