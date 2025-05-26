@@ -9,6 +9,7 @@ import java.awt.Color;
 import javax.sound.midi.Soundbank;
 import javax.swing.JPanel;
 
+import entity.Entity;
 import entity.Player;
 import item.SuperItem;
 import tile.TileManager;
@@ -38,13 +39,18 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileM = new TileManager(this);
     Sound music = new Sound();
     Sound SE = new Sound();
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     public UI ui = new UI(this);
     Thread gameThread;
     public CollisionChecker checker = new CollisionChecker(this);
     public AssetSetter setter = new AssetSetter(this);
+    
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
     public Player player = new Player(this,keyH);
     public SuperItem[] items = new SuperItem[10];
+    public Entity[] NPC = new Entity[10];
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -56,7 +62,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setUpGame(){
         setter.setItem();
+        setter.setNPC();
         playMusic(5);
+        gameState = playState;
     }
 
     public void startGameThread(){
@@ -119,8 +127,18 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void update(){
+        if(gameState == playState){
         player.update();
+        for(int i = 0; i < NPC.length; i++){
+            if(NPC[i] != null){
+                NPC[i].update();;
+            }
+        }
+        if(gameState == pauseState){
+
+        }
     }
+}
 
     public void paintComponent(Graphics g){
 
@@ -133,6 +151,12 @@ public class GamePanel extends JPanel implements Runnable{
         for(int i = 0; i < items.length; i++){
             if(items[i] != null){
                 items[i].draw(g2, this);
+            }
+        }
+
+        for(int i = 0; i < NPC.length; i++){
+            if(NPC[i] != null){
+                NPC[i].draw(g2);
             }
         }
 

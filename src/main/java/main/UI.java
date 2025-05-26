@@ -9,37 +9,48 @@ import item.*;
 
 public class UI {
     GamePanel gp;
+    Graphics2D g2;
     Font Arial;
-    BufferedImage keyImage;
-    public boolean messageOn = false;
+    // public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
         Arial = new Font("Arial", Font.PLAIN, 30);
-        ItemKey key = new ItemKey(gp);
-        keyImage = key.image;
+        // ItemKey key = new ItemKey(gp);
+        // keyImage = key.image;
     }
 
     public void showMessage(String message){
         this.message = message;
-        this.messageOn = true;
     }
 
     public void draw(Graphics2D g2){
-        g2.setFont(Arial);
+        this.g2 = g2;
+        g2.setFont(Arial); 
         g2.setColor(Color.white);
-        g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2, gp.tileSize/2, gp.tileSize/2, null);
-        g2.drawString(("x "+ gp.player.hasKey), 55, 47);
-        if(messageOn == true){
-            g2.setFont(g2.getFont().deriveFont(26F));
-            g2.drawString(message, gp.tileSize*6 - 10, gp.tileSize*11);
-            messageCounter++;
-            if(messageCounter == 90){
-                messageCounter = 0;
-                messageOn = false;
-            }
+
+        if(gp.gameState == gp.playState){
+            // gp.gameState = gp.pauseState;
+        } 
+        if (gp.gameState == gp.pauseState){
+            drawPauseScreen();
         }
+    }
+
+    public void drawPauseScreen(){
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,80F));
+        String text = "PAUSED";
+        int x = getXAtCenter(text);
+        int y = gp.screenHeight/2;
+
+        g2.drawString(text, x, y);
+    }
+
+    public int getXAtCenter(String text){
+        int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        int x = gp.screenWidth/2 - length/2;
+        return x;
     }
 }

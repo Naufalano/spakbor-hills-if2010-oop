@@ -13,16 +13,15 @@ import main.UtilityTool;
 
 public class Player extends Entity {
 
-    GamePanel gp;
     KeyHandler keyH;
 
     public final int screenX;
     public final int screenY;
-    public int hasKey = 0;
+    // public int hasKey = 0;
 
     public Player(GamePanel gp, KeyHandler keyH){
 
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
@@ -43,30 +42,17 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage(){
-        up1 = setup("boy_up_1");
-        up2 = setup("boy_up_2");
-        down1 = setup("boy_down_1");
-        down2 = setup("boy_down_2");
-        left1 = setup("boy_left_1");
-        left2 = setup("boy_left_2");
-        right1 = setup("boy_right_1");
-        right2 = setup("boy_right_2");
+        up1 = setup("/player/boy_up_1");
+        up2 = setup("/player/boy_up_2");
+        down1 = setup("/player/boy_down_1");
+        down2 = setup("/player/boy_down_2");
+        left1 = setup("/player/boy_left_1");
+        left2 = setup("/player/boy_left_2");
+        right1 = setup("/player/boy_right_1");
+        right2 = setup("/player/boy_right_2");
     }
 
-    public BufferedImage setup(String imageName) {
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-
-            image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
+    
     public void update(){
 
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true){
@@ -88,6 +74,9 @@ public class Player extends Entity {
 
         int Idx = gp.checker.checkObject(this, true);
         pickUpObject(Idx);
+
+        int npcIdx = gp.checker.checkNPC(this, gp.NPC);
+        interactNPC(npcIdx);
 
         if(!collisionOn){
 
@@ -121,32 +110,13 @@ public class Player extends Entity {
     }
     public void pickUpObject(int i){
         if(i != 999){
-            String itemName = gp.items[i].name; 
-            switch (itemName) {
-                case "Key":
-                    gp.playSE(1);
-                    hasKey++;
-                    gp.items[i] = null;
-                    gp.ui.showMessage("You Have A Key!");
-                    break;
-                case "Door":
-                    if(hasKey > 0) {
-                        gp.playSE(3);
-                        gp.items[i] = null;
-                        hasKey--;
-                        gp.ui.showMessage("You Opened The Door!");
-                    } else {
-                        gp.playSE(4);
-                        gp.ui.showMessage("You Need A Key!");
-                    }
-                    break;
-                case "Boots":
-                    gp.playSE(2);
-                    speed += 2;
-                    gp.items[i] = null;
-                    gp.ui.showMessage("You Have A Power Up!");
-                    break;
-            }
+            
+        }
+    }
+
+    public void interactNPC(int i){
+        if(i != 999){
+            
         }
     }
 
