@@ -7,7 +7,6 @@ public class MountainMap implements GameMap {
     public static final int MAP_HEIGHT = 20;
     public static final String MOUNTAIN_WALL_ID = "MountainWall"; 
     public static final String LAKE_WATER_ID = "LakeWater";
-    public static final String MINE_ENTRANCE_ID = "MineEntrance"; 
 
     private List<Tile> tiles;
     private Random random = new Random();
@@ -43,8 +42,6 @@ public class MountainMap implements GameMap {
             if (getTileAtPosition(0, y).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, 0, y); 
             if (getTileAtPosition(MAP_WIDTH - 1, y).getObjectOnTile() == null) placeObjectOnTile(MOUNTAIN_WALL_ID, MAP_WIDTH - 1, y);
         }
-
-        placeObjectOnTile(MINE_ENTRANCE_ID, random.nextInt(MAP_WIDTH - 4) + 2, 2);
     }
 
     @Override
@@ -67,7 +64,6 @@ public class MountainMap implements GameMap {
                     Object obj = tile.getObjectOnTile();
                     if (MOUNTAIN_WALL_ID.equals(obj)) charToDisplay = 'M';
                     else if (LAKE_WATER_ID.equals(obj)) charToDisplay = '~';
-                    else if (MINE_ENTRANCE_ID.equals(obj)) charToDisplay = 'E';
                     else if (obj instanceof NPC) charToDisplay = 'N';
                     else charToDisplay = 'X';
                 } else {
@@ -91,7 +87,7 @@ public class MountainMap implements GameMap {
         Tile tile = getTileAtPosition(x, y);
         if (tile != null) {
             tile.setObjectOnTile(obj);
-            if (MOUNTAIN_WALL_ID.equals(obj) || LAKE_WATER_ID.equals(obj) || MINE_ENTRANCE_ID.equals(obj)) {
+            if (MOUNTAIN_WALL_ID.equals(obj) || LAKE_WATER_ID.equals(obj)) {
                  tile.setOccupied(true);
             } else {
                  tile.setOccupied(obj != null);

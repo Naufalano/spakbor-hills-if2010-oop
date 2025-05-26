@@ -10,7 +10,7 @@ public class MiscDataRegistry {
     static {
         ALL_MISC_ITEMS.add(new Misc("Firewood", 20, 5));
 
-        ALL_MISC_ITEMS.add(new Misc("Coal", 50, 15));
+        ALL_MISC_ITEMS.add(new Misc("Coal", 20, 15));
 
         ALL_MISC_ITEMS.add(new Misc("Proposal Ring", 10000, 2000));
     }

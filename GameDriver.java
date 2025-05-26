@@ -111,6 +111,9 @@ public class GameDriver {
         playerInventory.addItem(new Equipment("Watering Can"), 1);
         playerInventory.addItem(new Equipment("Fishing Rod"), 1);
         playerInventory.addItem(new Equipment("Pickaxe"),1);
+        
+        Misc coal = MiscDataRegistry.getMiscItemByName("Coal");
+        if (coal != null) playerInventory.addItem(coal, 10);
 
         Seeds parsnipSeeds = SeedDataRegistry.getSeedByName("Parsnip Seeds");
         if (parsnipSeeds != null) playerInventory.addItem(parsnipSeeds, 15);

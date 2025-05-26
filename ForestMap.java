@@ -92,12 +92,14 @@ public class ForestMap implements GameMap {
                 }
                 else if (tile.isOccupied()) {
                     Object objOnTile = tile.getObjectOnTile();
-                    if (TREE_ID.equals(objOnTile)) {
-                        charToDisplay = TREE_CHAR.charAt(0);
+                    if (y == MAP_HEIGHT / 2 && x == MAP_WIDTH - 1) {
+                        charToDisplay = 'D';
                     } else if (RIVER_WATER_ID.equals(objOnTile)) {
                         charToDisplay = RIVER_CHAR.charAt(0);
                     } else if (objOnTile instanceof NPC) { 
                         charToDisplay = 'N';
+                    } else if (TREE_ID.equals(objOnTile)) {
+                        charToDisplay = TREE_CHAR.charAt(0);
                     } else {
                         charToDisplay = 'X';
                     }

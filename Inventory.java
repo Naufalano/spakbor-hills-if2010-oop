@@ -5,22 +5,18 @@ public class Inventory {
     private Map<Item, Integer> inventory = new HashMap<>(); 
 
     public Inventory playerInv(){
-        Item hoe = new Equipment("Hoe");
-        Seeds parsnips = SeedDataRegistry.getSeedByName("Parsnip Seeds");
-        if (parsnips != null) {
-            this.inventory.put(parsnips, 15); // Give 5 Parsnip Seeds
-        }
-        Item can = new Equipment("Watering Can");
-        Item pickaxe = new Equipment("Pickaxe");
-        Item rod = new Equipment("Fishing Rod");
-        inventory.put(hoe, 1);
-        inventory.put(can, 1);
-        inventory.put(pickaxe, 1);
-        inventory.put(rod, 1);
         return this;
     }
 
     public void addItem(Item item, int amt){
+        if(inventory.containsKey(item)){
+            if(item instanceof Equipment){
+                return;
+            }
+            int curAmt = inventory.get(item);
+            inventory.put(item, curAmt + amt);
+            return;
+        }
         inventory.put(item, amt);
     }
 

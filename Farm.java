@@ -60,11 +60,6 @@ public class Farm {
             "Dasco's Lair", "Perry's Place", "Caroline's Home", 
             "Mayor's Manor", "Abigail's Room"
         };
-        String[] npcHouseDoorIdsInTown = {
-            TownMap.DASCO_HOUSE_ENTRANCE_ID, TownMap.PERRY_HOUSE_ENTRANCE_ID,
-            TownMap.CAROLINE_HOUSE_ENTRANCE_ID, TownMap.MAYOR_HOUSE_ENTRANCE_ID,
-            TownMap.ABIGAIL_HOUSE_ENTRANCE_ID
-        };
 
         for (int i = 0; i < npcNamesForHouses.length; i++) {
             NPC resident = npcFactory.getNPC(npcNamesForHouses[i]);
@@ -89,12 +84,16 @@ public class Farm {
      * @param comingFromMapName The name of the map the player is transitioning from, to determine the correct entry point.
      */
     public void loadMap(String mapName, String comingFromMapName) {
+        // System.out.println("[DEBUG Farm.loadMap] Memuat peta: '" + mapName + "', dari: '" + comingFromMapName + "'");
         GameMap mapToLoad = worldMaps.get(mapName);
         if (mapToLoad != null) {
             this.currentMap = mapToLoad;
             this.player.setCurrentLocationName(this.currentMap.getMapName());
+            // System.out.println("[DEBUG Farm.loadMap] player.currentLocationName diatur ke: '" + this.player.getCurrentLocationName() + "'");
+            // System.out.println("[DEBUG Farm.loadMap] Nama peta tujuan (currentMap.getMapName()): '" + this.currentMap.getMapName() + "'");
             int[] entryPoint = this.currentMap.getEntryPoint(comingFromMapName);
             this.player.setLocation(entryPoint[0], entryPoint[1]);
+            // System.out.println("[DEBUG Farm.loadMap] Pemain ditempatkan di peta '" + this.currentMap.getMapName() + "' pada koordinat: (" + player.getX() + "," + player.getY() + ")");
 
             System.out.println("\nTransitioned to " + this.currentMap.getMapName() + ".");
             System.out.println("Player at (" + player.getX() + "," + player.getY() + ")");

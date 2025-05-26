@@ -7,6 +7,7 @@ public class TownMap implements GameMap {
     public static final int MAP_HEIGHT = 25;
 
     public static final String BUILDING_WALL_ID = "BuildingWall";
+    public static final String STORE_WALL_ID = "StoreWall";
     public static final String ROAD_ID = "Road";
 
     public static final String STORE_ENTRANCE_ID = "TOWN_DOOR_TO_Store";
@@ -22,6 +23,7 @@ public class TownMap implements GameMap {
 
     public static final char ROAD_CHAR = '#';
     public static final char BUILDING_CHAR = 'B';
+    public static final char STORE_CHAR = 'S';
     public static final char DOOR_CHAR = 'D';
     public static final char GROUND_CHAR = '.';
 
@@ -69,7 +71,7 @@ public class TownMap implements GameMap {
             placeObjectOnTile(ROAD_ID, x, (MAP_HEIGHT / 4) * 3, false);
         }
 
-        placeBuildingWithEntrance(STORE_ENTRANCE_ID, "Eksterior Toko", 5, MAP_HEIGHT / 2 + 1, 7, 4, "Store");
+        placeStoreWithEntrance(STORE_ENTRANCE_ID, "Eksterior Toko", 5, MAP_HEIGHT / 2 + 1, 7, 4, "Store");
         
         placeBuildingWithEntrance(DASCO_HOUSE_ENTRANCE_ID, "Eksterior Rumah Dasco", 15, MAP_HEIGHT / 2 + 1, 5, 4, "Dasco's Lair");
         placeBuildingWithEntrance(PERRY_HOUSE_ENTRANCE_ID, "Eksterior Rumah Perry", 5, MAP_HEIGHT / 4 + 1, 5, 4, "Perry's Place");
@@ -87,9 +89,7 @@ public class TownMap implements GameMap {
      * Menempatkan bangunan dan pintu masuknya.
      * Pintu akan ditempatkan di sisi bawah bangunan secara default, menghadap jalan jika memungkinkan.
      */
-    private void placeBuildingWithEntrance(String entranceId, String buildingExteriorId, 
-                                           int preferredX, int preferredY, int width, int height, 
-                                           String destinationMapKey) {
+    private void placeBuildingWithEntrance(String entranceId, String buildingExteriorId, int preferredX, int preferredY, int width, int height, String destinationMapKey) {
 
         int startX = preferredX;
         int startY = preferredY;
@@ -121,7 +121,40 @@ public class TownMap implements GameMap {
         removeObjectFromTile(doorX, doorY);
         placeObjectOnTile(entranceId, doorX, doorY, false); 
         doors.add(new DoorInfo(entranceId, doorX, doorY, destinationMapKey));
-        System.out.println("Pintu " + entranceId + " ke " + destinationMapKey + " ditempatkan di (" + doorX + "," + doorY + ")");
+    }
+
+    private void placeStoreWithEntrance(String entranceId, String buildingExteriorId, int preferredX, int preferredY, int width, int height, String destinationMapKey) {
+
+        int startX = preferredX;
+        int startY = preferredY;
+
+        if (startX + width >= MAP_WIDTH) startX = MAP_WIDTH - width -1;
+        if (startY + height >= MAP_HEIGHT) startY = MAP_HEIGHT - height -1;
+        if (startX < 0) startX = 0;
+        if (startY < 0) startY = 0;
+
+        for (int y = startY; y < startY + height; y++) {
+            for (int x = startX; x < startX + width; x++) {
+                Tile currentTile = getTileAtPosition(x,y);
+                if (currentTile != null && (currentTile.getObjectOnTile() == null || !ROAD_ID.equals(currentTile.getObjectOnTile()))) {
+                    placeObjectOnTile(STORE_WALL_ID, x, y, true);
+                } else if (currentTile != null && ROAD_ID.equals(currentTile.getObjectOnTile())) {
+                    placeObjectOnTile(STORE_WALL_ID, x, y, true);
+                }
+            }
+        }
+        
+        int doorX = startX + width / 2;
+        int doorY = startY + height - 1;
+
+        Tile accessTile = getTileAtPosition(doorX, doorY + 1);
+        if (accessTile == null || (accessTile.isOccupied() && !ROAD_ID.equals(accessTile.getObjectOnTile()) )) {
+            System.err.println("Peringatan: Akses ke pintu " + entranceId + " mungkin terhalang.");
+        }
+
+        removeObjectFromTile(doorX, doorY);
+        placeObjectOnTile(entranceId, doorX, doorY, false); 
+        doors.add(new DoorInfo(entranceId, doorX, doorY, destinationMapKey));
     }
 
     private void placeObjectOnTile(String objectId, int x, int y, boolean isSolid) {
@@ -179,6 +212,7 @@ public class TownMap implements GameMap {
                         String objId = (String) obj;
                         if (objId.contains("DOOR") || objId.equals(TOWN_EXIT_TO_FARM_ID)) charToDisplay = DOOR_CHAR;
                         else if (objId.equals(BUILDING_WALL_ID) || objId.contains("Eksterior")) charToDisplay = BUILDING_CHAR;
+                        else if (objId.equals(STORE_WALL_ID) || objId.contains("Eksterior")) charToDisplay = STORE_CHAR;
                         else if (objId.equals(ROAD_ID)) charToDisplay = ROAD_CHAR;
                         else if (tile.isOccupied()) charToDisplay = 'X';
                     } else if (obj instanceof NPC) {
@@ -191,7 +225,7 @@ public class TownMap implements GameMap {
             }
             System.out.println();
         }
-        System.out.println("P:Pemain, B:Bangunan, D:Pintu, #:Jalan, ,:Tanah, N:NPC, X:Lainnya");
+        System.out.println("P:Pemain, B:Bangunan, S:Toko, D:Pintu, #:Jalan, ,:Tanah, N:NPC, X:Lainnya");
     }
 
     @Override
@@ -228,28 +262,68 @@ public class TownMap implements GameMap {
 
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
-        for (DoorInfo door : doors) {
-            if (door.destinationMapName.equals(comingFromMapName)) {
-                int spawnX = door.x;
-                int spawnY = door.y + 1;
-                if (spawnY >= MAP_HEIGHT || (getTileAtPosition(spawnX, spawnY) != null && getTileAtPosition(spawnX, spawnY).isOccupied() && !ROAD_ID.equals(getTileAtPosition(spawnX, spawnY).getObjectOnTile()))) {
-                    spawnY = door.y - 1;
+        if ("Farm".equals(comingFromMapName)) {
+            for (DoorInfo door : doors) {
+                if (TOWN_EXIT_TO_FARM_ID.equals(door.doorId)) {
+                    return new int[]{door.x + 1 < MAP_WIDTH ? door.x +1 : door.x-1, door.y};
                 }
-                if (spawnY < 0 || (getTileAtPosition(spawnX, spawnY) != null && getTileAtPosition(spawnX, spawnY).isOccupied() && !ROAD_ID.equals(getTileAtPosition(spawnX, spawnY).getObjectOnTile()))) {
-                     spawnY = door.y;
-                     spawnX = (door.x +1 < MAP_WIDTH) ? door.x+1 : door.x-1;
-                }
-                return new int[]{spawnX, spawnY};
             }
         }
-        if ("Farm".equals(comingFromMapName)) {
-             for (DoorInfo door : doors) {
-                 if (TOWN_EXIT_TO_FARM_ID.equals(door.doorId)) {
-                     return new int[]{door.x + 1 < MAP_WIDTH ? door.x +1 : door.x-1, door.y};
-                 }
-             }
+        TownMap test = new TownMap();
+        int doorX = 0;
+        int entryY = test.getHeight() / 2;
+        List<TownMap.DoorInfo> checker = test.getAllDoors();
+        switch (comingFromMapName) {
+            case "Perry's Place":
+                for (int k = 0; k < checker.size(); k++) {
+                    if (checker.get(k).destinationMapName.equals(comingFromMapName)) {
+                        doorX = checker.get(k).x;
+                        entryY = checker.get(k).y + 1;
+                        break;
+                    }
+                }
+                break;
+            case "Dasco's Lair":
+                for (int k = 0; k < checker.size(); k++) {
+                    if (checker.get(k).destinationMapName.equals(comingFromMapName)) {
+                        doorX = checker.get(k).x;
+                        entryY = checker.get(k).y + 1;
+                        break;
+                    }
+                }
+                break;
+            case "Caroline's Home":
+                for (int k = 0; k < checker.size(); k++) {
+                    if (checker.get(k).destinationMapName.equals(comingFromMapName)) {
+                        doorX = checker.get(k).x;
+                        entryY = checker.get(k).y + 1;
+                        break;
+                    }
+                }
+                break;
+            case "Mayor's Manor":
+                for (int k = 0; k < checker.size(); k++) {
+                    if (checker.get(k).destinationMapName.equals(comingFromMapName)) {
+                        doorX = checker.get(k).x;
+                        entryY = checker.get(k).y + 1;
+                        break;
+                    }
+                }
+                break;
+            case "Abigail's Room":
+                for (int k = 0; k < checker.size(); k++) {
+                    if (checker.get(k).destinationMapName.equals(comingFromMapName)) {
+                        doorX = checker.get(k).x;
+                        entryY = checker.get(k).y + 1;
+                        break;
+                    }
+                }
+                break;
+            default:
+                doorX = 0;
+                entryY = test.getHeight() / 2;
         }
-        return new int[]{MAP_WIDTH / 3 + 1, MAP_HEIGHT / 2}; 
+        return new int[]{doorX, entryY};
     }
 
     public DoorInfo getDoorInfo(String doorId) {

@@ -1,3 +1,5 @@
+import java.util.List;
+
 enum Direction { UP, DOWN, LEFT, RIGHT }
 
 public class MovingAction extends Action {
@@ -76,9 +78,44 @@ public class MovingAction extends Action {
                     System.out.println("Tidak bisa bergerak lebih jauh: Tepi peta " + currentActiveMap.getMapName() + ".");
                     break;
                 }
-            } else if (attemptedNextX == house.getHouseEntranceX() && attemptedNextY == house.getHouseEntranceY()) {
+            } else if (attemptedNextX == house.getHouseEntranceX() && attemptedNextY == house.getHouseEntranceY() && currentActiveMap instanceof FarmMap) {
                 String oldLocationName = player.getCurrentLocationName();
                 farm.loadMap("Player's House", oldLocationName);
+                attemptedNextX = player.getX(); attemptedNextY = player.getY();
+            } else if (currentActiveMap instanceof PlayerHouseMap) {
+                if (attemptedNextX == currentActiveMap.getWidth() / 2 && attemptedNextY == currentActiveMap.getHeight() - 1) {
+                    farm.loadMap("Farm", null);
+                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
+                }
+            }
+            else if (currentActiveMap instanceof TownMap) {
+                if (attemptedNextX <= 0 && attemptedNextY == currentActiveMap.getHeight() / 2) {
+                    farm.loadMap("Farm", player.getCurrentLocationName());
+                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
+                }
+                TownMap some = new TownMap();
+                List<TownMap.DoorInfo> points = some.getAllDoors();
+                for (int j = 0;j < points.size(); j++) {
+                    if (attemptedNextX == points.get(j).x && attemptedNextY == points.get(j).y) {
+                        farm.loadMap(points.get(j).destinationMapName, "Town");
+                        attemptedNextX = player.getX(); attemptedNextY = player.getY();
+                        break;
+                    }
+                }
+            }
+            else if (currentActiveMap instanceof StoreMap) {
+                StoreMap some = new StoreMap(farm.getNpcFactory());
+                if (attemptedNextX == some.getWidth() / 2 && attemptedNextY == some.getHeight() - 1) {
+                    farm.loadMap("Town", "Store");
+                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
+                }
+            }
+            else if (currentActiveMap instanceof GenericInteriorMap) {
+                GenericInteriorMap some = new GenericInteriorMap("");
+                if (attemptedNextX == some.getWidth() / 2 && attemptedNextY == some.getHeight() - 1) {
+                    farm.loadMap("Town", player.getCurrentLocationName());
+                    attemptedNextX = player.getX(); attemptedNextY = player.getY();
+                }
             }
 
             Tile targetTile = currentActiveMap.getTileAtPosition(attemptedNextX, attemptedNextY);
@@ -99,20 +136,6 @@ public class MovingAction extends Action {
                 newX = attemptedNextX;
                 newY = attemptedNextY;
                 movedThisAction = true;
-            } else {
-                String reason = "jalur terhalang";
-                if (targetTile != null && targetTile.getObjectOnTile() != null) {
-                    Object occupant = targetTile.getObjectOnTile();
-                    if (occupant instanceof String) {
-                        reason += " oleh " + occupant;
-                    } else {
-                        reason += " oleh " + occupant.getClass().getSimpleName();
-                    }
-                } else if (targetTile == null) {
-                    reason = "tile tujuan tidak ada (di luar batas)";
-                }
-                System.out.println("Tidak bisa bergerak lebih jauh ke arah itu. " + reason + " di (" + attemptedNextX + "," + attemptedNextY + ").");
-                break; 
             }
         }
 
