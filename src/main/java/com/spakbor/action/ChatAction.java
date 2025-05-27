@@ -18,7 +18,7 @@ public class ChatAction extends Action {
             System.out.println("NPC target tidak valid.");
             return false;
         }
-        if (player.getEnergy() < ENERGY_COST) {
+        if (player.getEnergy() + 20 < ENERGY_COST) {
             System.out.println("Energi tidak cukup untuk chat (-" + ENERGY_COST + ").");
             return false;
         }

@@ -86,40 +86,6 @@ public class SellingAction extends Action {
              System.out.println("Shipping Bin sudah penuh.");
         }
 
-        // if (player.getInventory().hasItem(itemToSell) && player.getInventory().getItemQuantity(itemToSell) > 0) {
-        //     itemInstanceInInventory = null;
-        //     for(Item it : player.getInventory().getInventoryMap().keySet()){
-        //          if(it.equals(itemToSell)){ 
-        //             itemInstanceInInventory = it;
-        //             break;
-        //         }
-        //     }
-            
-        //     if(itemInstanceInInventory == null) {
-        //          for(Item it : player.getInventory().getInventoryMap().keySet()){
-        //             if(it.getName().equals(itemToSell.getName())){
-        //                 itemInstanceInInventory = it;
-        //                 break;
-        //             }
-        //         }
-        //     }
-
-
-        //     if(itemInstanceInInventory == null) {
-        //         System.err.println("Error: Item " + itemToSell.getName() + " validated but couldn't be re-fetched from inventory for selling.");
-        //         return;
-        //     }
-
-        //     if (farm.getShippingBin().addItem(itemInstanceInInventory)) {
-        //         player.getInventory().useItem(itemInstanceInInventory, amtToSell);
-        //         System.out.println(itemInstanceInInventory.getName() + " placed in the Shipping Bin.");
-        //     } else {
-        //         System.out.println("Shipping Bin is full. Failed to add " + itemInstanceInInventory.getName() + ".");
-        //     }
-        // } else {
-        //     System.out.println("Item " + itemToSell.getName() + " not found in inventory or quantity zero (should have been caught by validate).");
-        // }
-
         farm.advanceGameTime(15);
     }
 }

@@ -21,7 +21,7 @@ public class GiftingAction extends Action {
             System.out.println(giftItem.getName() + " tidak ada di inventory.");
             return false;
         }
-        if (player.getEnergy() < 5) {
+        if (player.getEnergy() + 20 < 5) {
             System.out.println("Ga ada tenaga buat kasih hadiah.");
             return false;
         }

@@ -1,9 +1,11 @@
 package cls.world;
-import cls.core.*;
-import enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import cls.core.NPC;
+import cls.core.Player;
+import enums.TileState;
 
 public class FarmMap implements GameMap {
     public static final int MAP_WIDTH = 32;
@@ -80,8 +82,8 @@ public class FarmMap implements GameMap {
         shippingBinLocation = null;
 
         placeHouseAndDoor();
-        placePond();
         placeShippingBin();
+        placePond();
 
         for (PlacedObject structure : placedStructures) {
             if (HOUSE_ENTRANCE_EXTERIOR_ID.equals(structure.id)) continue;

@@ -5,14 +5,14 @@ public class NPCInteractionStats {
     private String currentRelationshipStatus; 
     private int chatFrequency;
     private int giftFrequency;
-    // private int visitFrequency;
+    private int visitFrequency;
 
     public NPCInteractionStats(String npcName) {
         this.npcName = npcName;
         this.currentRelationshipStatus = "Single";
         this.chatFrequency = 0;
         this.giftFrequency = 0;
-        // this.visitFrequency = 0;
+        this.visitFrequency = 0;
     }
 
     public String getNpcName() {
@@ -43,15 +43,15 @@ public class NPCInteractionStats {
         this.giftFrequency++;
     }
 
-    // public int getVisitFrequency() { return visitFrequency; }
-    // public void incrementVisitFrequency() { this.visitFrequency++; }
+    public int getVisitFrequency() { return visitFrequency; }
+    public void incrementVisitFrequency() { this.visitFrequency++; }
 
     @Override
     public String toString() {
         return "NPC: " + npcName +
                ", Status Hubungan: " + currentRelationshipStatus +
                ", Frekuensi Chat: " + chatFrequency +
-               ", Frekuensi Hadiah: " + giftFrequency;
-               // + ", Frekuensi Kunjungan: " + visitFrequency;
+               ", Frekuensi Hadiah: " + giftFrequency +
+               ", Frekuensi Kunjungan: " + visitFrequency;
     }
 }

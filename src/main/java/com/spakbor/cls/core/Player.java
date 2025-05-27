@@ -1,16 +1,17 @@
 package cls.core;
-import action.*;
-import cls.items.*;
-import cls.world.*;
-import data.*;
-import enums.*;
-
 import java.util.ArrayList;
-import java.util.HashMap; // Untuk statistik
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import action.Action; // Untuk statistik
+import cls.items.Fish;
+import cls.items.Item;
+import data.FishDataRegistry;
+import data.RecipeDataRegistry;
+import enums.FishRarity;
 
 public class Player {
     public static final int MAX_ENERGY = 100;
@@ -241,7 +242,7 @@ public class Player {
     public String getName() { return name; }
     public String getGender() { return gender; }
     public int getEnergy() { return energy; }
-    public void setEnergy(int energy) { this.energy = Math.max(0, Math.min(MAX_ENERGY, energy)); }
+    public void setEnergy(int energy) { this.energy = Math.max(-20, Math.min(MAX_ENERGY, energy)); }
     public String getFarmName() { return farmName; }
     public List<NPC> getPartner() { return partner; }
     public void addPartner(NPC npc) { if (!this.partner.contains(npc)) this.partner.add(npc); }

@@ -4,7 +4,7 @@ import cls.items.*;
 
 public class EatingAction extends Action {
     private EdibleItem foodToEat;
-    private Item itemInstance; // To remove from inventory
+    private Item itemInstance;
 
     public EatingAction(Item item) {
         if (!(item instanceof EdibleItem)) {
@@ -32,7 +32,7 @@ public class EatingAction extends Action {
         int energyRestored = foodToEat.getEnergyRestoration();
         player.setEnergy(player.getEnergy() + energyRestored);
         player.getInventory().useItem(itemInstance, 1); // Consume the item
-        farm.advanceGameTime(5); // [cite: 1]
+        farm.advanceGameTime(5);
 
         System.out.println(player.getName() + " dahar " + itemInstance.getName() + " dan dapet " + energyRestored + " energi.");
         System.out.println("Energi: " + player.getEnergy() + "/" + Player.MAX_ENERGY);

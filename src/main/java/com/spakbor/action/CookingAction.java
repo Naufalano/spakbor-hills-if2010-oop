@@ -1,10 +1,16 @@
 package action;
-import cls.core.*;
-import cls.items.*;
-import cls.world.*;
-import utils.*;
-
 import java.util.Map;
+
+import cls.core.Farm;
+import cls.core.OngoingCooking;
+import cls.core.Player;
+import cls.core.Recipe;
+import cls.items.Food;
+import cls.items.Item;
+import cls.world.FarmMap;
+import cls.world.GameMap;
+import cls.world.PlayerHouseMap;
+import utils.InteractionHelper;
 
 public class CookingAction extends Action {
     private Recipe recipeToCook;
@@ -45,6 +51,18 @@ public class CookingAction extends Action {
             return false;
         }
 
+        if (farm.isStoveBusy()) {
+            OngoingCooking currentTask = farm.getCurrentCookingTaskInfo();
+            if (currentTask != null && !currentTask.isReadyToClaim()) {
+                 System.out.println("Kompor sedang digunakan untuk memasak " + currentTask.getCookedItemName() + ". Tunggu hingga matang.");
+            } else if (currentTask != null && currentTask.isReadyToClaim()) {
+                System.out.println(currentTask.getCookedItemName() + " sudah matang dan siap diambil. Anda tidak bisa memasak lagi sebelum mengambilnya.");
+            } else {
+                 System.out.println("Kompor sedang digunakan."); // Fallback
+            }
+            return false;
+        }
+
         // Check for ingredients
         for (Map.Entry<String, Integer> entry : recipeToCook.getIngredients().entrySet()) {
             boolean foundSufficient = false;
@@ -61,7 +79,6 @@ public class CookingAction extends Action {
             }
         }
 
-        // Check for fuel
         boolean hasFirewood = false;
         boolean hasCoal = false;
         for(Item itemInInv : player.getInventory().getInventoryMap().keySet()){
@@ -73,8 +90,7 @@ public class CookingAction extends Action {
             return false;
         }
 
-        // 6. Check energy for initiation
-        if (player.getEnergy() < 10) {
+        if (player.getEnergy() + 20 < 10) {
             System.out.println("Masak butuh tenaga coy (-10 energy).");
             return false;
         }
@@ -101,22 +117,26 @@ public class CookingAction extends Action {
         }
 
         boolean fuelConsumed = false;
-        Item coalItemInstance = null;
-        Item firewoodItemInstance = null;
+        Item coal = null;
+        Item firewood = null;
 
         for(Item item : player.getInventory().getInventoryMap().keySet()){
-            if(COAL_NAME.equalsIgnoreCase(item.getName())) coalItemInstance = item;
-            if(FIREWOOD_NAME.equalsIgnoreCase(item.getName())) firewoodItemInstance = item;
+            if(COAL_NAME.equalsIgnoreCase(item.getName())) coal = item;
+            if(FIREWOOD_NAME.equalsIgnoreCase(item.getName())) firewood = item;
         }
 
-        if (coalItemInstance != null && player.getInventory().getItemQuantity(coalItemInstance) > 0) {
-            player.getInventory().useItem(coalItemInstance, 1);
+        if (coal != null && player.getInventory().getItemQuantity(coal) > 0) {
+            player.getInventory().useItem(coal, 1);
             System.out.println("Pakai 1 Coal.");
             fuelConsumed = true;
-        } else if (firewoodItemInstance != null && player.getInventory().getItemQuantity(firewoodItemInstance) > 0) {
-            player.getInventory().useItem(firewoodItemInstance, 1);
+        } else if (firewood != null && player.getInventory().getItemQuantity(firewood) > 0) {
+            player.getInventory().useItem(firewood, 1);
             System.out.println("Pakai 1 Firewood.");
             fuelConsumed = true;
+        }
+        
+        if (!farm.startNewCookingProcess(recipeToCook, player)) {
+            System.out.println("Gagal memulai memasak, kompor sedang digunakan.");
         }
 
         if (!fuelConsumed) {

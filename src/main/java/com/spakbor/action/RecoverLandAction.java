@@ -34,7 +34,7 @@ public class RecoverLandAction extends Action {
             return false;
         }
 
-        if (player.getEnergy() < ENERGY_COST_PER_TILE) {
+        if (player.getEnergy() + 20 < ENERGY_COST_PER_TILE) {
             System.out.println("Energi tidak cukup untuk memulihkan lahan (-" + ENERGY_COST_PER_TILE + " energi).");
             return false;
         }

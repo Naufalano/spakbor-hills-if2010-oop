@@ -28,7 +28,7 @@ public class FishingAction extends Action {
             System.out.println("Anda harus memegang Fishing Rod untuk memancing.");
             return false;
         }
-        if (player.getEnergy() < ENERGY_COST) {
+        if (player.getEnergy() + 20 < ENERGY_COST) {
             System.out.println("Energi tidak cukup untuk memancing.");
             return false;
         }

@@ -96,7 +96,7 @@ public class MovingAction extends Action {
                 String transitionType = isTransitionViaEdge ? "tepi peta" : "pintu";
                 System.out.println(player.getName() + " mencapai " + transitionType + " di " + activeMapForStep.getMapName() + " menuju " + destinationMapName + "...");
                 
-                if (player.getEnergy() >= VISIT_ENERGY_COST && !destinationMapName.equals("Player's House")) {
+                if (player.getEnergy() + 20 >= VISIT_ENERGY_COST && !destinationMapName.equals("Player's House")) {
                     player.setEnergy(player.getEnergy() - VISIT_ENERGY_COST);
                     farm.advanceGameTime(VISIT_TIME_COST_MINUTES);
                     String oldLocationName = player.getCurrentLocationName();

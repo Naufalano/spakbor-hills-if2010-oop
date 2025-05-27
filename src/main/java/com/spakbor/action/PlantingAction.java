@@ -5,6 +5,8 @@ import cls.world.*;
 import enums.*;
 
 public class PlantingAction extends Action {
+    private final int PLANTING_ENERGY_COST = 5;
+    private final int PLANTING_TIME_COST = 5;
     private Seeds seedToPlant;
 
     public PlantingAction(Seeds seedToPlant) {
@@ -42,14 +44,17 @@ public class PlantingAction extends Action {
             System.out.println(seedToPlant.getName() + " ga bisa ditanem pas " + farm.getCurrentSeason().toString() + ".");
             return false;
         }
-        // if (player.getEnergy() < PLANTING_ENERGY_COST) return false;
+        if (player.getEnergy() + 20 < PLANTING_ENERGY_COST) {
+            System.out.println("Ah capek ah.");
+            return false;
+        }
         return true;
     }
 
     @Override
     public void execute(Player player, Farm farm) {
-        // player.setEnergy(player.getEnergy() - PLANTING_ENERGY_COST);
-        // farm.advanceGameTime(PLANTING_TIME_COST);
+        player.setEnergy(player.getEnergy() - PLANTING_ENERGY_COST);
+        farm.advanceGameTime(PLANTING_TIME_COST);
 
         player.getInventory().useItem(seedToPlant, 1);
 
@@ -59,6 +64,9 @@ public class PlantingAction extends Action {
         PlantedCrop newPlant = new PlantedCrop(this.seedToPlant); 
         currentTile.setObjectOnTile(newPlant);
         currentTile.setState(TileState.PLANTED);
+        if (farm.getCurrentWeather() == WeatherType.RAINY) {
+            newPlant.setWateredToday(true);
+        }
         // currentTile.setOccupied(true); 
 
         System.out.println(player.getName() + " nanem " + seedToPlant.getName() + ".");

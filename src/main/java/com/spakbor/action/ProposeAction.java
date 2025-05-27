@@ -33,6 +33,13 @@ public class ProposeAction extends Action {
 
     @Override
     public void execute(Player player, Farm farm) {
+        if (targetNpc.getAffection() < 150 && player.getEnergy() + 20 < 20) {
+            System.out.println("Udah capek. Besok-besok aja lah.");
+            return;
+        } else if (targetNpc.getAffection() == 150 && player.getEnergy() + 20 < 10) {
+            System.out.println("Udah capek. Besok-besok aja lah.");
+            return;
+        }
         farm.advanceGameTime(TIME_COST_MINUTES);
         targetNpc.propose();
 

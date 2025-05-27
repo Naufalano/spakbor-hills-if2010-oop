@@ -2,6 +2,7 @@ package cls.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import cls.items.Food;
 import cls.items.Item;
 import cls.world.CoastalMap;
 import cls.world.FarmMap;
@@ -39,6 +40,7 @@ public class Farm {
 
     private House house;
     private ShippingBin shippingBin;
+    private OngoingCooking currentCookingTask;
 
     private boolean automaticSleepScheduled = false;
     private boolean isCurrentlySleeping = false;
@@ -87,6 +89,7 @@ public class Farm {
 
         this.house = new House(0, 0, 0, 0);
         this.shippingBin = new ShippingBin();
+        this.currentCookingTask = null;
 
         loadMap(playerFarmMap.getMapName(), null); 
         int[] initialSpawnPoint = playerFarmMap.getEntryPoint(null); 
@@ -161,6 +164,7 @@ public class Farm {
         weatherController.nextDay(); 
 
         timeController.resetTime();
+        updateCookingProgress();
 
         System.out.println("\n--- Pagiku cerahku! Matahari di Bar- ehem. ---");
         System.out.println("Musim: " + getCurrentSeason().toString() + ", Hari " + getCurrentDayInSeason());
@@ -199,11 +203,11 @@ public class Farm {
         for (Tile tile : specificFarmMap.getTiles()) {
             if (tile.getState() == TileState.PLANTED && tile.getObjectOnTile() instanceof PlantedCrop) {
                 PlantedCrop plant = (PlantedCrop) tile.getObjectOnTile();
+                boolean shouldRemovePlant = plant.grow(currentFarmSeason);
+                
                 if (isRaining) {
                     plant.setWateredToday(true);
                 } 
-                
-                boolean shouldRemovePlant = plant.grow(currentFarmSeason);
 
                 if (shouldRemovePlant) {
                     tile.setObjectOnTile(null);
@@ -222,6 +226,50 @@ public class Farm {
         }
     }
 
+    public boolean startNewCookingProcess(Recipe recipe, Player player) {
+        if (isStoveBusy()) {
+            System.out.println("Stove sedang digunakan untuk memasak " + currentCookingTask.getCookedItemName() + ".");
+            return false;
+        }
+        if (recipe == null || player == null) return false;
+
+        this.currentCookingTask = new OngoingCooking(
+            recipe,
+            recipe.getResultItem(),
+            seasonController.getTotalDaysPassed(),
+            timeController.getGameTime()
+        );
+        System.out.println(recipe.getCookedItemName() + " sedang dimasak! Akan siap dalam " + Recipe.COOKING_DURATION_MINUTES + " menit.");
+        return true;
+    }
+
+    public void updateCookingProgress() {
+        if (currentCookingTask != null && !currentCookingTask.isReadyToClaim() && !currentCookingTask.isClaimed()) {
+            if (currentCookingTask.checkIsReady(seasonController.getTotalDaysPassed(), timeController.getGameTime())) {
+                System.out.println(currentCookingTask.getCookedItemName() + " sudah matang dan siap diambil dari Stove!");
+            }
+        }
+    }
+
+    public boolean isStoveBusy() {
+        return currentCookingTask != null && !currentCookingTask.isClaimed();
+    }
+
+    public Food claimCookedFood(Player player) {
+        if (currentCookingTask != null && currentCookingTask.isReadyToClaim() && !currentCookingTask.isClaimed()) {
+            Food cookedFood = currentCookingTask.getResultItemPrototype();
+            player.obtainItem(cookedFood, 1); // Tambahkan ke inventaris pemain
+            currentCookingTask.setClaimed(true); // Tandai sudah diambil
+            
+            System.out.println(cookedFood.getName() + " berhasil diambil dan ditambahkan ke inventaris.");
+            OngoingCooking claimedTask = currentCookingTask;
+            currentCookingTask = null; 
+            return claimedTask.getResultItemPrototype();
+        }
+        // System.out.println("Tidak ada makanan yang siap diambil atau sudah diambil.");
+        return null;
+    }
+
     /**
      * Advances the in-game time by a specified number of minutes.
      * Also checks for automatic sleep if time passes 2:00 AM.
@@ -229,10 +277,10 @@ public class Farm {
      */
     public void advanceGameTime(int minutes) {
         this.timeController.getGameTime().advanceMinutes(minutes);
+        updateCookingProgress();
         if (this.timeController.getGameTime().getHour() == 2 && !isSleepingScheduled()) {
-            System.out.println("\nIt's 2:00 AM due to your actions! Time to sleep automatically.");
+            System.out.println("\nOh tidak it's turu o'clock. Jam 2 malem ngapain bro? (Tekan enter)");
             scheduleAutomaticSleep();
-            System.out.print("Press enter to proceed.");
         }
     }
 
@@ -246,6 +294,7 @@ public class Farm {
     public NPCFactory getNpcFactory() { return npcFactory; }
     public House getHouse() { return house; }
     public ShippingBin getShippingBin() { return shippingBin; }
+    public OngoingCooking getCurrentCookingTaskInfo() { return currentCookingTask; }
     public String getName() { return name; } 
 
     public String getFormattedTime() { return timeController.getFormattedTime(); }

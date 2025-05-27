@@ -24,7 +24,7 @@ public class MarryAction extends Action {
             System.out.println("Perlu '" + PROPOSAL_RING_NAME + "' untuk menikah.");
             return false;
         }
-        if (player.getEnergy() < ENERGY_COST) {
+        if (player.getEnergy() + 20 < ENERGY_COST) {
             System.out.println("Energi tidak cukup untuk upacara pernikahan (-" + ENERGY_COST + ").");
             return false;
         }
