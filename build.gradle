@@ -7,16 +7,16 @@
 
 plugins {
     id 'java'
-    id 'application'
+    // id 'application'
 }
 
-application {
-    mainClass = 'main.GameDriver'
-}
+// application {
+//     mainClass = 'main.GameDriver'
+// }
 
-run {
-    standardInput = System.in
-}
+// run {
+//     standardInput = System.in
+// }
 
 jar {
     manifest {
