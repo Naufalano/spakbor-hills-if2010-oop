@@ -66,7 +66,7 @@ public class MountainMap implements GameMap {
                 } else if (tile.isOccupied()) {
                     Object obj = tile.getObjectOnTile();
                     if (MOUNTAIN_WALL_ID.equals(obj)) charToDisplay = 'M';
-                    else if (LAKE_WATER_ID.equals(obj)) charToDisplay = '~';
+                    else if (LAKE_WATER_ID.equals(obj)) charToDisplay = 'W';
                     else if (obj instanceof NPC) charToDisplay = 'N';
                     else charToDisplay = 'X';
                 } else {
@@ -76,6 +76,7 @@ public class MountainMap implements GameMap {
             }
             System.out.println();
         }
+        System.out.println("P: Player, M: Gunung, W: Air");
     }
 
     @Override

@@ -114,7 +114,7 @@ public class ForestMap implements GameMap {
             }
             System.out.println();
         }
-        System.out.println("P: Player, T: Tree, ~: River Water, -: Ground, N: NPC, X: Obstacle");
+        System.out.println("P: Player, T: Tree, W: River Water, -: Ground, N: NPC, X: Obstacle");
     }
 
     @Override
