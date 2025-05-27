@@ -81,12 +81,14 @@ public class GameDriver {
         while (currentGameState != GameState.EXITING) {
             switch (currentGameState) {
                 case MAIN_MENU:
+                    clearConsole();
                     mainMenuLoop();
                     break;
                 case IN_GAME:
                     if (player == null || farm == null) {
                         currentGameState = GameState.MAIN_MENU;
                     } else {
+                        clearConsole();
                         inGameLoop();
                     }
                     break;
@@ -101,6 +103,7 @@ public class GameDriver {
     }
 
     private static void mainMenuLoop() throws InterruptedException {
+        clearConsole();
         System.out.println("\n=========================");
         System.out.println("    SPAKBOR HILLS RPG");
         System.out.println("=========================");
@@ -131,6 +134,7 @@ public class GameDriver {
                 displayCredits();
                 break;
             case "4":
+                clearConsole();
                 currentGameState = GameState.EXITING;
                 break;
             default:
@@ -140,6 +144,7 @@ public class GameDriver {
     }
 
     private static void initializeNewGame() {
+        clearConsole();
         System.out.println("\n--- Memulai Game Baru ---");
         System.out.print("Masukkan Nama Pemain: ");
         String playerName = scanner.nextLine();
@@ -171,6 +176,26 @@ public class GameDriver {
         if (parsnipSeeds != null) playerInventory.addItem(parsnipSeeds, 15);
 
         System.out.println("\nGame baru dimulai untuk " + player.getName() + " di " + farm.getName() + "!");
+    }
+
+    public static void clearConsole() {
+        try {
+            String operatingSystem = System.getProperty("os.name"); // Dapatkan nama OS
+
+            if (operatingSystem.contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // Untuk Unix-like (Linux, macOS)
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+                // Alternatif lain untuk Unix: Runtime.getRuntime().exec("clear");
+                // Namun, \033[H\033[2J lebih portabel untuk terminal yang mendukung ANSI
+            }
+        } catch (IOException | InterruptedException ex) {
+            // Jika gagal, cetak beberapa baris baru sebagai fallback sederhana
+            // System.err.println("Gagal membersihkan konsol: " + ex.getMessage());
+            for (int i = 0; i < 25; ++i) System.out.println(); // Fallback: cetak banyak baris baru
+        }
     }
 
     private static void startGameTimer() {
@@ -236,12 +261,14 @@ public class GameDriver {
     }
 
     private static void inGameLoop() throws IOException{
+        clearConsole();
         System.out.println("\n--- Selamat datang di " + player.getCurrentLocationName() + "! ---");
         displayFullStatus();
 
         boolean inGamePlaying = true;
         while (inGamePlaying && currentGameState == GameState.IN_GAME) {
             if (player.getEnergy() == -20) {
+                clearConsole();
                 System.out.println(player.getName() + " tepar brutal. Lupa istirahat jadi digotong pulang.");
                 farm.scheduleAutomaticSleep();
             }
@@ -268,6 +295,7 @@ public class GameDriver {
 
             try {
                 if (command.equals("mainmenu")) {
+                    clearConsole();
                     System.out.println("Kembali ke Menu Utama...");
                     stopGameTimer();
                     player = null; farm = null; // Bersihkan state game saat ini
@@ -357,18 +385,18 @@ public class GameDriver {
                         break;
                     case "info": displayPlayerStatusDetailed(); break;
                     case "stats": displayPlayerStatistics(); break;
-                    case "status": displayFarmStatus(); break;
-                    case "map": if (farm.getCurrentMap() != null) farm.getCurrentMap().display(player); break;
+                    case "map": clearConsole(); if (farm.getCurrentMap() != null) farm.getCurrentMap().display(player); displayFarmStatus(); break;
                     case "toggletime": timeDisplayEnabled = !timeDisplayEnabled; System.out.println("Tampilan jam periodik " + (timeDisplayEnabled ? "diaktifkan." : "dinonaktifkan.")); break;
                     case "help": displayInGameHelp(); break;
                     case "quit": 
                         System.out.print("Permainan tidak disimpan. Yakin ingin keluar? [Y/N]: ");
                         String ans = scanner.nextLine();
                         if (ans.equals("Y") || ans.equals("y")) {
+                            clearConsole();
                             currentGameState = GameState.EXITING; inGamePlaying = false; break;
                         }
                         break;
-                    case "nd": farm.nextDay(); displayFullStatus(); break;
+                    case "nd": clearConsole(); farm.nextDay(); displayFullStatus(); break;
                     default: System.out.println("Perintah tidak dikenal. Ketik 'help' untuk opsi."); break;
                 }
 
@@ -378,15 +406,12 @@ public class GameDriver {
                         GameMap mapBeforeAction = farm.getCurrentMap();
                         String locBeforeAction = player.getCurrentLocationName();
 
-                        if (actionToPerform instanceof SleepingAction) {
-                            displayFullStatus();
-                        } else {
-                            displayPlayerStatus();
-                        }
+                        displayFullStatus();
 
                         if (!locBeforeAction.equals(player.getCurrentLocationName()) || farm.getCurrentMap() != mapBeforeAction) {
-                             System.out.println("\n--- Selamat datang di " + player.getCurrentLocationName() + "! ---");
-                             displayFullStatus();
+                            clearConsole();
+                            System.out.println("\n--- Selamat datang di " + player.getCurrentLocationName() + "! ---");
+                            displayFullStatus();
                         }
                     }
                 }
@@ -403,6 +428,7 @@ public class GameDriver {
         boolean showStats = false;
 
         if (!milestoneReachedGold && player.getGold() >= GOLD_MILESTONE_TARGET) {
+            clearConsole();
             milestoneReachedGold = true;
             showStats = true;
             System.out.println("\n======================================================");
@@ -412,6 +438,7 @@ public class GameDriver {
         }
 
         if (!milestoneReachedMarriage && player.isMarried()) {
+            clearConsole();
             milestoneReachedMarriage = true;
             showStats = true;
             System.out.println("\n======================================================");
@@ -851,6 +878,7 @@ public class GameDriver {
     }
 
     private static void displayHelpScreen() {
+        clearConsole();
         System.out.println("\n--- Bantuan Game ---");
         System.out.println("Selamat datang di Spakbor Hills, game simulasi bertani dan kehidupan!");
         System.out.println("Ayo mengelola kebun, menanam tanaman, mancing keribu- maksudku ikan, berinteraksi dengan penduduk,");
@@ -863,7 +891,9 @@ public class GameDriver {
         System.out.println("- Ketik 'help' di dalam game untuk daftar perintah aksi spesifik.");
         System.out.println("-----------------");
     }
+
     private static void displayShippingBinContents() {
+        clearConsole();
         if (farm == null || farm.getShippingBin() == null) {
             System.out.println("Tidak ada game aktif atau Shipping Bin tidak tersedia.");
             return;
@@ -884,7 +914,9 @@ public class GameDriver {
         System.out.println("Kapasitas: " + bin.getCurrentSize() + "/" + (bin.getMaxCapacity() > 0 ? bin.getMaxCapacity() : "Tak Terbatas"));
         System.out.println("---------------------------");
     }
+
     private static void displayCredits() throws InterruptedException {
+        clearConsole();
         System.out.println("\n--- Credits ---");
         System.out.println("Game Concept & Design: Team 11 of Section 01");
         Thread.sleep(1000);
@@ -901,7 +933,9 @@ public class GameDriver {
         System.out.println("Terima kasih telah bermain!");
         System.out.println("---------------");
     }
+
     private static void displayInGameHelp() {
+        clearConsole();
         System.out.println("\n--- Perintah Dalam Game ---");
         System.out.println("  move [up|down|left|right] [langkah (opsional)] - Gerakkan pemain.");
         System.out.println("  interact                  - Berinteraksi dengan objek sekitar atau struktur yang dimasuki.");
@@ -918,15 +952,16 @@ public class GameDriver {
         System.out.println("  viewbin                   - Lihat isi Shipping Bin.");
         System.out.println("  info                      - Lihat atribut detail pemain.");
         System.out.println("  stats                     - Lihat statistik pemain.");
-        System.out.println("  status                    - Tampilkan status waktu, tanggal, dan cuaca saat ini.");
-        System.out.println("  map                       - Tampilkan peta saat ini.");
+        System.out.println("  map                       - Tampilkan peta dan waktu saat ini.");
         System.out.println("  sleep                     - Lanjut ke hari berikutnya.");
         System.out.println("  toggletime                - Aktifkan/nonaktifkan tampilan jam periodik di konsol.");
         System.out.println("  mainmenu                  - Kembali ke Menu Utama (sesi game saat ini akan berakhir).");
         System.out.println("  quit                      - Keluar dari aplikasi.");
         System.out.println("------------------------");
     }
+
     private static void displayPlayerStatusDetailed() {
+        clearConsole();
         if (player == null) { System.out.println("Tidak ada game aktif untuk menampilkan info pemain."); return; }
         System.out.println("\n--- Informasi Pemain ---");
         System.out.println("1. Nama    : " + player.getName());
@@ -938,7 +973,9 @@ public class GameDriver {
         System.out.println("5. Emas    : " + player.getGold() + "g");
         System.out.println("--------------------------");
     }
+
     private static void displayPlayerStatistics() {
+        clearConsole();
         if (player == null) {
             System.out.println("Tidak ada game aktif untuk menampilkan statistik.");
             return;
@@ -946,17 +983,14 @@ public class GameDriver {
         System.out.println("\nMenampilkan Statistik Pemain Saat Ini...");
         displayEndGameStatistics();
     }
+
     private static String combineParts(String[] parts, int startIndex) { 
         StringBuilder sb = new StringBuilder();
         for (int i = startIndex; i < parts.length; i++) { sb.append(parts[i]); if (i < parts.length - 1) sb.append(" ");}
         return sb.toString();
     }
-    private static String combineParts(String[] parts, int startIdx, int endIdx) { 
-        StringBuilder sb = new StringBuilder();
-        for (int i = startIdx; i < endIdx; i++) { sb.append(parts[i]); if (i < endIdx - 1) sb.append(" ");}
-        return sb.toString();
-    }
-    private static void displayPlayerStatus() { 
+    
+    private static void displayPlayerStatus() {
         if (player == null) return;
         System.out.println("\n--- Status ---");
         System.out.println("Pemain: " + player.getName() + " | Lokasi: " + player.getCurrentLocationName() + " (" + player.getX() + "," + player.getY() + ")");
@@ -969,7 +1003,9 @@ public class GameDriver {
         if (farm != null && farm.getTimeController() != null) System.out.println("Waktu: " + farm.getFormattedTime()); else System.out.println("Waktu: N/A");
         System.out.println("--------------");
     }
+
     private static void displayInventory() {
+        clearConsole();
         if (player == null || player.getInventory() == null) { System.out.println("Tidak ada game aktif atau inventory."); return; }
         System.out.println("\n--- Inventory ---");
         Map<Item, Integer> items = player.getInventory().getInventoryMap(); // Pastikan getInventoryMap() ada
@@ -977,6 +1013,7 @@ public class GameDriver {
         else { for (Map.Entry<Item, Integer> entry : items.entrySet()) { System.out.println("- " + entry.getKey().getName() + ": " + entry.getValue()); } }
         System.out.println("-----------------");
     }
+
     private static void displayFarmStatus() { 
         if (farm == null || player == null) { System.out.println("Tidak ada game aktif."); return; }
         System.out.println("\n----- Status Farm & Dunia -----");
@@ -988,7 +1025,9 @@ public class GameDriver {
         } else { System.out.println("Info waktu/musim/cuaca tidak tersedia.");}
         System.out.println("-----------------------------");
     }
+
     private static void displayFullStatus() { 
+        clearConsole();
         displayPlayerStatus();
         displayFarmStatus();
         if(farm != null && farm.getCurrentMap() != null && player != null) farm.getCurrentMap().display(player);
