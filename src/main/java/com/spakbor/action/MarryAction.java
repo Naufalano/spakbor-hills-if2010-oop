@@ -3,7 +3,7 @@ import cls.core.*;
 import cls.items.*;
 import system.*;
 
-public class MarryAction extends Action {
+public class MarryAction implements Action {
     private NPC targetNpc;
     private static final String PROPOSAL_RING_NAME = "Proposal Ring";
 

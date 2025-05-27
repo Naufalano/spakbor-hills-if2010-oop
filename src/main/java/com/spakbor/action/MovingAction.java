@@ -3,7 +3,7 @@ import cls.core.*;
 import cls.world.*;
 import enums.*;
 
-public class MovingAction extends Action {
+public class MovingAction implements Action {
     private Direction direction;
     private int steps;
 

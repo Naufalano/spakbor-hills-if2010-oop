@@ -5,7 +5,7 @@ import cls.world.*;
 import data.*;
 import enums.*;
 
-public class HarvestingAction extends Action {
+public class HarvestingAction implements Action {
 
     @Override
     public boolean validate(Player player, Farm farm) {

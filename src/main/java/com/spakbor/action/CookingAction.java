@@ -12,7 +12,7 @@ import cls.world.GameMap;
 import cls.world.PlayerHouseMap;
 import utils.InteractionHelper;
 
-public class CookingAction extends Action {
+public class CookingAction implements  Action {
     private Recipe recipeToCook;
     private static final String FIREWOOD_NAME = "Firewood";
     private static final String COAL_NAME = "Coal";

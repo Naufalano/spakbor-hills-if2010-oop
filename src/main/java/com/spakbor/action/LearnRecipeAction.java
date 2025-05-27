@@ -2,7 +2,7 @@ package action;
 import cls.core.*;
 import cls.items.*;
 
-public class LearnRecipeAction extends Action {
+public class LearnRecipeAction implements Action {
     private RecipeItem recipeItemToLearn;
 
     public LearnRecipeAction(RecipeItem recipeItem) {

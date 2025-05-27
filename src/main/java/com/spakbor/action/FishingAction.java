@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 import utils.*;
 
-public class FishingAction extends Action {
+public class FishingAction implements Action {
     private Item fishingRod;
     private Random random = new Random();
     private Scanner scanner;

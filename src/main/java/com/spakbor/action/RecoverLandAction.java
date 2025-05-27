@@ -4,7 +4,7 @@ import cls.items.*;
 import cls.world.*;
 import enums.*;
 
-public class RecoverLandAction extends Action {
+public class RecoverLandAction implements Action {
     private Item pickaxe; 
     
     private static final int ENERGY_COST_PER_TILE = 5;

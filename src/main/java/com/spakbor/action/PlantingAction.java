@@ -4,7 +4,7 @@ import cls.items.*;
 import cls.world.*;
 import enums.*;
 
-public class PlantingAction extends Action {
+public class PlantingAction implements Action {
     private final int PLANTING_ENERGY_COST = 5;
     private final int PLANTING_TIME_COST = 5;
     private Seeds seedToPlant;

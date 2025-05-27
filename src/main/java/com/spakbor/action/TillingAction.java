@@ -4,7 +4,7 @@ import cls.items.*;
 import cls.world.*;
 import enums.*;
 
-public class TillingAction extends Action {
+public class TillingAction implements Action {
     private Item hoe;
 
     public TillingAction() {

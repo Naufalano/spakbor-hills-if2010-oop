@@ -3,7 +3,7 @@ import cls.core.*;
 import cls.world.*;
 import utils.*;
 
-public class SleepingAction extends Action {
+public class SleepingAction implements Action {
     private boolean isAutomaticSleep;
 
     /**
