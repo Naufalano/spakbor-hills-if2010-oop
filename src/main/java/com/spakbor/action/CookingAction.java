@@ -56,7 +56,7 @@ public class CookingAction implements  Action {
             if (currentTask != null && !currentTask.isReadyToClaim()) {
                  System.out.println("Kompor sedang digunakan untuk memasak " + currentTask.getCookedItemName() + ". Tunggu hingga matang.");
             } else if (currentTask != null && currentTask.isReadyToClaim()) {
-                System.out.println(currentTask.getCookedItemName() + " sudah matang dan siap diambil. Anda tidak bisa memasak lagi sebelum mengambilnya.");
+                System.out.println(currentTask.getCookedItemName() + " sudah matang dan siap diambil. Kamu tidak bisa memasak lagi sebelum mengambilnya.");
             } else {
                  System.out.println("Kompor sedang digunakan."); // Fallback
             }

@@ -40,7 +40,7 @@ public class PlantingAction implements Action {
             System.out.println("Belum dicangkul.");
             return false;
         }
-        if (!seedToPlant.getSeason().equalsIgnoreCase(farm.getCurrentSeason().toString()) && !seedToPlant.getSeason().equalsIgnoreCase("Any")) { // Assuming "Any" season seeds
+        if (!seedToPlant.canBePlantedIn(farm.getCurrentSeason()) && !seedToPlant.canBePlantedIn(farm.getCurrentSeason()) || farm.getCurrentSeason().equals(SeasonType.WINTER)) {
             System.out.println(seedToPlant.getName() + " ga bisa ditanem pas " + farm.getCurrentSeason().toString() + ".");
             return false;
         }

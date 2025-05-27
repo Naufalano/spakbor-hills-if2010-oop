@@ -15,7 +15,7 @@ public class WateringAction implements Action {
     public boolean validate(Player player, Farm farm) {
         Item heldItem = player.getHeldItem();
         if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Watering Can")) {
-            System.out.println("Anda harus memegang Watering Can untuk menyiram.");
+            System.out.println("Kamu harus memegang Watering Can untuk menyiram.");
             return false;
         }
         if (player.getEnergy() < 5) { 

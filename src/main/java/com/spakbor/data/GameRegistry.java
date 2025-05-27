@@ -1,11 +1,14 @@
 package data;
 import cls.items.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import enums.SeasonType;
 
 public class GameRegistry<T extends Item, K> {
     private static final Map<Object, Item> PROTOTYPES_BY_KEY = new HashMap<>();
@@ -144,10 +147,10 @@ public class GameRegistry<T extends Item, K> {
             return Collections.unmodifiableList(new ArrayList<>(ALL_SEED_PROTOTYPES_LIST));
         }
 
-        public static List<Seeds> getSeedsForSeason(String seasonName) {
+        public static List<Seeds> getSeedsForSeason(SeasonType season) {
             List<Seeds> result = new ArrayList<>();
             for (Seeds seed : ALL_SEED_PROTOTYPES_LIST) {
-                if (seed.getSeason().equalsIgnoreCase(seasonName)) {
+                if (seed.canBePlantedIn(season)) {
                     result.add(seed);
                 }
             }

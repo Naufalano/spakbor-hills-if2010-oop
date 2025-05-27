@@ -24,13 +24,13 @@ public class RecoverLandAction implements Action {
             return false;
         }
         if (currentPlayersMap != playersActualFarmMap) {
-             System.out.println("Pemulihan lahan hanya bisa dilakukan di kebun utama Anda (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
+             System.out.println("Recovery lahan hanya bisa dilakukan di farm milikmu (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
              return false;
         }
 
         Item heldItem = player.getHeldItem();
         if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Pickaxe")) {
-            System.out.println("Anda harus memegang Pickaxe untuk memulihkan lahan.");
+            System.out.println("Kamu harus memegang Pickaxe untuk memulihkan lahan.");
             return false;
         }
 

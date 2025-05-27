@@ -406,8 +406,8 @@ public class GameDriver {
             milestoneReachedGold = true;
             showStats = true;
             System.out.println("\n======================================================");
-            System.out.println("SELAMAT! Anda telah mencapai milestone kekayaan!");
-            System.out.println("Total emas Anda: " + player.getGold() + "g");
+            System.out.println("SELAMAT! Kamu telah mencapai milestone kekayaan!");
+            System.out.println("Total emasmu: " + player.getGold() + "g");
             System.out.println("======================================================");
         }
 
@@ -415,14 +415,14 @@ public class GameDriver {
             milestoneReachedMarriage = true;
             showStats = true;
             System.out.println("\n======================================================");
-            System.out.println("SELAMAT! Anda telah menikah!");
-            System.out.println("Pasangan Anda: " + (player.getPartner().isEmpty() ? "N/A" : player.getPartner().get(0).getName()));
+            System.out.println("SELAMAT! Kamu telah menikah!");
+            System.out.println("Pasanganmu: " + (player.getPartner().isEmpty() ? "N/A" : player.getPartner().get(0).getName()));
             System.out.println("======================================================");
         }
 
         if (showStats) {
             displayEndGameStatistics();
-            System.out.println("\nPermainan berlanjut... Anda bisa terus bermain dan mencapai hal lain!");
+            System.out.println("\nPermainan berlanjut... Ayo terus bermain dan mencapai hal lain!");
             System.out.println("------------------------------------------------------");
         }
     }
@@ -581,7 +581,7 @@ public class GameDriver {
                         System.out.println("Jumlah yang dimasukkan tidak valid.");
                     }
                 } else {
-                    System.out.println("Item '" + itemToSellName + "' tidak ditemukan di inventory Anda.");
+                    System.out.println("Item '" + itemToSellName + "' tidak ditemukan di inventory.");
                 }
 
                 farm.getTimeController().resumeGameTime();
@@ -609,13 +609,12 @@ public class GameDriver {
     }
 
     private static void handleStoveInteraction() {
-        System.out.println("\nAnda berada di depan kompor.");
         OngoingCooking currentTask = farm.getCurrentCookingTaskInfo();
 
         if (currentTask != null && !currentTask.isClaimed()) {
             if (currentTask.isReadyToClaim()) {
                 System.out.println(currentTask.getCookedItemName() + " sudah matang!");
-                System.out.print("Apakah Anda ingin mengambilnya? (y/n) > ");
+                System.out.print("Apakah kamu ingin mengambilnya? (y/n) > ");
                 String claimChoice = scanner.nextLine().trim().toLowerCase();
                 if (claimChoice.equals("y")) {
                     Food claimedFood = farm.claimCookedFood(player);
@@ -644,7 +643,7 @@ public class GameDriver {
         List<Recipe> availableRecipes = RecipeDataRegistry.getAvailableRecipesForPlayer(player);
 
         if (availableRecipes == null || availableRecipes.isEmpty()) {
-            System.out.println("Anda belum mengetahui resep apapun atau tidak bisa membuat resep saat ini.");
+            System.out.println("Belum mengetahui resep apapun atau tidak bisa membuat resep saat ini.");
             return;
         }
 
@@ -747,7 +746,7 @@ public class GameDriver {
         System.out.println("\n--- Selamat Datang di Toko " + shopkeeper.getName() + "! ---");
         boolean shopping = true;
         while (shopping) {
-            System.out.println("\nKategori Barang (Emas Anda: " + player.getGold() + "g):");
+            System.out.println("\nKategori Barang (Emasmu: " + player.getGold() + "g):");
             System.out.println("1. Seeds");
             System.out.println("2. Food"); 
             System.out.println("3. Misc (Lain-lain & Resep)");
