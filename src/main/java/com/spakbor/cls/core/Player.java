@@ -247,7 +247,6 @@ public class Player {
     public List<NPC> getPartner() { return partner; }
     public void addPartner(NPC npc) { if (!this.partner.contains(npc)) this.partner.add(npc); }
     public int getGold() { return gold; }
-    // public void setGold(int gold) { this.gold = Math.max(0, gold); }
     public Inventory getInventory() { return inventory; }
     public int getX() { return x; }
     public void setX(int x) { this.x = x; }
