@@ -12,22 +12,21 @@ public class SeedDataRegistry {
 
     static {
         // SPRING SEEDS
-        ALL_SEEDS.add(new Seeds("Parsnip Seeds", "Spring", 1, 20));
-        ALL_SEEDS.add(new Seeds("Cauliflower Seeds", "Spring", 5, 80));
-        ALL_SEEDS.add(new Seeds("Potato Seeds", "Spring", 3, 50));
-        ALL_SEEDS.add(new Seeds("Wheat Seeds (Spring)", "Spring", 1, 60)); 
+        ALL_SEEDS.add(new Seeds("Parsnip Seeds", List.of(SeasonType.SPRING), 1, 20));
+        ALL_SEEDS.add(new Seeds("Cauliflower Seeds", List.of(SeasonType.SPRING), 5, 80));
+        ALL_SEEDS.add(new Seeds("Potato Seeds", List.of(SeasonType.SPRING), 3, 50));
+        ALL_SEEDS.add(new Seeds("Wheat Seeds", List.of(SeasonType.SPRING, SeasonType.FALL), 1, 60)); 
 
         // SUMMER SEEDS
-        ALL_SEEDS.add(new Seeds("Blueberry Seeds", "Summer", 7, 80));
-        ALL_SEEDS.add(new Seeds("Tomato Seeds", "Summer", 3, 50));
-        ALL_SEEDS.add(new Seeds("Hot Pepper Seeds", "Summer", 1, 40));
-        ALL_SEEDS.add(new Seeds("Melon Seeds", "Summer", 4, 80));
+        ALL_SEEDS.add(new Seeds("Blueberry Seeds", List.of(SeasonType.SUMMER), 7, 80));
+        ALL_SEEDS.add(new Seeds("Tomato Seeds", List.of(SeasonType.SUMMER), 3, 50));
+        ALL_SEEDS.add(new Seeds("Hot Pepper Seeds", List.of(SeasonType.SUMMER), 1, 40));
+        ALL_SEEDS.add(new Seeds("Melon Seeds", List.of(SeasonType.SUMMER), 4, 80));
 
         // FALL SEEDS
-        ALL_SEEDS.add(new Seeds("Cranberry Seeds", "Fall", 2, 100));
-        ALL_SEEDS.add(new Seeds("Pumpkin Seeds", "Fall", 7, 150));
-        ALL_SEEDS.add(new Seeds("Wheat Seeds (Fall)", "Fall", 1, 60)); 
-        ALL_SEEDS.add(new Seeds("Grape Seeds", "Fall", 3, 60));
+        ALL_SEEDS.add(new Seeds("Cranberry Seeds", List.of(SeasonType.FALL), 2, 100));
+        ALL_SEEDS.add(new Seeds("Pumpkin Seeds", List.of(SeasonType.FALL), 7, 150));
+        ALL_SEEDS.add(new Seeds("Grape Seeds", List.of(SeasonType.FALL), 3, 60));
     }
 
     /**
@@ -59,20 +58,8 @@ public class SeedDataRegistry {
      * @return A list of seeds that can be planted in the given season.
      */
     public static List<Seeds> getSeedsForSeason(SeasonType season) {
-        String seasonName = season.toString(); 
         return ALL_SEEDS.stream()
-                .filter(seed -> seed.getSeason().equalsIgnoreCase(seasonName))
-                .collect(Collectors.toList());
-    }
-
-     /**
-     * Gets all seeds available for a specific season, using a string for the season.
-     * @param seasonName The name of the season (e.g., "Spring").
-     * @return A list of seeds that can be planted in the given season.
-     */
-    public static List<Seeds> getSeedsForSeason(String seasonName) {
-        return ALL_SEEDS.stream()
-                .filter(seed -> seed.getSeason().equalsIgnoreCase(seasonName))
+                .filter(seed -> seed.canBePlantedIn(season))
                 .collect(Collectors.toList());
     }
 }

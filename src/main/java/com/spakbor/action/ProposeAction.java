@@ -2,7 +2,7 @@ package action;
 import cls.core.*;
 import cls.items.*;
 
-public class ProposeAction extends Action {
+public class ProposeAction implements Action {
     private NPC targetNpc;
     private static final String PROPOSAL_RING_NAME = "Proposal Ring";
 

@@ -12,7 +12,7 @@ import cls.world.GameMap;
 import cls.world.PlayerHouseMap;
 import utils.InteractionHelper;
 
-public class CookingAction extends Action {
+public class CookingAction implements  Action {
     private Recipe recipeToCook;
     private static final String FIREWOOD_NAME = "Firewood";
     private static final String COAL_NAME = "Coal";
@@ -56,7 +56,7 @@ public class CookingAction extends Action {
             if (currentTask != null && !currentTask.isReadyToClaim()) {
                  System.out.println("Kompor sedang digunakan untuk memasak " + currentTask.getCookedItemName() + ". Tunggu hingga matang.");
             } else if (currentTask != null && currentTask.isReadyToClaim()) {
-                System.out.println(currentTask.getCookedItemName() + " sudah matang dan siap diambil. Anda tidak bisa memasak lagi sebelum mengambilnya.");
+                System.out.println(currentTask.getCookedItemName() + " sudah matang dan siap diambil. Kamu tidak bisa memasak lagi sebelum mengambilnya.");
             } else {
                  System.out.println("Kompor sedang digunakan."); // Fallback
             }

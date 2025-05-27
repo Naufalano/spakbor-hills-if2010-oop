@@ -4,7 +4,7 @@ import cls.items.*;
 import cls.world.*;
 import enums.*;
 
-public class WateringAction extends Action {
+public class WateringAction implements Action {
     private Item wateringCan;
 
     public WateringAction() {
@@ -15,7 +15,7 @@ public class WateringAction extends Action {
     public boolean validate(Player player, Farm farm) {
         Item heldItem = player.getHeldItem();
         if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Watering Can")) {
-            System.out.println("Anda harus memegang Watering Can untuk menyiram.");
+            System.out.println("Kamu harus memegang Watering Can untuk menyiram.");
             return false;
         }
         if (player.getEnergy() < 5) { 

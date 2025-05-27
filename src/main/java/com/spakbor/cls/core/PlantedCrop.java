@@ -1,21 +1,32 @@
 package cls.core;
+import java.util.ArrayList;
+import java.util.List;
+
 import cls.items.*;
 import data.*;
 import enums.*;
 
 public class PlantedCrop {
     private String resultingCropName;
+    private Crop cropPrototype;
     private int yieldAmountPerHarvest;
     private int daysToMature;
     private int growthDays;
     private boolean wateredToday;
-    private String seasonToGrowIn;
+    private List<SeasonType> growableSeasons;
     private boolean canSurviveOutOfSeason;
 
     public PlantedCrop(Seeds seed) {
-        this.resultingCropName = seed.getName().replace(" Seeds", "");
+        this.resultingCropName = seed.getName().replace(" Seeds", "").replace(" Seed", "");
+        this.cropPrototype = CropDataRegistry.getCropByName(this.resultingCropName);
+        if (this.cropPrototype == null) {
+            System.err.println("Tidak dapat menemukan prototipe Crop untuk '" + this.resultingCropName + "' dari benih '" + seed.getName() + "'. Tanaman mungkin tidak berfungsi dengan benar.");
+            this.daysToMature = seed.getDaysToHarvest();
+        } else {
+            this.daysToMature = seed.getDaysToHarvest();
+        }
         this.daysToMature = seed.getDaysToHarvest();
-        this.seasonToGrowIn = seed.getSeason().toUpperCase();
+        this.growableSeasons = new ArrayList<>(seed.getPlantableSeasons());
         this.growthDays = 0;
         this.wateredToday = false;
         this.canSurviveOutOfSeason = false;
@@ -45,7 +56,7 @@ public class PlantedCrop {
      * @return true if the crop should be removed (e.g., died), false otherwise.
      */
     public boolean grow(SeasonType currentSeason) {
-        if (!this.seasonToGrowIn.equalsIgnoreCase("ANY") && !this.seasonToGrowIn.equals(currentSeason.toString().toUpperCase())) {
+        if (!growableSeasons.contains(currentSeason) && !growableSeasons.contains(SeasonType.ANY)) {
             if (!canSurviveOutOfSeason) {
                 System.out.println(resultingCropName + " ga bertahan saat " + currentSeason + " terus mati.");
                 return true;
@@ -66,13 +77,20 @@ public class PlantedCrop {
         return false;
     }
 
+    public String getCropName() {
+        return cropPrototype != null ? cropPrototype.getName() : this.resultingCropName;
+    }
+
     public boolean isMature() {
         return growthDays >= daysToMature;
     }
 
     public Crop getCropType() {
-        Crop cropDefinition = CropDataRegistry.getCropByName(this.resultingCropName);
-        return cropDefinition;
+        return cropPrototype;
+    }
+
+    public List<SeasonType> getGrowableSeasons() {
+        return new ArrayList<>(growableSeasons);
     }
 
     public int getAmountPerHarvest() {

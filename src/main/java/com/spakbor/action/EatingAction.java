@@ -2,7 +2,7 @@ package action;
 import cls.core.*;
 import cls.items.*;
 
-public class EatingAction extends Action {
+public class EatingAction implements Action {
     private EdibleItem foodToEat;
     private Item itemInstance;
 

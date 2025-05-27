@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 import utils.*;
 
-public class FishingAction extends Action {
+public class FishingAction implements Action {
     private Item fishingRod;
     private Random random = new Random();
     private Scanner scanner;
@@ -25,7 +25,7 @@ public class FishingAction extends Action {
     public boolean validate(Player player, Farm farm) {
         Item heldItem = player.getHeldItem();
         if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Fishing Rod")) {
-            System.out.println("Anda harus memegang Fishing Rod untuk memancing.");
+            System.out.println("Kamu harus memegang Fishing Rod untuk memancing.");
             return false;
         }
         if (player.getEnergy() + 20 < ENERGY_COST) {

@@ -1,7 +1,7 @@
 package action;
 import cls.core.*;
 
-public class ChatAction extends Action {
+public class ChatAction implements Action {
     private NPC targetNpc;
 
     private static final int ENERGY_COST = 10;

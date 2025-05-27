@@ -4,7 +4,7 @@ import cls.items.*;
 import cls.world.*;
 import enums.*;
 
-public class PlantingAction extends Action {
+public class PlantingAction implements Action {
     private final int PLANTING_ENERGY_COST = 5;
     private final int PLANTING_TIME_COST = 5;
     private Seeds seedToPlant;
@@ -40,7 +40,7 @@ public class PlantingAction extends Action {
             System.out.println("Belum dicangkul.");
             return false;
         }
-        if (!seedToPlant.getSeason().equalsIgnoreCase(farm.getCurrentSeason().toString()) && !seedToPlant.getSeason().equalsIgnoreCase("Any")) { // Assuming "Any" season seeds
+        if (!seedToPlant.canBePlantedIn(farm.getCurrentSeason()) && !seedToPlant.canBePlantedIn(farm.getCurrentSeason()) || farm.getCurrentSeason().equals(SeasonType.WINTER)) {
             System.out.println(seedToPlant.getName() + " ga bisa ditanem pas " + farm.getCurrentSeason().toString() + ".");
             return false;
         }

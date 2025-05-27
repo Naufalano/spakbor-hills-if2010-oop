@@ -4,7 +4,7 @@ import cls.items.*;
 import cls.world.*;
 import enums.*;
 
-public class TillingAction extends Action {
+public class TillingAction implements Action {
     private Item hoe;
 
     public TillingAction() {
@@ -23,18 +23,14 @@ public class TillingAction extends Action {
         }
 
         if (!(currentPlayersMap instanceof FarmMap) || !currentPlayersMap.getMapName().equals(playersActualFarmMap.getMapName())) {
-             System.out.println("Tilling hanya bisa dilakukan di kebun utama Anda (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
+             System.out.println("Tilling hanya bisa dilakukan di farm milikmu (" + playersActualFarmMap.getMapName() + "). Lokasi saat ini: " + player.getCurrentLocationName());
              return false;
         }
-        // if (!player.getCurrentLocationName().equals(farm.getName())) {
-        //     System.out.println("Validasi Gagal: Tilling hanya bisa dilakukan di kebun Anda. Lokasi saat ini: " + player.getCurrentLocationName());
-        //     return false;
-        // }
 
 
         Item heldItem = player.getHeldItem();
         if (heldItem == null || !(heldItem instanceof Equipment) || !heldItem.getName().equalsIgnoreCase("Hoe")) {
-            System.out.println("Anda harus memegang Hoe untuk tilling.");
+            System.out.println("Kamu harus memegang Hoe untuk tilling.");
             return false;
         }
 

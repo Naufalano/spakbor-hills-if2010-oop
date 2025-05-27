@@ -3,7 +3,7 @@ import cls.core.*;
 import cls.world.*;
 import utils.*;
 
-public class SleepingAction extends Action {
+public class SleepingAction implements Action {
     private boolean isAutomaticSleep;
 
     /**
@@ -28,7 +28,7 @@ public class SleepingAction extends Action {
         }
 
         if (!player.getCurrentLocationName().equals("Player's House")) {
-            System.out.println("Anda hanya bisa tidur di dalam rumah.");
+            System.out.println("Kamu hanya bisa tidur di dalam rumah.");
             return false;
         }
 

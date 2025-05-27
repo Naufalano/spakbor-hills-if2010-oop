@@ -2,7 +2,7 @@ package action;
 import cls.core.*;
 import cls.items.*;
 
-public class GiftAction extends Action {
+public class GiftAction implements Action {
     private NPC targetNpc;
     private Item giftItem;
     private int quantity;

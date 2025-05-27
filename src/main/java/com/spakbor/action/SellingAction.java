@@ -4,7 +4,7 @@ import cls.items.*;
 import cls.world.*;
 import utils.*;
 
-public class SellingAction extends Action {
+public class SellingAction implements Action {
     private Item itemToSell;
     private int amtToSell;
 
