@@ -93,7 +93,7 @@ public class GenericInteriorMap implements GameMap {
             }
             System.out.println();
         }
-        charToDisplay = resident.getName().charAt(0);
+        char charToDisplay = resident.getName().charAt(0);
         System.out.println("P: Player, .: Lantai, F: Furnitur, " + charToDisplay + ": " + resident.getName());
     }
 
