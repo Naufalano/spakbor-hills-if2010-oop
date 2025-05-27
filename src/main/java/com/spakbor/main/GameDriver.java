@@ -162,7 +162,7 @@ public class GameDriver {
                     }
 
                 } catch (InterruptedException e) {
-                    System.out.println("Game Time Thread diinterupsi.");
+                    // System.out.println("Game Time Thread diinterupsi.");
                     Thread.currentThread().interrupt();
                     gameIsPlaying = false;
                 } catch (Exception e) {
@@ -170,7 +170,7 @@ public class GameDriver {
                     e.printStackTrace();
                 }
             }
-            System.out.println("Game Time Thread berhenti.");
+            // System.out.println("Game Time Thread berhenti.");
         });
 
         gameTimeThread.setDaemon(true);
