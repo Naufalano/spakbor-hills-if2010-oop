@@ -47,7 +47,7 @@ public class PlantedCrop {
     public boolean grow(SeasonType currentSeason) {
         if (!this.seasonToGrowIn.equalsIgnoreCase("ANY") && !this.seasonToGrowIn.equals(currentSeason.toString().toUpperCase())) {
             if (!canSurviveOutOfSeason) {
-                System.out.println("Info: " + resultingCropName + " cannot survive in " + currentSeason + " and has withered.");
+                System.out.println(resultingCropName + " ga bertahan saat " + currentSeason + " terus mati.");
                 return true;
             } else {
                 // System.out.println("Info: " + cropType.getName() + " is out of season and will not grow.");
@@ -59,10 +59,8 @@ public class PlantedCrop {
         if (wateredToday) {
             if (growthDays < daysToMature) {
                 growthDays++;
-                System.out.println("Info: " + resultingCropName + " grew. Growth: " + growthDays + "/" + daysToMature);
+                System.out.println(resultingCropName + " tumbuh. Growth: " + growthDays + "/" + daysToMature);
             }
-        } else {
-            // System.out.println("Info: " + cropType.getName() + " was not watered and did not grow.");
         }
         wateredToday = false; 
         return false;

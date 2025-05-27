@@ -7,10 +7,20 @@
 
 plugins {
     id 'java'
+    id 'application'
+}
+
+application {
+    mainClass = 'main.GameDriver'
+}
+
+run {
+    standardInput = System.in
 }
 
 jar {
     manifest {
-        attributes 'Main-Class' : 'main.GameDriver'
+        // attributes 'Main-Class' : application.mainClass // run with gradle run
+        attributes 'Main-Class' : 'main.GameDriver'     // run with jar
     }
 }

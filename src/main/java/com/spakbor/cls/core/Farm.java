@@ -1,12 +1,25 @@
 package cls.core;
-import cls.world.*;
-import cls.items.*;
-import data.*;
-import enums.*;
-import system.*;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import cls.items.Item;
+import cls.world.CoastalMap;
+import cls.world.FarmMap;
+import cls.world.ForestMap;
+import cls.world.GameMap;
+import cls.world.GenericInteriorMap;
+import cls.world.MountainMap;
+import cls.world.PlayerHouseMap;
+import cls.world.StoreMap;
+import cls.world.Tile;
+import cls.world.TownMap;
+import data.NPCFactory;
+import enums.SeasonType;
+import enums.TileState;
+import enums.WeatherType;
+import system.SeasonController;
+import system.TimeController;
+import system.Weather;
 
 public class Farm {
     private String name; 
@@ -16,21 +29,17 @@ public class Farm {
     private int croppedCrop;
     private int fishCaught;
 
-    // Game state controllers
     private TimeController timeController;
     private SeasonController seasonController;
     private Weather weatherController;
     private int days = 0;
 
-    // World map management
     private Map<String, GameMap> worldMaps; 
     private GameMap currentMap;
 
-    // Components specific to the player's farm (logical instances)
     private House house;
     private ShippingBin shippingBin;
 
-    // Flags for managing automatic sleep at 2 AM
     private boolean automaticSleepScheduled = false;
     private boolean isCurrentlySleeping = false;
 
@@ -153,9 +162,9 @@ public class Farm {
 
         timeController.resetTime();
 
-        System.out.println("\n--- A new day has begun! ---");
-        System.out.println("Date: " + getCurrentSeason().toString() + ", Day " + getCurrentDayInSeason());
-        System.out.println("Weather: " + getCurrentWeather().toString());
+        System.out.println("\n--- Pagiku cerahku! Matahari di Bar- ehem. ---");
+        System.out.println("Musim: " + getCurrentSeason().toString() + ", Hari " + getCurrentDayInSeason());
+        System.out.println("Cuaca: " + getCurrentWeather().toString());
 
         FarmMap playerOwnedFarm = getFarmMap();
         if (playerOwnedFarm != null) {
@@ -180,7 +189,9 @@ public class Farm {
      */
     private void updateCropGrowthOnMap(FarmMap specificFarmMap) {
         SeasonType currentFarmSeason = seasonController.getCurrentSeason();
+        WeatherType weatherToday = weatherController.getTodayWeather();
 
+        boolean isRaining = (weatherToday == WeatherType.RAINY);
         if (specificFarmMap.getTiles() == null) {
              return;
         }
@@ -188,16 +199,20 @@ public class Farm {
         for (Tile tile : specificFarmMap.getTiles()) {
             if (tile.getState() == TileState.PLANTED && tile.getObjectOnTile() instanceof PlantedCrop) {
                 PlantedCrop plant = (PlantedCrop) tile.getObjectOnTile();
+                if (isRaining) {
+                    plant.setWateredToday(true);
+                } 
+                
                 boolean shouldRemovePlant = plant.grow(currentFarmSeason);
 
                 if (shouldRemovePlant) {
                     tile.setObjectOnTile(null);
                     tile.setState(TileState.TILLED);
-                    System.out.println("A plant at (" + tile.getX() + "," + tile.getY() + ") on the farm has withered.");
+                    System.out.println("Tanaman di farm (" + tile.getX() + "," + tile.getY() + ") mati.");
                 } else {
                     if (plant.isMature()) {
                         tile.setState(TileState.HARVESTABLE);
-                        System.out.println("A plant at (" + tile.getX() + "," + tile.getY() + ") on the farm is now harvestable!");
+                        System.out.println("Tanaman di farm (" + tile.getX() + "," + tile.getY() + ") udah bisa panen!");
                     }
                 }
             } else if (tile.getState() == TileState.HARVESTABLE && !(tile.getObjectOnTile() instanceof PlantedCrop)) {

@@ -1,19 +1,61 @@
 package main;
-import action.*;
-import cls.core.*;
-import cls.items.*;
-import cls.world.*;
-import data.*;
-import enums.*;
-import system.*;
-import utils.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import action.Action;
+import action.ChatAction;
+import action.CookingAction;
+import action.EatingAction;
+import action.FishingAction;
+import action.GiftAction;
+import action.HarvestingAction;
+import action.LearnRecipeAction;
+import action.MarryAction;
+import action.MovingAction;
+import action.PlantingAction;
+import action.ProposeAction;
+import action.RecoverLandAction;
+import action.SellingAction;
+import action.SleepingAction;
+import action.TillingAction;
+import action.WateringAction;
+import cls.core.Farm;
+import cls.core.Inventory;
+import cls.core.NPC;
+import cls.core.NPCInteractionStats;
+import cls.core.Player;
+import cls.core.Recipe;
+import cls.core.ShippingBin;
+import cls.items.EdibleItem;
+import cls.items.Equipment;
+import cls.items.Food;
+import cls.items.Item;
+import cls.items.Misc;
+import cls.items.RecipeItem;
+import cls.items.Seeds;
+import cls.world.CoastalMap;
+import cls.world.FarmMap;
+import cls.world.ForestMap;
+import cls.world.GameMap;
+import cls.world.GenericInteriorMap;
+import cls.world.MountainMap;
+import cls.world.PlayerHouseMap;
+import cls.world.StoreMap;
+import cls.world.Tile;
+import cls.world.TownMap;
+import data.FoodDataRegistry;
+import data.MiscDataRegistry;
+import data.NPCFactory;
+import data.RecipeDataRegistry;
+import data.SeedDataRegistry;
+import enums.Direction;
+import enums.FishRarity;
+import system.Time;
+import utils.InteractionHelper;
 
 enum GameState {
     MAIN_MENU,
@@ -34,7 +76,7 @@ public class GameDriver {
     private static boolean milestoneReachedMarriage = false;
     private static final int GOLD_MILESTONE_TARGET = 17209;
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, InterruptedException{
         while (currentGameState != GameState.EXITING) {
             switch (currentGameState) {
                 case MAIN_MENU:
@@ -57,7 +99,7 @@ public class GameDriver {
         stopGameTimer();
     }
 
-    private static void mainMenuLoop() {
+    private static void mainMenuLoop() throws InterruptedException {
         System.out.println("\n=========================");
         System.out.println("    SPAKBOR HILLS RPG");
         System.out.println("=========================");
@@ -536,14 +578,14 @@ public class GameDriver {
                 player.performAction(new FishingAction(), farm);
             }
             else if (TownMap.TOWN_EXIT_TO_FARM_ID.equals(adjacentObjectId) && player.getCurrentLocationName().equals("Town")) {
-                System.out.println("Kembali ke Kebun...");
+                System.out.println("Kembali ke Farm...");
                 farm.loadMap("Farm", "Town"); displayFullStatus();
             }
             else {
                 System.out.println("Anda bersebelahan dengan '" + adjacentObjectId + "', tapi interaksi spesifik belum didefinisikan.");
             }
         } else {
-            System.out.println("Tidak ada yang spesifik untuk diinteraksikan di sini.");
+            System.out.println("Tidak ada yang spesifik untuk interaksi di sini.");
         }
     }
 
@@ -552,7 +594,7 @@ public class GameDriver {
         List<Recipe> availableRecipes = RecipeDataRegistry.getAvailableRecipesForPlayer(player);
 
         if (availableRecipes == null || availableRecipes.isEmpty()) {
-            System.out.println("Anda belum mengetahui resep apapun yang bisa dimasak dengan bahan yang ada, atau belum memenuhi syarat unlock.");
+            System.out.println("Belum mengetahui resep apapun yang bisa dimasak dengan bahan yang ada, atau belum memenuhi syarat unlock.");
             return;
         }
         System.out.println("Resep yang Dapat Anda Masak Saat Ini:");
@@ -761,20 +803,20 @@ public class GameDriver {
 
     private static void displayHelpScreen() {
         System.out.println("\n--- Bantuan Game ---");
-        System.out.println("Selamat datang di Spakbor Hills, game simulasi kebun dan kehidupan!");
-        System.out.println("Tujuanmu adalah mengelola kebun, menanam tanaman, berinteraksi dengan penduduk,");
+        System.out.println("Selamat datang di Spakbor Hills, game simulasi bertani dan kehidupan!");
+        System.out.println("Ayo mengelola kebun, menanam tanaman, mancing keribu- maksudku ikan, berinteraksi dengan penduduk,");
         System.out.println("dan membangun kehidupan yang makmur.");
-        System.out.println("\nCara Bermain (Dalam Game):");
-        System.out.println("- Gunakan perintah seperti 'move', 'till', 'plant', 'water', 'harvest' untuk mengelola kebunmu.");
-        System.out.println("- 'interact' dengan objek seperti rumahmu (untuk tidur/memasak), kotak pengiriman (untuk menjual), atau perairan (untuk memancing).");
-        System.out.println("- Kelola energi dan waktumu. Tidur memulihkan energi.");
-        System.out.println("- Jelajahi area berbeda dengan bergerak ke tepi kebunmu.");
+        System.out.println("\nCara Bermain:");
+        System.out.println("- Gunakan perintah seperti 'move', 'till', 'plant', 'water', 'harvest' untuk mengelola kebunmu! Jangan lupa equip item yang sesuai.");
+        System.out.println("- 'interact' dengan objek dalam rumahmu untuk tidur dan memasak, Shipping Bin untuk menjual, atau perairan untuk memancing!");
+        System.out.println("- Kelola energi dan waktumu. Tidur memulihkan energi!");
+        System.out.println("- Jelajahi area berbeda dengan bergerak ke pojok peta.");
         System.out.println("- Ketik 'help' di dalam game untuk daftar perintah aksi spesifik.");
         System.out.println("-----------------");
     }
     private static void displayShippingBinContents() {
         if (farm == null || farm.getShippingBin() == null) {
-            System.out.println("Tidak ada game aktif atau kotak pengiriman tidak tersedia.");
+            System.out.println("Tidak ada game aktif atau Shipping Bin tidak tersedia.");
             return;
         }
         ShippingBin bin = farm.getShippingBin();
@@ -793,14 +835,20 @@ public class GameDriver {
         System.out.println("Kapasitas: " + bin.getCurrentSize() + "/" + (bin.getMaxCapacity() > 0 ? bin.getMaxCapacity() : "Tak Terbatas"));
         System.out.println("---------------------------");
     }
-    private static void displayCredits() {
+    private static void displayCredits() throws InterruptedException {
         System.out.println("\n--- Credits ---");
         System.out.println("Game Concept & Design: Team 11 of Section 01");
+        Thread.sleep(1000);
         System.out.println("Lead Programmer: Dr. Asep Spakbor");
+        Thread.sleep(1000);
         System.out.println("Susah banget integrasi apalagi GUI T_T");
+        Thread.sleep(1000);
         System.out.println("HE DOPE JOKE COW WE!");
+        Thread.sleep(1000);
         System.out.println("Wi kod de kod, not onle prom de kod. Wi ret de kod, not nowing hau to komben.");
+        Thread.sleep(1000);
         System.out.println("Send help pls bug everywhere. My glock looks kinda tempting lately.");
+        Thread.sleep(750);
         System.out.println("Terima kasih telah bermain!");
         System.out.println("---------------");
     }
@@ -874,7 +922,7 @@ public class GameDriver {
     }
     private static void displayInventory() {
         if (player == null || player.getInventory() == null) { System.out.println("Tidak ada game aktif atau inventory."); return; }
-        System.out.println("\n--- Inventaris ---");
+        System.out.println("\n--- Inventory ---");
         Map<Item, Integer> items = player.getInventory().getInventoryMap(); // Pastikan getInventoryMap() ada
         if (items == null || items.isEmpty()) { System.out.println("Inventory kosong."); }
         else { for (Map.Entry<Item, Integer> entry : items.entrySet()) { System.out.println("- " + entry.getKey().getName() + ": " + entry.getValue()); } }
@@ -882,7 +930,7 @@ public class GameDriver {
     }
     private static void displayFarmStatus() { 
         if (farm == null || player == null) { System.out.println("Tidak ada game aktif."); return; }
-        System.out.println("\n----- Status Kebun & Dunia -----");
+        System.out.println("\n----- Status Farm & Dunia -----");
         System.out.println("Lokasi Saat Ini: " + player.getCurrentLocationName());
         if (farm.getSeasonController() != null && farm.getTimeController() != null && farm.getWeatherController() != null) {
             System.out.println("Tanggal: " + farm.getCurrentSeason().toString() + ", Hari ke-" + farm.getCurrentDayInSeason());
