@@ -68,6 +68,7 @@ public class CoastalMap implements GameMap {
             }
             System.out.println();
         }
+        System.out.println("Legenda: P:Player, W:Air");
     }
     @Override
     public int getWidth() { return MAP_WIDTH; }

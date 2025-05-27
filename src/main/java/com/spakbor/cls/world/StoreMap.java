@@ -97,6 +97,7 @@ public class StoreMap implements GameMap {
             }
             System.out.println();
         }
+        System.out.println("P: Player, |: Rak, =: Meja Counter, E: Emily");
     }
 
     @Override

@@ -92,7 +92,7 @@ public class PlayerHouseMap implements GameMap {
             }
             System.out.println();
         }
-        System.out.println("P: Pemain, #: Dinding, B: Kasur, C: Kompor, D: Pintu, .: Lantai");
+        System.out.println("P: Pemain, #: Dinding, B: Kasur, C: Kompor, .: Lantai");
     }
 
     @Override

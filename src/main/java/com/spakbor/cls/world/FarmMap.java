@@ -125,7 +125,7 @@ public class FarmMap implements GameMap {
         if (this.houseDoorY >= MAP_HEIGHT) {
             this.houseDoorY = this.houseEntranceY -1;
             if (this.houseDoorY <0) { 
-                 System.err.println("Peringatan: Tidak bisa menentukan akses pintu rumah yang valid.");
+                 System.err.println("Tidak bisa menentukan akses pintu rumah yang valid.");
                  this.houseDoorY = houseStartY; 
             }
         }
@@ -214,12 +214,12 @@ public class FarmMap implements GameMap {
             placedStructures.add(this.shippingBinLocation);
             return;
         }
-        System.err.println("Tidak dapat menemukan spot untuk Kotak Kirim dekat rumah (mungkin terhalang akses pintu). Menempatkan secara acak.");
+        System.err.println("Tidak dapat menemukan spot untuk Shipping Bin dekat rumah.");
         int binX, binY, attempts = 0;
         do {
             binX = random.nextInt(MAP_WIDTH - SHIPPING_BIN_WIDTH + 1);
             binY = random.nextInt(MAP_HEIGHT - SHIPPING_BIN_HEIGHT + 1);
-            attempts++; if (attempts > 100) { System.err.println("Kritis: Gagal menempatkan kotak pengiriman (acak)."); return; }
+            attempts++; if (attempts > 100) { System.err.println("Gagal menempatkan kotak pengiriman (acak)."); return; }
         } while (!isAreaFree(binX, binY, SHIPPING_BIN_WIDTH, SHIPPING_BIN_HEIGHT, null, forbiddenForBin));
         for (int y = binY; y < binY + SHIPPING_BIN_HEIGHT; y++) {
             for (int x = binX; x < binX + SHIPPING_BIN_WIDTH; x++) {
@@ -228,7 +228,7 @@ public class FarmMap implements GameMap {
         }
         this.shippingBinLocation = new PlacedObject(binX, binY, SHIPPING_BIN_WIDTH, SHIPPING_BIN_HEIGHT, SHIPPING_BIN_ID);
         placedStructures.add(this.shippingBinLocation);
-        System.out.println("Kotak Kirim (acak) ditempatkan di: (" + binX + "," + binY + ")");
+        System.out.println("Shipping Bin ditempatkan di: (" + binX + "," + binY + ")");
     }
 
     @Override
@@ -279,7 +279,7 @@ public class FarmMap implements GameMap {
             }
             System.out.println();
         }
-        System.out.println("Legenda: P:Pemain, H:Rumah, D:Pintu Rumah, O:Kolam, S:Kotak Kirim, .:Bisa Dicangkul, T:Tercangkul, L:Ditanami, V:Siap Panen");
+        System.out.println("Legenda: P:Pemain, H:Rumah, D:Pintu Rumah, O:Kolam, S:Shipping Bin, .:Bisa Dicangkul, T:Tercangkul, L:Ditanami, V:Siap Panen");
         System.out.println("Legenda Visiting:");
         System.out.println("- Pojok kiri atas: Pergi ke kiri untuk ke Hutan, ke atas untuk ke Gunung");
         System.out.println("- Pojok kanan atas: Pergi ke kanan untuk ke Kota, ke atas untuk ke Pantai");
