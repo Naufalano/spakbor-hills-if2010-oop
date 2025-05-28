@@ -142,24 +142,27 @@ public class GameDriver {
                 currentGameState = GameState.EXITING;
                 break;
             case "5":
+                System.out.print("Masukkan nama file save untuk dimuat (misal: bas.json): ");
+                String loadFilename = scanner.nextLine().trim();
+                if (loadFilename.isEmpty()) {
+                    System.out.println("Nama file tidak boleh kosong. Load dibatalkan.");
+                    break;
+                }
                 try {
-                    SaveLoadManager.GameSaveData loadedData = SaveLoadManager.loadGame("savegame.json");
+                    SaveLoadManager.GameSaveData loadedData = SaveLoadManager.loadGame(loadFilename);
                     if (loadedData != null) {
                         player = loadedData.player;
                         farm = loadedData.farm;
                         npcFactory = farm.getNpcFactory();
                         currentGameState = GameState.IN_GAME;
                         startGameTimer();
-                        System.out.println("Game berhasil dimuat!");
+                        System.out.println("Game berhasil dimuat dari '" + loadFilename + "'!");
                     } else {
-                        System.out.println("Tidak ada data game yang ditemukan.");
+                        System.out.println("Tidak ada data game yang ditemukan di file '" + loadFilename + "'.");
                     }
                 } catch (IOException e) {
-                    System.err.println("Gagal memuat game: " + e.getMessage());
+                    System.err.println("Gagal memuat game dari '" + loadFilename + "': " + e.getMessage());
                 }
-                break;
-            default:
-                System.out.println("Opsi tidak valid. Silakan coba lagi.");
                 break;
         }
     }
