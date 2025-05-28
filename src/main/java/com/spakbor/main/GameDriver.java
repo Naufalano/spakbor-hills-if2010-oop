@@ -421,9 +421,21 @@ public class GameDriver {
 
                     case "save":
                         if (player != null && farm != null) {
+                            System.out.print("Masukkan nama file save (misal: savegame.json): ");
+                            String filename = scanner.nextLine().trim();
+                            if (filename.isEmpty()) {
+                                System.out.println("Nama file tidak boleh kosong. Simpan dibatalkan.");
+                                break;
+                            }
                             try {
-                                SaveLoadManager.saveGame(player, farm, "savegame.json");
-                                System.out.println("Game berhasil disimpan.");
+                                SaveLoadManager.saveGame(player, farm, filename);
+                                System.out.println("Game berhasil disimpan ke '" + filename + "'.");
+                                // Setelah simpan, kembali ke main menu
+                                stopGameTimer();
+                                player = null;
+                                farm = null;
+                                currentGameState = GameState.MAIN_MENU;
+                                return; // keluar dari inGameLoop agar mainMenuLoop jalan
                             } catch (IOException e) {
                                 System.err.println("Gagal menyimpan game: " + e.getMessage());
                             }
