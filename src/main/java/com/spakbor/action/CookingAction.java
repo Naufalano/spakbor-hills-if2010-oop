@@ -145,8 +145,6 @@ public class CookingAction implements  Action {
              return;
         }
 
-        farm.advanceGameTime(recipeToCook.getTimeToCookMinutes());
-
         Food cookedFood = recipeToCook.getResultItem();
         player.obtainItem(cookedFood, 1);
 

@@ -1,7 +1,15 @@
 package action;
-import cls.core.*;
-import cls.world.*;
-import enums.*;
+import cls.core.Farm;
+import cls.core.PlantedCrop;
+import cls.core.Player;
+import cls.world.FarmMap;
+import cls.world.GameMap;
+import cls.world.GenericInteriorMap;
+import cls.world.PlayerHouseMap;
+import cls.world.StoreMap;
+import cls.world.Tile;
+import cls.world.TownMap;
+import enums.Direction;
 
 public class MovingAction implements Action {
     private Direction direction;
@@ -108,6 +116,7 @@ public class MovingAction implements Action {
                     return;
                 } else {
                     System.out.println("...tapi tidak punya cukup energi (" + VISIT_ENERGY_COST + ") untuk melanjutkan.");
+                    farm.scheduleAutomaticSleep();
                     break;
                 }
             }

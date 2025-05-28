@@ -28,18 +28,20 @@ public class ProposeAction implements Action {
             System.out.println(targetNpc.getName() + " belum siap untuk dilamar (cinta belum tulus atau status tidak memungkinkan).");
             return false;
         }
+
+        if (targetNpc.getAffection() < 150 && player.getEnergy() + 20 < 20) {
+            System.out.println("Udah capek. Besok-besok aja lah.");
+            return false;
+        } else if (targetNpc.getAffection() == 150 && player.getEnergy() + 20 < 10) {
+            System.out.println("Udah capek. Besok-besok aja lah.");
+            return false;
+        }
+        
         return true;
     }
 
     @Override
     public void execute(Player player, Farm farm) {
-        if (targetNpc.getAffection() < 150 && player.getEnergy() + 20 < 20) {
-            System.out.println("Udah capek. Besok-besok aja lah.");
-            return;
-        } else if (targetNpc.getAffection() == 150 && player.getEnergy() + 20 < 10) {
-            System.out.println("Udah capek. Besok-besok aja lah.");
-            return;
-        }
         farm.advanceGameTime(TIME_COST_MINUTES);
         targetNpc.propose();
 

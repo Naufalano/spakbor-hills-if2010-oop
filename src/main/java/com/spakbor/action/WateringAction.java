@@ -1,8 +1,13 @@
 package action;
-import cls.core.*;
-import cls.items.*;
-import cls.world.*;
-import enums.*;
+import cls.core.Farm;
+import cls.core.PlantedCrop;
+import cls.core.Player;
+import cls.items.Equipment;
+import cls.items.Item;
+import cls.world.FarmMap;
+import cls.world.GameMap;
+import cls.world.Tile;
+import enums.TileState;
 
 public class WateringAction implements Action {
     private Item wateringCan;
@@ -18,7 +23,7 @@ public class WateringAction implements Action {
             System.out.println("Kamu harus memegang Watering Can untuk menyiram.");
             return false;
         }
-        if (player.getEnergy() < 5) { 
+        if (player.getEnergy() + 20 < 5) { 
             System.out.println("Energi tidak cukup.");
             return false;
         }
