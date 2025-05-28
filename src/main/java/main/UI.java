@@ -395,7 +395,13 @@ public class UI {
         }
 
         // FULL SCREEN CHECK BOX
-        
+        int fsTextY = frameY + gp.tileSize * 2 + 37; // Ini adalah Y dari TEKS "Full Screen"
+        int fsTextX = frameX + gp.tileSize;
+        int checkBoxX = fsTextX + (int)g2.getFontMetrics().getStringBounds("Full Screen", g2).getWidth() + 20; 
+        int checkBoxY = fsTextY - (24/2); // Menjaga vertikal sejajar dengan teks "Full Screen"
+
+    g2.setStroke(new BasicStroke(3));
+    g2.drawRect(checkBoxX, checkBoxY, 24, 24); // Gunakan checkBoxX dan checkBoxY yang baru dihitung
 
     }
     public int getItemIndexOnSlot(){
