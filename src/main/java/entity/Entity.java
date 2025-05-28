@@ -38,9 +38,9 @@ public class Entity {
 
     public void setDialogue(){
         
-        dialogue[0] = "Hello, how are you?";
-        dialogue[1] = "abcde";
-        dialogue[2] = "hai hai halo";
+        dialogue[0] = "Hello Player1, how are you?";
+        dialogue[1] = "Today's sky is pretty clear right?";
+        dialogue[2] = "Let me show you around here";
     }
 
     public void setAction(){}
@@ -54,6 +54,7 @@ public class Entity {
         gp.checker.checkTile(this);
         gp.checker.checkObject(this, false);
         gp.checker.checkPlayer(this);
+        gp.checker.checkNPC(this, gp.NPC);
 
         if(!collisionOn){
 

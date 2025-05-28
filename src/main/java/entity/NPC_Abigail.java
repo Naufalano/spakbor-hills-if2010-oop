@@ -74,5 +74,4 @@ public class NPC_Abigail extends Entity {
                 break;
         }
     }
-
 }

@@ -12,6 +12,7 @@ public class NPC_Emily extends Entity {
         speed = 1;
 
         getPlayerImage();
+        setDialogue();
     }
 
     public void getPlayerImage(){
@@ -50,6 +51,27 @@ public class NPC_Emily extends Entity {
         actionLockCounter = 0;
         }
     }
-        
+    public void speak(){
 
+        if(dialogue[dialogueIndex] == null){
+            dialogueIndex = 0;
+        }
+        gp.ui.currentDialogue = dialogue[dialogueIndex];
+        dialogueIndex++;
+
+        switch(gp.player.direction){
+            case "up":
+                direction = "down";
+                break;
+            case "down":
+                direction = "up";
+                break;
+            case "left":
+                direction = "right";
+                break;
+            case "right":
+                direction = "left";
+                break;
+        }
+    }   
 }
