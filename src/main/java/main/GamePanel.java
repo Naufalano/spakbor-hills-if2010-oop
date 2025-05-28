@@ -46,9 +46,11 @@ public class GamePanel extends JPanel implements Runnable{
     public AssetSetter setter = new AssetSetter(this);
     
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int inventoryState = 4;
     
     public Player player = new Player(this,keyH);
     public SuperItem[] items = new SuperItem[10];
@@ -66,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable{
         setter.setItem();
         setter.setNPC();
         playMusic(5);
-        gameState = playState;
+        gameState = titleState;
     }
 
     public void startGameThread(){
@@ -148,23 +150,32 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D)g;
 
-        tileM.draw(g2);
 
-        for(int i = 0; i < items.length; i++){
-            if(items[i] != null){
-                items[i].draw(g2, this);
-            }
+        // TITLE SCREEN
+        if (gameState == titleState){
+            ui.draw(g2);
         }
 
-        for(int i = 0; i < NPC.length; i++){
-            if(NPC[i] != null){
-                NPC[i].draw(g2);
+        // OTHERS
+        else {
+            tileM.draw(g2);
+
+            for(int i = 0; i < items.length; i++){
+                if(items[i] != null){
+                    items[i].draw(g2, this);
+                }
             }
+
+            for(int i = 0; i < NPC.length; i++){
+                if(NPC[i] != null){
+                    NPC[i].draw(g2);
+                }
+            }
+
+            player.draw(g2);
+
+            ui.draw(g2);
         }
-
-        player.draw(g2);
-
-        ui.draw(g2);
 
         g2.dispose();
     }

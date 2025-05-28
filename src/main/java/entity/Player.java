@@ -6,10 +6,18 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
+
+import item.OBJ_WateringCan;
+import item.OBJ_TrainingRod;
+import item.OBJ_Coal;
+import item.OBJ_Hoe;
+import item.OBJ_Pickaxe;
+import item.OBJ_ParsnipSeeds;
 
 import entity.NPC_Abigail;
 
@@ -20,6 +28,8 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     // public int hasKey = 0;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler keyH){
 
@@ -35,6 +45,7 @@ public class Player extends Entity {
 
         setDefaultValues();
         getPlayerImage();
+        setItems();
     }
     public void setDefaultValues() {
         WorldX = gp.tileSize * 24;
@@ -43,6 +54,15 @@ public class Player extends Entity {
         direction = "down";
     }
 
+    public void setItems(){
+        // Add items to the inventory here
+        inventory.add(new OBJ_WateringCan(gp));
+        inventory.add(new OBJ_TrainingRod(gp));
+        inventory.add(new OBJ_Coal(gp));
+        inventory.add(new OBJ_Pickaxe(gp));
+        inventory.add(new OBJ_Hoe(gp));
+        inventory.add(new OBJ_ParsnipSeeds(gp));
+    }
     public void getPlayerImage(){
         up1 = setup("/player/boy_up_1");
         up2 = setup("/player/boy_up_2");

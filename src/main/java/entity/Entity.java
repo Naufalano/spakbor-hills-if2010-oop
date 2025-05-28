@@ -27,6 +27,8 @@ public class Entity {
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public boolean collisionOn = false;
     public int actionLockCounter = 0;
+
+    public String name;
     
     String dialogue[] = new String[20];
 
