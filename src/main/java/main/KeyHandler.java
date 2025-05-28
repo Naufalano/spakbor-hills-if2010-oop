@@ -93,6 +93,10 @@ public class KeyHandler implements KeyListener{
             if(code == KeyEvent.VK_I){
                 gp.gameState = gp.inventoryState;
             }
+
+            if(code == KeyEvent.VK_ESCAPE){
+                gp.gameState = gp.settingsState;
+            }
         }
 
         // PAUSE STATE
@@ -136,6 +140,35 @@ public class KeyHandler implements KeyListener{
                 if(gp.ui.slotCol != 4){
                     gp.ui.slotCol++;
                     gp.playSE(6);
+                }
+            }
+        }
+
+        // SETTINGS STATE
+        else if (gp.gameState == gp.settingsState){
+            if(code == KeyEvent.VK_ESCAPE){
+                gp.gameState = gp.playState;
+            }
+            if (code == KeyEvent.VK_ENTER){
+                gp.gameState = gp.playState;
+            }
+
+            int maxCommandNum = 0;
+            switch(gp.ui.subState){
+                case 0: maxCommandNum = 5; 
+            }
+            if (code == KeyEvent.VK_W){
+                gp.ui.commandNum--;
+                gp.playSE(6);
+                if(gp.ui.commandNum < 0){
+                    gp.ui.commandNum = maxCommandNum;
+                }
+            }
+            if (code == KeyEvent.VK_S){
+                gp.ui.commandNum++;
+                gp.playSE(6);
+                if(gp.ui.commandNum > maxCommandNum){
+                    gp.ui.commandNum = 0;
                 }
             }
         }

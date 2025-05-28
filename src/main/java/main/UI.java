@@ -24,6 +24,7 @@ public class UI {
     public int titleScreenState = 0; // 0: the first screen 1: the second screen
     public int slotCol = 0;
     public int slotRow = 0;
+    int subState = 0;
 
     BufferedImage titleScreenImage;
 
@@ -74,6 +75,11 @@ public class UI {
         // CHARACTER STATE
         if(gp.gameState == gp.inventoryState){
             drawInventory();
+        }
+
+        // OPTIONS STATE
+        if(gp.gameState == gp.settingsState){
+            drawSettingsScreen();
         }
     }
 
@@ -311,6 +317,85 @@ public class UI {
             }
 
         }
+
+    }
+
+    public void drawSettingsScreen(){
+
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(32F));
+
+        // SUB WINDOW
+        int frameX = gp.tileSize*4;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize*8;
+        int frameHeight = gp.tileSize*10;
+
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        switch(subState){
+            case 0: settings_top(frameX,frameY);
+            break;
+            case 1: break;
+            case 2: break;
+        }
+
+    }
+    public void settings_top(int frameX, int frameY){
+        int textX;
+        int textY;
+
+        // TITLE
+        String text = "Settings";
+        textX = getXAtCenter(text);
+        textY = frameY + gp.tileSize;
+        g2.drawString(text, textX, textY);
+
+        // FULL SCREEN ON/OFF
+        textX = frameX + gp.tileSize;
+        textY += gp.tileSize*2;
+        g2.drawString("Full Screen", textX, textY);
+        if(commandNum == 0){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        // MUSIC
+        textY += gp.tileSize;
+        g2.drawString("Music", textX, textY);
+        if(commandNum == 1){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        // SE
+        textY += gp.tileSize;
+        g2.drawString("SE", textX, textY);
+        if(commandNum == 2){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        // CONTROL
+        textY += gp.tileSize;
+        g2.drawString("Control", textX, textY);
+        if(commandNum == 3){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        // END GAME
+        textY += gp.tileSize;
+        g2.drawString("End Game", textX, textY);
+        if(commandNum == 4){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        // BACK
+        textY += gp.tileSize*2;
+        g2.drawString("Back", textX, textY);
+        if(commandNum == 5){
+            g2.drawString(">", textX-25, textY);
+        }
+
+        // FULL SCREEN CHECK BOX
+        
 
     }
     public int getItemIndexOnSlot(){
