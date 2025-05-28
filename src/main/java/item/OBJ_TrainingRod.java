@@ -15,6 +15,7 @@ public class OBJ_TrainingRod extends Entity {
         name = "Training Rod";
         down1 = setup("/item/Training_Rod"); // Assuming items are in /items folder
         // You might have other sprites for different directions if needed, but for inventory display, down1 is often sufficient.
+        description = "[" + name + "]\nbuat mancing";
     }
 
     // You might add specific functionality for the watering can here

@@ -15,6 +15,7 @@ public class OBJ_WateringCan extends Entity {
         name = "Watering Can";
         down1 = setup("/item/Watering_Can"); // Assuming items are in /items folder
         // You might have other sprites for different directions if needed, but for inventory display, down1 is often sufficient.
+        description = "[" + name + "]\nnyirem taneman dah";
     }
 
     // You might add specific functionality for the watering can here

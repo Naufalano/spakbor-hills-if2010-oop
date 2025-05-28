@@ -14,6 +14,7 @@ public class OBJ_ParsnipSeeds extends Entity {
         name = "Parsnip Seeds";
         down1 = setup("/item/Parsnip_Seeds"); // Assuming items are in /items folder
         // You might have other sprites for different directions if needed, but for inventory display, down1 is often sufficient.
+        description = "[" + name + "]\nParsnip Seeds aja";
     }
 
     // You might add specific functionality for the watering can here

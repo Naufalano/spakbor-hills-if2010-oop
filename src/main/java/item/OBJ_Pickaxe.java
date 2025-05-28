@@ -14,6 +14,7 @@ public class OBJ_Pickaxe extends Entity {
         name = "Pickaxe";
         down1 = setup("/item/pickaxe"); // Assuming items are in /items folder
         // You might have other sprites for different directions if needed, but for inventory display, down1 is often sufficient.
+        description = "[" + name + "]\nPickaxe aja";
     }
 
     // You might add specific functionality for the watering can here

@@ -139,4 +139,6 @@ public class Entity {
         }
         return image;
     }
+
+    public String description = "";
 }
