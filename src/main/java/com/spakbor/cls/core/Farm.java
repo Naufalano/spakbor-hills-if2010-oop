@@ -1,28 +1,30 @@
-package cls.core;
+package com.spakbor.cls.core;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.Serializable;
 
-import cls.items.Food;
-import cls.items.Item;
-import cls.world.CoastalMap;
-import cls.world.FarmMap;
-import cls.world.ForestMap;
-import cls.world.GameMap;
-import cls.world.GenericInteriorMap;
-import cls.world.MountainMap;
-import cls.world.PlayerHouseMap;
-import cls.world.StoreMap;
-import cls.world.Tile;
-import cls.world.TownMap;
-import data.NPCFactory;
-import enums.SeasonType;
-import enums.TileState;
-import enums.WeatherType;
-import system.SeasonController;
-import system.TimeController;
-import system.Weather;
+import com.spakbor.cls.items.Food;
+import com.spakbor.cls.items.Item;
+import com.spakbor.cls.world.CoastalMap;
+import com.spakbor.cls.world.FarmMap;
+import com.spakbor.cls.world.ForestMap;
+import com.spakbor.cls.world.GameMap;
+import com.spakbor.cls.world.GenericInteriorMap;
+import com.spakbor.cls.world.MountainMap;
+import com.spakbor.cls.world.PlayerHouseMap;
+import com.spakbor.cls.world.StoreMap;
+import com.spakbor.cls.world.Tile;
+import com.spakbor.cls.world.TownMap;
+import com.spakbor.data.NPCFactory;
+import com.spakbor.enums.SeasonType;
+import com.spakbor.enums.TileState;
+import com.spakbor.enums.WeatherType;
+import com.spakbor.system.SeasonController;
+import com.spakbor.system.TimeController;
+import com.spakbor.system.Weather;
 
-public class Farm {
+public class Farm implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String name; 
     private Player player;
     private NPCFactory npcFactory;

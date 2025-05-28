@@ -1,7 +1,9 @@
-package cls.world;
-import enums.*;
+package com.spakbor.cls.world;
+import com.spakbor.enums.*;
+import java.io.Serializable;
 
-public class Tile {
+public class Tile implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int x;
     private int y;
     private boolean isOccupied;
@@ -29,6 +31,9 @@ public class Tile {
     }
 
     public void setObjectOnTile(Object objectOnTile) {
+        if (objectOnTile != null && !(objectOnTile instanceof Serializable)) {
+        throw new IllegalArgumentException("Object on tile must be Serializable");
+        }
         this.objectOnTile = objectOnTile;
         this.setOccupied(objectOnTile != null);
     }

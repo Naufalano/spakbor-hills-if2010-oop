@@ -1,11 +1,14 @@
-package action;
-import cls.core.*;
-import cls.items.*;
-import cls.world.*;
-import data.*;
-import enums.*;
+package com.spakbor.action;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.items.*;
+import com.spakbor.cls.world.*;
+import com.spakbor.data.*;
+import com.spakbor.enums.*;
+
 
 public class HarvestingAction implements Action {
+    private static final long serialVersionUID = 1L;
+
 
     @Override
     public boolean validate(Player player, Farm farm) {

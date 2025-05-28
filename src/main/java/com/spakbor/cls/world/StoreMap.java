@@ -1,12 +1,13 @@
-package cls.world;
-import cls.core.*;
-import data.*;
-import enums.*;
+package com.spakbor.cls.world;
+import com.spakbor.cls.core.*;
+import com.spakbor.data.*;
+import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class StoreMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 15;
     public static final int MAP_HEIGHT = 10;
     public static final String WALL_ID = "StoreWall";
@@ -15,7 +16,7 @@ public class StoreMap implements GameMap {
     public static final String DOOR_ID = "StoreDoor_ExitToTown";
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
     private NPC shopkeeper; 
 
     public StoreMap(NPCFactory npcFactory) {

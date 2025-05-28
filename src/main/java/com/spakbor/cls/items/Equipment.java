@@ -1,16 +1,20 @@
-package cls.items;
+package com.spakbor.cls.items;
 
 public class Equipment extends Item {
+    private static final long serialVersionUID = 1L;
 
     public Equipment(String name) {
         super(name);
     }
-    
-    public int getSellPrice(){
-        return 0;
+
+    @Override
+    public int getSellPrice() {
+        return 0; // Bisa dikustomisasi jika suatu equipment bisa dijual
     }
 
-    public void use(){
-        return;
+    @Override
+    public void use() {
+        // Logika penggunaan equipment jika diperlukan
+        System.out.println(getName() + " digunakan (tidak ada efek saat ini).");
     }
 }

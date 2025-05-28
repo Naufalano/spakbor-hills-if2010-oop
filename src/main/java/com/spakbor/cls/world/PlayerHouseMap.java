@@ -1,10 +1,11 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
+import com.spakbor.cls.core.*;
+import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerHouseMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 10;
     public static final int MAP_HEIGHT = 8;
 

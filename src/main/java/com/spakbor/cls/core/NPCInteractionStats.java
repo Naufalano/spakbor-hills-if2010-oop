@@ -1,6 +1,9 @@
-package cls.core;
+package com.spakbor.cls.core;
+import java.io.Serializable;
 
-public class NPCInteractionStats {
+
+public class NPCInteractionStats implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String npcName;
     private String currentRelationshipStatus; 
     private int chatFrequency;

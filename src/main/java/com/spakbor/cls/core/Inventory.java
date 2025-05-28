@@ -1,9 +1,11 @@
-package cls.core;
-import cls.items.*;
+package com.spakbor.cls.core;
+import com.spakbor.cls.items.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.Serializable;
 
-public class Inventory {
+public class Inventory implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Map<Item, Integer> inventory = new HashMap<>(); 
 
     public Inventory playerInv(){

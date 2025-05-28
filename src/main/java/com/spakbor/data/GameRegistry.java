@@ -1,5 +1,5 @@
-package data;
-import cls.items.*;
+package com.spakbor.data;
+import com.spakbor.cls.items.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import enums.SeasonType;
+import com.spakbor.enums.SeasonType;
 
 public class GameRegistry<T extends Item, K> {
     private static final Map<Object, Item> PROTOTYPES_BY_KEY = new HashMap<>();

@@ -1,18 +1,19 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
+import com.spakbor.cls.core.*;
+import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class MountainMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 25;
     public static final int MAP_HEIGHT = 20;
     public static final String MOUNTAIN_WALL_ID = "MountainWall"; 
     public static final String LAKE_WATER_ID = "LakeWater";
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
 
     public MountainMap() {
         this.tiles = new ArrayList<>();

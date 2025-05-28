@@ -1,17 +1,18 @@
-package action;
-import cls.core.*;
-import cls.items.*;
-import cls.world.*;
-import data.*;
-import enums.*;
+package com.spakbor.action;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.items.*;
+import com.spakbor.cls.world.*;
+import com.spakbor.data.*;
+import com.spakbor.enums.*;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import utils.*;
+import com.spakbor.utils.*;
 
 public class FishingAction implements Action {
+    private static final long serialVersionUID = 1L;
     private Item fishingRod;
-    private Random random = new Random();
+    private transient Random random = new Random();
     private Scanner scanner;
 
     private static final int ENERGY_COST = 5;

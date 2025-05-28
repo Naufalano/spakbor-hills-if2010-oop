@@ -1,5 +1,5 @@
-package system;
-import enums.*;
+package com.spakbor.system;
+import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,8 @@
-package cls.items;
+package com.spakbor.cls.items;
 
 public class Misc extends Item {
+    private static final long serialVersionUID = 1L;
+
     private int buyPrice;
     private int sellPrice;
 

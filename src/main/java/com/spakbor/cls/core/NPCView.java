@@ -1,6 +1,9 @@
-package cls.core;
+package com.spakbor.cls.core;
+import java.io.Serializable;
 
-public class NPCView {
+
+public class NPCView implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String action;
 
     public NPCView(String action){

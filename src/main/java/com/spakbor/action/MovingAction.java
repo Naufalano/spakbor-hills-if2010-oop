@@ -1,17 +1,19 @@
-package action;
-import cls.core.Farm;
-import cls.core.PlantedCrop;
-import cls.core.Player;
-import cls.world.FarmMap;
-import cls.world.GameMap;
-import cls.world.GenericInteriorMap;
-import cls.world.PlayerHouseMap;
-import cls.world.StoreMap;
-import cls.world.Tile;
-import cls.world.TownMap;
-import enums.Direction;
+package com.spakbor.action;
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.PlantedCrop;
+import com.spakbor.cls.core.Player;
+import com.spakbor.cls.world.FarmMap;
+import com.spakbor.cls.world.GameMap;
+import com.spakbor.cls.world.GenericInteriorMap;
+import com.spakbor.cls.world.PlayerHouseMap;
+import com.spakbor.cls.world.StoreMap;
+import com.spakbor.cls.world.Tile;
+import com.spakbor.cls.world.TownMap;
+import com.spakbor.enums.Direction;
 
 public class MovingAction implements Action {
+    private static final long serialVersionUID = 1L;
+
     private Direction direction;
     private int steps;
 

@@ -1,4 +1,4 @@
-package system;
+package com.spakbor.system;
 
 public class Time {
     private int hour; 

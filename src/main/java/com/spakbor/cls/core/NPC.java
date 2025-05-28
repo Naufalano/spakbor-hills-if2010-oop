@@ -1,9 +1,12 @@
-package cls.core;
-import cls.items.*;
+package com.spakbor.cls.core;
+import com.spakbor.cls.items.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NPC {
+public class NPC implements Serializable{
+    private static final long serialVersionUID = 1L;
     private static final int MAX_HEART = 150;
     private String name;
     private int heartPoints = 0;
