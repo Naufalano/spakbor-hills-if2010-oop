@@ -41,6 +41,7 @@ public class Entity {
         gp.checker.checkTile(this);
         gp.checker.checkObject(this, false);
         gp.checker.checkPlayer(this);
+        gp.checker.checkNPC(this, gp.NPC);
 
         if(!collisionOn){
 

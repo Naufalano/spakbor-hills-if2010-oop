@@ -126,7 +126,7 @@ public class CollisionChecker {
     public int checkNPC(Entity entity, Entity[] target){
         int index = 999;
         for(int i = 0; i < target.length; i++){
-            if(target[i] != null){
+            if(target[i] != null && target[i] != entity){
                 entity.solidArea.x = entity.WorldX + entity.solidArea.x;
                 entity.solidArea.y = entity.WorldY + entity.solidArea.y;
 
