@@ -78,7 +78,7 @@ public class MovingAction implements Action {
                 isTransitionViaEdge = true;
             }
             else if (activeMapForStep instanceof FarmMap) {
-                if (attemptedNextX == ((FarmMap) activeMapForStep).gethouseDoorX() && attemptedNextY == ((FarmMap) activeMapForStep).gethouseDoorY() - 1) {
+                if (attemptedNextX == ((FarmMap) activeMapForStep).getHouseEntranceX() && attemptedNextY == ((FarmMap) activeMapForStep).getHouseEntranceY()) {
                     destinationMapName = "Player's House";
                 }
             }

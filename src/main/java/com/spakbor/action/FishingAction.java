@@ -1,13 +1,22 @@
 package com.spakbor.action;
-import com.spakbor.cls.core.*;
-import com.spakbor.cls.items.*;
-import com.spakbor.cls.world.*;
-import com.spakbor.data.*;
-import com.spakbor.enums.*;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import com.spakbor.utils.*;
+
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.Player;
+import com.spakbor.cls.items.Equipment;
+import com.spakbor.cls.items.Fish;
+import com.spakbor.cls.items.Item;
+import com.spakbor.cls.world.CoastalMap;
+import com.spakbor.cls.world.FarmMap;
+import com.spakbor.cls.world.ForestMap;
+import com.spakbor.cls.world.GameMap;
+import com.spakbor.cls.world.MountainMap;
+import com.spakbor.data.FishDataRegistry;
+import com.spakbor.enums.SeasonType;
+import com.spakbor.enums.WeatherType;
+import com.spakbor.utils.InteractionHelper;
 
 public class FishingAction implements Action {
     private static final long serialVersionUID = 1L;
@@ -62,7 +71,7 @@ public class FishingAction implements Action {
         return true;
     }
 
-    private String getActualFishingSpotName(String objectIdOnTile) {
+    private String getFishingSpot(String objectIdOnTile) {
         if (FarmMap.POND_ID.equals(objectIdOnTile)) return "Pond";
         if (ForestMap.RIVER_WATER_ID.equals(objectIdOnTile)) return "Forest River";
         if (MountainMap.LAKE_WATER_ID.equals(objectIdOnTile)) return "Mountain Lake";
@@ -80,7 +89,7 @@ public class FishingAction implements Action {
 
         GameMap currentMap = farm.getCurrentMap();
         String adjacentWaterObjectId = InteractionHelper.getAdjacentInteractableObject(player, currentMap);
-        String fishingLocationName = getActualFishingSpotName(adjacentWaterObjectId);
+        String fishingLocationName = getFishingSpot(adjacentWaterObjectId);
 
         if (fishingLocationName == null) {
             // System.out.println("Could not determine the fishing spot. Action failed.");

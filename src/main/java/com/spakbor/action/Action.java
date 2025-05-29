@@ -1,9 +1,9 @@
 package com.spakbor.action;
 
-import com.spakbor.cls.core.*;
-import java.io.Serializable;
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.Player;
 
-public interface Action extends Serializable {
+public interface Action {
     /**
      * Executes the action.
      * @param player The player performing the action.
