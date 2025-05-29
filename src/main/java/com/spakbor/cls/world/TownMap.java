@@ -1,9 +1,11 @@
 package com.spakbor.cls.world;
-import com.spakbor.cls.core.*;
-import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.Player;
+import com.spakbor.enums.TileState;
 
 public class TownMap implements GameMap {
     private static final long serialVersionUID = 1L;
@@ -214,7 +216,8 @@ public class TownMap implements GameMap {
                     Object obj = tile.getObjectOnTile();
                     if (obj instanceof String) {
                         String objId = (String) obj;
-                        if (objId.contains("DOOR") || objId.equals(TOWN_EXIT_TO_FARM_ID)) charToDisplay = DOOR_CHAR;
+                        if (objId.contains("DOOR")) charToDisplay = DOOR_CHAR;
+                        else if (objId.equals(TOWN_EXIT_TO_FARM_ID)) charToDisplay = 'F';
                         else if (objId.equals(BUILDING_WALL_ID) || objId.contains("Eksterior")) charToDisplay = BUILDING_CHAR;
                         else if (objId.equals(STORE_WALL_ID) || objId.contains("Eksterior")) charToDisplay = STORE_CHAR;
                         else if (objId.equals(ROAD_ID)) charToDisplay = ROAD_CHAR;
@@ -229,7 +232,7 @@ public class TownMap implements GameMap {
             }
             System.out.println();
         }
-        System.out.println("P:Pemain, B:Bangunan, S:Toko, D:Pintu, #:Jalan, ,:Tanah, N:NPC, X:Lainnya");
+        System.out.println("P:Pemain, F:Farm, B:Bangunan, S:Toko, D:Pintu, #:Jalan, ,:Tanah, N:NPC, X:Lainnya");
     }
 
     @Override
@@ -344,5 +347,10 @@ public class TownMap implements GameMap {
 
     public List<DoorInfo> getAllDoors() {
         return doors;
+    }
+
+    @Override
+    public List<Tile> getTiles() {
+        return tiles;
     }
 }
