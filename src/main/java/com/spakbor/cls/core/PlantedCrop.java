@@ -1,12 +1,16 @@
-package cls.core;
+package com.spakbor.cls.core;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-import cls.items.*;
-import data.*;
-import enums.*;
 
-public class PlantedCrop {
+import com.spakbor.cls.items.*;
+import com.spakbor.data.*;
+import com.spakbor.enums.*;
+
+public class PlantedCrop implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String resultingCropName;
     private Crop cropPrototype;
     private int yieldAmountPerHarvest;

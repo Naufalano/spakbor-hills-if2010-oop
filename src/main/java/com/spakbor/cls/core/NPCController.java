@@ -1,7 +1,9 @@
-package cls.core;
-import cls.items.*;
+package com.spakbor.cls.core;
+import com.spakbor.cls.items.*;
+import java.io.Serializable;
 
-public class NPCController {
+public class NPCController implements Serializable{
+    private static final long serialVersionUID = 1L;
     private NPC npc;
     private NPCView command;
 

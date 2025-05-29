@@ -1,9 +1,11 @@
-package action;
-import cls.core.*;
-import cls.items.*;
-import system.*;
+package com.spakbor.action;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.items.*;
+import com.spakbor.system.*;
 
 public class MarryAction implements Action {
+    private static final long serialVersionUID = 1L;
+
     private NPC targetNpc;
     private static final String PROPOSAL_RING_NAME = "Proposal Ring";
 

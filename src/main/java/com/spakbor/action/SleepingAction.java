@@ -1,9 +1,11 @@
-package action;
-import cls.core.*;
-import cls.world.*;
-import utils.*;
+package com.spakbor.action;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.world.*;
+import com.spakbor.utils.*;
 
 public class SleepingAction implements Action {
+    private static final long serialVersionUID = 1L;
+
     private boolean isAutomaticSleep;
 
     /**

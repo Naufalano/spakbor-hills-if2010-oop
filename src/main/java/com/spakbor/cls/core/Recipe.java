@@ -1,8 +1,10 @@
-package cls.core;
-import cls.items.*;
+package com.spakbor.cls.core;
+import com.spakbor.cls.items.*;
 import java.util.Map;
+import java.io.Serializable;
 
-public class Recipe {
+public class Recipe implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String recipeId; 
     private String cookedItemName; 
     private Map<String, Integer> ingredients; 

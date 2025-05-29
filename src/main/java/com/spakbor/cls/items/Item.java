@@ -1,8 +1,11 @@
-package cls.items;
+package com.spakbor.cls.items;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Item {
+public abstract class Item implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     protected String name;
 
     public Item(String name) {

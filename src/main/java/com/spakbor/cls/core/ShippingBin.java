@@ -1,9 +1,11 @@
-package cls.core;
-import cls.items.*;
+package com.spakbor.cls.core;
+import com.spakbor.cls.items.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class ShippingBin {
+public class ShippingBin implements Serializable{
+    private static final long serialVersionUID = 1L;
     private List<Item> items;
     private final int MAX_SLOTS = 16;
 

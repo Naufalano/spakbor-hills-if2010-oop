@@ -1,11 +1,12 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
+import com.spakbor.cls.core.*;
+import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class GenericInteriorMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 12;
     public static final int MAP_HEIGHT = 10;
     public static final String WALL_ID = "HouseWall";
@@ -13,7 +14,7 @@ public class GenericInteriorMap implements GameMap {
     public static final String DOOR_ID = "HouseDoor_ExitToTown"; 
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
     private String mapDisplayName; 
     private NPC resident; 
 

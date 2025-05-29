@@ -1,11 +1,12 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
+import com.spakbor.cls.core.*;
+import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class TownMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 30;
     public static final int MAP_HEIGHT = 25;
 
@@ -32,7 +33,7 @@ public class TownMap implements GameMap {
 
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
     private List<DoorInfo> doors; 
 
     public static class DoorInfo {

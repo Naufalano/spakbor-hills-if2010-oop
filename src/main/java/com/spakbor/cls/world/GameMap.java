@@ -1,7 +1,8 @@
-package cls.world;
-import cls.core.*;
+package com.spakbor.cls.world;
+import com.spakbor.cls.core.*;
+import java.io.Serializable;
 
-public interface GameMap {
+public interface GameMap extends Serializable{
     /**
      * Retrieves the tile at the given coordinates.
      * @param x The x-coordinate.

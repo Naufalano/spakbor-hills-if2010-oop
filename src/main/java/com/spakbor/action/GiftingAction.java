@@ -1,8 +1,9 @@
-package action;
-import cls.core.*;
-import cls.items.*;
+package com.spakbor.action;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.items.*;
 
 public class GiftingAction implements Action {
+    private static final long serialVersionUID = 1L;
     private NPC targetNpc;
     private Item giftItem;
 

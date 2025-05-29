@@ -1,13 +1,14 @@
-package cls.world;
+package com.spakbor.cls.world;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cls.core.NPC;
-import cls.core.Player;
-import enums.TileState;
+import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.Player;
+import com.spakbor.enums.TileState;
 
 public class FarmMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 32;
     public static final int MAP_HEIGHT = 32;
 
@@ -41,7 +42,7 @@ public class FarmMap implements GameMap {
 
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
 
     public static class PlacedObject {
         public int x, y, width, height;

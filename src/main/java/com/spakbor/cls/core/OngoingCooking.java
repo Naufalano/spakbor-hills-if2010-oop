@@ -1,9 +1,11 @@
-package cls.core; 
+package com.spakbor.cls.core; 
 
-import cls.items.Food;
-import system.Time;
+import com.spakbor.cls.items.Food;
+import com.spakbor.system.Time;
+import java.io.Serializable;
 
-public class OngoingCooking {
+public class OngoingCooking implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Recipe recipeBeingCooked;
     private Food resultItemPrototype;
     private int startDay;

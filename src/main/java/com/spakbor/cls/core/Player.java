@@ -1,4 +1,5 @@
-package cls.core;
+package com.spakbor.cls.core;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,14 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import action.Action; // Untuk statistik
-import cls.items.Fish;
-import cls.items.Item;
-import data.FishDataRegistry;
-import data.RecipeDataRegistry;
-import enums.FishRarity;
+import com.spakbor.action.Action; // Untuk statistik
+import com.spakbor.cls.items.Fish;
+import com.spakbor.cls.items.Item;
+import com.spakbor.data.FishDataRegistry;
+import com.spakbor.data.RecipeDataRegistry;
+import com.spakbor.enums.FishRarity;
 
-public class Player {
+public class Player implements Serializable{
+    private static final long serialVersionUID = 1L;
     public static final int MAX_ENERGY = 100;
 
     private String name;
