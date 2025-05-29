@@ -1,25 +1,22 @@
 package com.spakbor.cls.core;
-import com.spakbor.cls.items.*;
 import java.util.Map;
-import java.io.Serializable;
 
-public class Recipe implements Serializable{
-    private static final long serialVersionUID = 1L;
+import com.spakbor.cls.items.Food;
+
+public class Recipe {
     private String recipeId; 
     private String cookedItemName; 
     private Map<String, Integer> ingredients; 
     private Food resultItem;
     private String unlockConditionDescription;
 
-    public static final String ANY_FISH_INGREDIENT = "Any Fish";
-    // public static final String ANY_CROP_INGREDIENT = "Any Crop"; 
+    public static final String ANY_FISH_INGREDIENT = "Any Fish"; 
 
     public static final int COOKING_DURATION_MINUTES = 60;
     public static final int COOKING_INITIATION_ENERGY = 10;
 
 
-    public Recipe(String recipeId, String cookedItemName, Map<String, Integer> ingredients,
-                  Food resultItem, String unlockConditionDescription) {
+    public Recipe(String recipeId, String cookedItemName, Map<String, Integer> ingredients, Food resultItem, String unlockConditionDescription) {
         this.recipeId = recipeId;
         this.cookedItemName = cookedItemName;
         this.ingredients = ingredients;

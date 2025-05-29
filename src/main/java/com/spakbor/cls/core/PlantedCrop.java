@@ -1,16 +1,13 @@
 package com.spakbor.cls.core;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.Serializable;
 
+import com.spakbor.cls.items.Crop;
+import com.spakbor.cls.items.Seeds;
+import com.spakbor.data.CropDataRegistry;
+import com.spakbor.enums.SeasonType;
 
-import com.spakbor.cls.items.*;
-import com.spakbor.data.*;
-import com.spakbor.enums.*;
-
-public class PlantedCrop implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class PlantedCrop {
     private String resultingCropName;
     private Crop cropPrototype;
     private int yieldAmountPerHarvest;
@@ -39,8 +36,7 @@ public class PlantedCrop implements Serializable {
         if (cropDefinition != null) {
             this.yieldAmountPerHarvest = cropDefinition.getYieldAmount();
         } else {
-            System.err.println("Warning: No crop definition found in registry for: " + this.resultingCropName +
-                               ". Defaulting yield to 1.");
+            System.err.println("Warning: No crop definition found in registry for: " + this.resultingCropName + ". Defaulting yield to 1.");
             this.yieldAmountPerHarvest = 1;
         }
     }
