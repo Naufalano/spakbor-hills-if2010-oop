@@ -1,8 +1,9 @@
 package com.spakbor.cls.core;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.Serializable;
 
+import com.google.gson.Gson;
 import com.spakbor.cls.items.Food;
 import com.spakbor.cls.items.Item;
 import com.spakbor.cls.world.CoastalMap;
@@ -23,8 +24,8 @@ import com.spakbor.system.SeasonController;
 import com.spakbor.system.TimeController;
 import com.spakbor.system.Weather;
 
-public class Farm implements Serializable{
-    private static final long serialVersionUID = 1L;
+public class Farm implements Serializable {
+    private static final long serialVersionUID = 1L; 
     private String name; 
     private Player player;
     private NPCFactory npcFactory;
@@ -77,8 +78,7 @@ public class Farm implements Serializable{
 
         String[] npcNamesForHouses = {"Dasco", "Perry", "Caroline", "MayorTadi", "Abigail"};
         String[] npcHouseMapKeys = {
-            "Dasco's Lair", "Perry's Place", "Caroline's Home", 
-            "Mayor's Manor", "Abigail's Room"
+            "Dasco's Lair", "Perry's Place", "Caroline's Home", "Mayor's Manor", "Abigail's Room"
         };
 
         for (int i = 0; i < npcNamesForHouses.length; i++) {
@@ -87,7 +87,6 @@ public class Farm implements Serializable{
                 this.worldMaps.put(npcHouseMapKeys[i], new GenericInteriorMap(npcHouseMapKeys[i], resident));
             }
         }
-
 
         this.house = new House(0, 0, 0, 0);
         this.shippingBin = new ShippingBin();
@@ -286,6 +285,40 @@ public class Farm implements Serializable{
         }
     }
 
+    public void performFullPostLoadObjectConversion(Gson gsonInstance) {
+        if (worldMaps == null || gsonInstance == null) {
+            System.err.println("Farm.performFullPostLoadObjectConversion: worldMaps atau gsonInstance null. Melewatkan.");
+            return;
+        }
+        System.out.println("Farm: Memulai konversi objek pasca-pemuatan untuk semua tile...");
+        int convertedCount = 0;
+        for (GameMap map : worldMaps.values()) {
+            if (map != null && map.getTiles() != null) {
+                // System.out.println("  Memproses peta: " + map.getMapName()); // Debug
+                for (Tile tile : map.getTiles()) {
+                    if (tile != null) {
+                        boolean converted = tile.convertObjectOnTile(gsonInstance);
+                        if (converted) {
+                            convertedCount++;
+                        }
+                    }
+                }
+            }
+        }
+        // Pastikan currentMap juga diproses jika instance-nya berbeda (seharusnya tidak jika dikelola dengan benar)
+        if (currentMap != null && !worldMaps.containsValue(currentMap) && currentMap.getTiles() != null) {
+             System.out.println("  Memproses currentMap secara terpisah (seharusnya sudah ada di worldMaps)...");
+             for (Tile tile : currentMap.getTiles()) {
+                if (tile != null) {
+                    boolean converted = tile.convertObjectOnTile(gsonInstance);
+                    if (converted) convertedCount++;
+                }
+            }
+        }
+
+        System.out.println("Farm: Konversi objek pasca-pemuatan selesai. " + convertedCount + " objek dikonversi/diperiksa.");
+    }
+
     public Player getPlayer() { return player; }
     public int getGold() { return totalGold; }
     public int getCrop() { return croppedCrop; }
@@ -305,6 +338,7 @@ public class Farm implements Serializable{
     public WeatherType getCurrentWeather() { return weatherController.getTodayWeather(); }
     public int getTotalDaysPassed() { return this.days; }
 
+    public void setPlayer(Player player) { this.player = player; }
     public void scheduleAutomaticSleep() {
         if (!this.isCurrentlySleeping && !this.automaticSleepScheduled) {
             this.automaticSleepScheduled = true;
