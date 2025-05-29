@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Assuming Seeds.java and SeasonType.java (enum) are accessible
-
 public class SeedDataRegistry {
     private static final List<Seeds> ALL_SEEDS = new ArrayList<>();
 
@@ -37,11 +35,6 @@ public class SeedDataRegistry {
         return new ArrayList<>(ALL_SEEDS);
     }
 
-    /**
-     * Gets a specific seed by its exact name.
-     * @param name The name of the seed.
-     * @return The Seeds object if found, otherwise null.
-     */
     public static Seeds getSeedByName(String name) {
         for (Seeds seed : ALL_SEEDS) {
             if (seed.getName().equalsIgnoreCase(name)) {

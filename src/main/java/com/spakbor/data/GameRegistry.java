@@ -30,7 +30,6 @@ public class GameRegistry<T extends Item, K> {
             System.err.println("Peringatan Registry: Kunci '" + key + "' sudah ada. Menimpa item: " + PROTOTYPES_BY_KEY.get(key).getName() + " dengan " + itemPrototype.getName());
         }
         PROTOTYPES_BY_KEY.put(key, itemPrototype);
-        // Tambahkan ke list hanya jika belum ada (berdasarkan referensi objek atau equals jika di-override dengan baik)
         if (!ALL_PROTOTYPES_LIST.contains(itemPrototype)) {
             ALL_PROTOTYPES_LIST.add(itemPrototype);
         }

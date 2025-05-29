@@ -21,12 +21,12 @@ public class FishDataRegistry {
                 try {
                     seasons.add(SeasonType.valueOf(s.trim().toUpperCase()));
                 } catch (IllegalArgumentException e) {
-                    System.err.println("Warning: Unknown season string '" + s + "' in fish data for: " + fishNameForLogging);
+                    System.err.println("Unknown season string '" + s + "' in fish data for: " + fishNameForLogging);
                 }
             }
         }
         if (seasons.isEmpty() && !seasonStr.equalsIgnoreCase("Any")) {
-             System.err.println("Warning: No valid seasons parsed for '" + seasonStr + "' for fish: " + fishNameForLogging + ". Defaulting to ANY.");
+             System.err.println("No valid seasons parsed for '" + seasonStr + "' for fish: " + fishNameForLogging + ". Defaulting to ANY.");
              seasons.add(SeasonType.ANY);
         }
         return seasons;
@@ -45,10 +45,10 @@ public class FishDataRegistry {
                         int endHour = Integer.parseInt(hours[1].substring(0, 2));
                         windows.add(new Fish.TimeWindow(startHour, endHour));
                     } else {
-                        System.err.println("Warning: Malformed time string part '" + part + "' for fish: " + fishNameForLogging);
+                        System.err.println("Malformed time string part '" + part + "' for fish: " + fishNameForLogging);
                     }
                 } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
-                     System.err.println("Warning: Error parsing time string part '" + part + "' for fish: " + fishNameForLogging + " - " + e.getMessage());
+                     System.err.println("Error parsing time string part '" + part + "' for fish: " + fishNameForLogging + " - " + e.getMessage());
                 }
             }
         }
@@ -106,8 +106,8 @@ public class FishDataRegistry {
 
         currentFish = "Rainbow Trout";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,
-                parseSeasons("Summer", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Sunny", currentFish),
-                parseLocations("Forest River, Mountain Lake")));
+        parseSeasons("Summer", currentFish), parseTimes("06.00-18.00", currentFish), parseWeathers("Sunny", currentFish),
+        parseLocations("Forest River, Mountain Lake")));
 
         currentFish = "Sturgeon";
         ALL_FISH.add(new Fish(currentFish, FishRarity.REGULAR,

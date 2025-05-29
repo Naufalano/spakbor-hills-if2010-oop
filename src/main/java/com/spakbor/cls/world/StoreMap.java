@@ -1,7 +1,6 @@
 package com.spakbor.cls.world;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.spakbor.cls.core.NPC;
 import com.spakbor.cls.core.Player;
@@ -18,7 +17,6 @@ public class StoreMap implements GameMap {
     public static final String DOOR_ID = "StoreDoor_ExitToTown";
 
     private List<Tile> tiles;
-    private transient Random random = new Random();
     private NPC shopkeeper; 
 
     public StoreMap(NPCFactory npcFactory) {

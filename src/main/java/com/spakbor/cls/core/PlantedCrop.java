@@ -21,7 +21,7 @@ public class PlantedCrop {
         this.resultingCropName = seed.getName().replace(" Seeds", "").replace(" Seed", "");
         this.cropPrototype = CropDataRegistry.getCropByName(this.resultingCropName);
         if (this.cropPrototype == null) {
-            System.err.println("Tidak dapat menemukan prototipe Crop untuk '" + this.resultingCropName + "' dari benih '" + seed.getName() + "'. Tanaman mungkin tidak berfungsi dengan benar.");
+            System.err.println("Tidak dapat menemukan Crop untuk '" + this.resultingCropName + "' dari benih '" + seed.getName() + "'. Tanaman mungkin tidak berfungsi dengan benar.");
             this.daysToMature = seed.getDaysToHarvest();
         } else {
             this.daysToMature = seed.getDaysToHarvest();
@@ -36,7 +36,7 @@ public class PlantedCrop {
         if (cropDefinition != null) {
             this.yieldAmountPerHarvest = cropDefinition.getYieldAmount();
         } else {
-            System.err.println("Warning: No crop definition found in registry for: " + this.resultingCropName + ". Defaulting yield to 1.");
+            System.err.println("No crop definition found in registry for: " + this.resultingCropName + ". Defaulting yield to 1.");
             this.yieldAmountPerHarvest = 1;
         }
     }
@@ -61,7 +61,6 @@ public class PlantedCrop {
                 System.out.println(resultingCropName + " ga bertahan saat " + currentSeason + " terus mati.");
                 return true;
             } else {
-                // System.out.println("Info: " + cropType.getName() + " is out of season and will not grow.");
                 wateredToday = false;
                 return false; 
             }

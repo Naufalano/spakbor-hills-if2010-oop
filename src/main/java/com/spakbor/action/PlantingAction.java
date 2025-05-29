@@ -69,7 +69,6 @@ public class PlantingAction implements Action {
         if (farm.getCurrentWeather() == WeatherType.RAINY) {
             newPlant.setWateredToday(true);
         }
-        // currentTile.setOccupied(true); 
 
         System.out.println(player.getName() + " nanem " + seedToPlant.getName() + ".");
         farmMap.display(player);

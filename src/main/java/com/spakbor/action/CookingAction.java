@@ -112,8 +112,6 @@ public class CookingAction implements  Action {
             }
             if (ingredientItem != null) {
                 player.getInventory().useItem(ingredientItem, entry.getValue());
-            } else {
-                //  System.err.println("Ingredient " + entry.getKey() + " validated but not found during execution. Cooking might be incorrect.");
             }
         }
 
@@ -141,7 +139,6 @@ public class CookingAction implements  Action {
         }
 
         if (!fuelConsumed) {
-            //  System.out.println("Fuel was validated but not found/used during execution. Cooking failed.");
              player.setEnergy(player.getEnergy() + 10);
              return;
         }

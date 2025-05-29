@@ -303,7 +303,7 @@ public class GameDriver {
                                 actionToPerform = new PlantingAction((Seeds) seedItem);
                                 GameDriver.savedSession = false;
                             } else {
-                                System.out.println("'" + seedName + "' bukan benih valid atau tidak ada di inventaris.");
+                                System.out.println("'" + seedName + "' bukan benih valid atau tidak ada di inventory.");
                             }
                         } else {
                             System.out.println("Format: plant [nama_benih]");
@@ -333,7 +333,7 @@ public class GameDriver {
                                 actionToPerform = new EatingAction(foodItem);
                                 GameDriver.savedSession = false;
                             } else {
-                                System.out.println("'" + foodName + "' tidak bisa dimakan atau tidak ada di inventaris.");
+                                System.out.println("'" + foodName + "' tidak bisa dimakan atau tidak ada di inventory.");
                             }
                         } else {
                             System.out.println("Format: eat [nama_makanan]");
@@ -378,7 +378,7 @@ public class GameDriver {
                                     System.out.println(itemToEquip.getName() + " bukan peralatan yang bisa dipegang untuk aksi ini.");
                                 }
                             } else {
-                                System.out.println("Item '" + itemName + "' tidak ditemukan di inventaris.");
+                                System.out.println("Item '" + itemName + "' tidak ditemukan di inventory.");
                             }
                         } else {
                             System.out.println("Format: equip [nama_peralatan]");
@@ -455,6 +455,19 @@ public class GameDriver {
                         farm.nextDay();
                         displayFullStatus();
                         break;
+                    
+                    case "hesoyam":
+                        player.setGold(GOLD_MILESTONE_TARGET);
+                        break;
+
+                    case "aezakmi":
+                        NPC spouse = npcFactory.getNPC("Emily");
+                        spouse.setAffection(150);
+                        spouse.propose();
+                        spouse.setEngaged(1);
+                        player.setEnergy(100);
+                        spouse.marry();
+                        break;
 
                     default:
                         System.out.println("Perintah tidak dikenal. Ketik 'help' untuk opsi.");
@@ -486,7 +499,7 @@ public class GameDriver {
 
     public static void clearConsole() {
         try {
-            String operatingSystem = System.getProperty("os.name"); // Dapatkan nama OS
+            String operatingSystem = System.getProperty("os.name");
 
             if (operatingSystem.contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -494,12 +507,8 @@ public class GameDriver {
                 // Untuk Unix-like (Linux, macOS)
                 System.out.print("\033[H\033[2J");
                 System.out.flush();
-                // Alternatif lain untuk Unix: Runtime.getRuntime().exec("clear");
-                // Namun, \033[H\033[2J lebih portabel untuk terminal yang mendukung ANSI
             }
         } catch (IOException | InterruptedException ex) {
-            // Jika gagal, cetak beberapa baris baru sebagai fallback sederhana
-            // System.err.println("Gagal membersihkan konsol: " + ex.getMessage());
             for (int i = 0; i < 25; ++i) System.out.println(); // Fallback: cetak banyak baris baru
         }
     }
@@ -533,7 +542,6 @@ public class GameDriver {
                     }
 
                 } catch (InterruptedException e) {
-                    // System.out.println("Game Time Thread diinterupsi.");
                     Thread.currentThread().interrupt();
                     gameIsPlaying = false;
                 } catch (Exception e) {
@@ -541,7 +549,6 @@ public class GameDriver {
                     e.printStackTrace();
                 }
             }
-            // System.out.println("Game Time Thread berhenti.");
         });
 
         gameTimeThread.setDaemon(true);
@@ -627,7 +634,7 @@ public class GameDriver {
         System.out.println("Musim Saat Ini: " + farm.getCurrentSeason() + ", Hari ke-" + farm.getCurrentDayInSeason());
 
         System.out.println("\n--- Status Hubungan NPC ---");
-        List<NPC> allNpcs = npcFactory.getAllNPCs(); // Asumsi NPCFactory punya metode ini
+        List<NPC> allNpcs = npcFactory.getAllNPCs();
         if (allNpcs.isEmpty()) {
             System.out.println("Tidak ada data NPC.");
         } else {
@@ -1171,7 +1178,7 @@ public class GameDriver {
         Thread.sleep(750);
         System.out.println("Terima kasih telah bermain!");
         System.out.println("---------------");
-        Thread.sleep(3000);
+        Thread.sleep(5000);
     }
 
     private static void displayInGameHelp() {
@@ -1247,7 +1254,7 @@ public class GameDriver {
         clearConsole();
         if (player == null || player.getInventory() == null) { System.out.println("Tidak ada game aktif atau inventory."); return; }
         System.out.println("\n--- Inventory ---");
-        Map<Item, Integer> items = player.getInventory().getInventoryMap(); // Pastikan getInventoryMap() ada
+        Map<Item, Integer> items = player.getInventory().getInventoryMap();
         if (items == null || items.isEmpty()) { System.out.println("Inventory kosong."); }
         else { for (Map.Entry<Item, Integer> entry : items.entrySet()) { System.out.println("- " + entry.getKey().getName() + ": " + entry.getValue()); } }
         System.out.println("-----------------");

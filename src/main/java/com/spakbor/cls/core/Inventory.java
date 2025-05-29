@@ -79,7 +79,7 @@ public class Inventory implements Serializable {
      * Ini akan menggunakan RuntimeTypeAdapterFactory untuk handle polymorphism
      */
     public static class InventoryEntry implements Serializable {
-        public Item item;      // Store the full Item object
+        public Item item;
         public Integer quantity;
         
         public InventoryEntry() {}  // Default constructor for Gson
@@ -116,8 +116,6 @@ public class Inventory implements Serializable {
             }
         }
     }
-
-    // ----- LEGACY SERIALIZATION HELPERS (for backwards compatibility) -----
     
     /**
      * Legacy InventoryEntry yang menggunakan strings - keep untuk backwards compatibility

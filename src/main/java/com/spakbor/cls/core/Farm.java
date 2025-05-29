@@ -104,20 +104,15 @@ public class Farm implements Serializable {
      * @param comingFromMapName The name of the map the player is transitioning from, to determine the correct entry point.
      */
     public void loadMap(String mapName, String comingFromMapName) {
-        // System.out.println("[DEBUG Farm.loadMap] Memuat peta: '" + mapName + "', dari: '" + comingFromMapName + "'");
         GameMap mapToLoad = worldMaps.get(mapName);
         if (mapToLoad != null) {
             this.currentMap = mapToLoad;
             this.player.setCurrentLocationName(this.currentMap.getMapName());
-            // System.out.println("[DEBUG Farm.loadMap] player.currentLocationName diatur ke: '" + this.player.getCurrentLocationName() + "'");
-            // System.out.println("[DEBUG Farm.loadMap] Nama peta tujuan (currentMap.getMapName()): '" + this.currentMap.getMapName() + "'");
             int[] entryPoint = this.currentMap.getEntryPoint(comingFromMapName);
             this.player.setLocation(entryPoint[0], entryPoint[1]);
-            // System.out.println("[DEBUG Farm.loadMap] Pemain ditempatkan di peta '" + this.currentMap.getMapName() + "' pada koordinat: (" + player.getX() + "," + player.getY() + ")");
 
             System.out.println("\nPindah ke " + this.currentMap.getMapName() + ".");
             System.out.println("Player di (" + player.getX() + "," + player.getY() + ")");
-            // this.currentMap.display(this.player);
         } else {
             System.err.println("Map '" + mapName + "' ga ada di worldMaps! Player tetap di: " + (currentMap != null ? currentMap.getMapName() : "undefined map"));
         }
@@ -267,7 +262,6 @@ public class Farm implements Serializable {
             currentCookingTask = null; 
             return claimedTask.getResultItemPrototype();
         }
-        // System.out.println("Tidak ada makanan yang siap diambil atau sudah diambil.");
         return null;
     }
 
@@ -294,7 +288,6 @@ public class Farm implements Serializable {
         int convertedCount = 0;
         for (GameMap map : worldMaps.values()) {
             if (map != null && map.getTiles() != null) {
-                // System.out.println("  Memproses peta: " + map.getMapName()); // Debug
                 for (Tile tile : map.getTiles()) {
                     if (tile != null) {
                         boolean converted = tile.convertObjectOnTile(gsonInstance);

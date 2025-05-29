@@ -48,7 +48,6 @@ public class WateringAction implements Action {
             System.out.println("Tile tidak ditanami atau sudah disiram.");
             return false;
         }
-        // if (!((PlantedCrop)currentTile.getObjectOnTile()).isWateredToday()) {}
         return true;
     }
 
@@ -62,11 +61,7 @@ public class WateringAction implements Action {
         if (currentTile.getObjectOnTile() instanceof PlantedCrop) {
             PlantedCrop plant = (PlantedCrop) currentTile.getObjectOnTile();
             plant.setWateredToday(true);
-            // System.out.println(player.getName() + " watered the plant at (" + player.getX() + "," + player.getY() + ").");
-        } else {
-            // System.out.println("Nothing to water here that requires it in this way.");
         }
-        // System.out.println(player.getName() + " watered the plant at (" + player.getX() + "," + player.getY() + "). Energy: " + player.getEnergy());
         farmMap.display(player);
     }
 }

@@ -31,37 +31,17 @@ public class InteractionHelper {
 
                 if (FarmMap.SHIPPING_BIN_ID.equals(objectId) ||
                     FarmMap.POND_ID.equals(objectId) ||
-                    FarmMap.HOUSE_ENTRANCE_EXTERIOR_ID.equals(objectId) || 
-                    PlayerHouseMap.DOOR_TO_FARM_ID.equals(objectId) ||
                     PlayerHouseMap.BED_ID.equals(objectId) ||
                     PlayerHouseMap.STOVE_ID.equals(objectId) ||
                     ForestMap.RIVER_WATER_ID.equals(objectId) ||
                     MountainMap.LAKE_WATER_ID.equals(objectId) ||
-                    CoastalMap.OCEAN_WATER_ID.equals(objectId) ||
-                    TownMap.STORE_ENTRANCE_ID.equals(objectId) ||
-                    TownMap.DASCO_HOUSE_ENTRANCE_ID.equals(objectId) ||
-                    TownMap.PERRY_HOUSE_ENTRANCE_ID.equals(objectId) ||
-                    TownMap.CAROLINE_HOUSE_ENTRANCE_ID.equals(objectId) ||
-                    TownMap.MAYOR_HOUSE_ENTRANCE_ID.equals(objectId) ||
-                    TownMap.ABIGAIL_HOUSE_ENTRANCE_ID.equals(objectId) ||
-                    StoreMap.DOOR_ID.equals(objectId) ||
-                    (objectId != null && objectId.startsWith("HouseDoor_Exit"))
-                    ) {
+                    CoastalMap.OCEAN_WATER_ID.equals(objectId)) {
                     return objectId; 
                 }
             }
         }
         return null;
     }
-
-    /**
-     * Checks if the player is currently *inside* a structure defined by a PlacedObject.
-     * This is for objects like the House where interaction happens from within.
-     * Requires FarmMap.PlacedObject to be a public static class or a standalone public class.
-     * @param player The player.
-     * @param structure The PlacedObject representing the structure (e.g., houseLocation from FarmMap).
-     * @return true if the player is inside the structure, false otherwise.
-     */
 
     /**
      * Checks if the player is standing next to any part of a given structure (like a building).
