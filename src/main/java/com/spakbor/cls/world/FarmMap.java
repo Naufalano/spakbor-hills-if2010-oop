@@ -59,7 +59,6 @@ public class FarmMap implements GameMap {
     private List<PlacedObject> placedStructures = new ArrayList<>();
     private PlacedObject houseStruct;
     private int houseEntranceX, houseEntranceY;
-    private int houseDoorX, houseDoorY; // Koordinat tile AKSES PINTU (di depannya)
 
     private PlacedObject pondLocation;
     private PlacedObject shippingBinLocation;
@@ -120,16 +119,6 @@ public class FarmMap implements GameMap {
         
         this.houseEntranceX = houseStartX + HOUSE_WIDTH / 2;
         this.houseEntranceY = houseStartY + HOUSE_HEIGHT - 1;
-        this.houseDoorX = this.houseEntranceX;
-        this.houseDoorY = this.houseEntranceY + 1;
-
-        if (this.houseDoorY >= MAP_HEIGHT) {
-            this.houseDoorY = this.houseEntranceY -1;
-            if (this.houseDoorY <0) { 
-                 System.err.println("Tidak bisa menentukan akses pintu rumah yang valid.");
-                 this.houseDoorY = houseStartY; 
-            }
-        }
         
         Tile doorTile = getTileAtPosition(this.houseEntranceX, this.houseEntranceY);
         if (doorTile != null) {
@@ -137,7 +126,7 @@ public class FarmMap implements GameMap {
             doorTile.setOccupied(false); // Pintu tidak solid, bisa diinteraksikan
             doorTile.setState(TileState.DEFAULT);
         }
-        System.out.println("Rumah ditempatkan di: (" + houseStartX + "," + houseStartY + ") Pintu: ("+this.houseEntranceX+","+this.houseEntranceY+"). Akses Pintu: ("+this.houseDoorX+","+this.houseDoorY+")");
+        System.out.println("Rumah ditempatkan di: (" + houseStartX + "," + houseStartY + ") Pintu: ("+this.houseEntranceX+","+this.houseEntranceY+").");
     }
     
     private void placeIndividualTileObject(int x, int y, String objectId, TileState state, boolean occupied) {
@@ -176,7 +165,7 @@ public class FarmMap implements GameMap {
     private void placePond() {
         List<int[]> forbiddenForPond = new ArrayList<>();
         if (houseStruct != null) { 
-            forbiddenForPond.add(new int[]{this.houseDoorX, this.houseDoorY});
+            forbiddenForPond.add(new int[]{this.houseEntranceX, this.houseEntranceY + 1});
         }
 
         int pondX, pondY, attempts = 0;
@@ -200,7 +189,7 @@ public class FarmMap implements GameMap {
         if (houseStruct == null) { return; }
 
         List<int[]> forbiddenForBin = new ArrayList<>();
-        forbiddenForBin.add(new int[]{this.houseDoorX, this.houseDoorY});
+        forbiddenForBin.add(new int[]{this.houseEntranceX, this.houseEntranceY + 1});
 
 
         int[] spot = new int[]{houseStruct.x + houseStruct.width + 1, houseStruct.y + houseStruct.height / 2 - SHIPPING_BIN_HEIGHT / 2};
@@ -335,18 +324,16 @@ public class FarmMap implements GameMap {
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
         if ("Player's House".equals(comingFromMapName)) {
-            if (this.houseDoorX >= 0 && this.houseDoorY >=0) {
-                 Tile spawnAccessTile = getTileAtPosition(this.houseDoorX, this.houseDoorY);
-                 if(spawnAccessTile != null && !spawnAccessTile.isOccupied()){
-                    return new int[]{this.houseDoorX, this.houseDoorY};
-                 } else {
-                     int[][] offsets = {{0,0}, {0,1}, {0,-1}, {-1,0}, {1,0}}; 
-                     for(int[] offset : offsets) {
-                         int checkX = this.houseEntranceX + offset[0];
-                         int checkY = this.houseEntranceY + (offset[1] == 0 ? 1 : offset[1]);
-                         if(isTileValidForSpawn(checkX, checkY)) return new int[]{checkX, checkY};
-                     }
-                 }
+            Tile spawnAccessTile = getTileAtPosition(this.houseEntranceX, this.houseEntranceY + 1);
+            if(spawnAccessTile != null && !spawnAccessTile.isOccupied()){
+               return new int[]{this.houseEntranceX, this.houseEntranceY + 1};
+            } else {
+                int[][] offsets = {{0,0}, {0,1}, {0,-1}, {-1,0}, {1,0}}; 
+                for(int[] offset : offsets) {
+                    int checkX = this.houseEntranceX + offset[0];
+                    int checkY = this.houseEntranceY + (offset[1] == 0 ? 1 : offset[1]);
+                    if(isTileValidForSpawn(checkX, checkY)) return new int[]{checkX, checkY};
+                }
             }
         } else if ("Forest Zone".equals(comingFromMapName)) {
             return new int[]{0, 0}; 
@@ -357,8 +344,8 @@ public class FarmMap implements GameMap {
         } else if ("Town".equals(comingFromMapName)) {
             return new int[]{MAP_WIDTH - 1, 0}; 
         }
-        if (comingFromMapName == null && this.houseDoorX >= 0 && this.houseDoorY >=0) {
-            return new int[]{this.houseDoorX, this.houseDoorY};
+        if (comingFromMapName == null) {
+            return new int[]{this.houseEntranceX, this.houseEntranceY + 1};
         }
         return new int[]{MAP_WIDTH / 2, MAP_HEIGHT / 2};
     }
@@ -367,13 +354,12 @@ public class FarmMap implements GameMap {
         Tile t = getTileAtPosition(x,y);
         return t != null && !t.isOccupied() && !HOUSE_ENTRANCE_EXTERIOR_ID.equals(t.getObjectOnTile());
     }
-
+    
+    @Override
     public List<Tile> getTiles() { return this.tiles; }
     public PlacedObject getHouseStructureLocation() { return this.houseStruct; }
     public int getHouseEntranceX() { return this.houseEntranceX; }
     public int getHouseEntranceY() { return this.houseEntranceY; }
-    public int gethouseDoorX() { return this.houseDoorX; }
-    public int gethouseDoorY() { return this.houseDoorY; }
     public PlacedObject getPondLocation() { return this.pondLocation;}
     public PlacedObject getShippingBinLocation() { return this.shippingBinLocation;}
 }

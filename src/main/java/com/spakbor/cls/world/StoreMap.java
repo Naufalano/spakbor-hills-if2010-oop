@@ -1,10 +1,12 @@
 package com.spakbor.cls.world;
-import com.spakbor.cls.core.*;
-import com.spakbor.data.*;
-import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.Player;
+import com.spakbor.data.NPCFactory;
+import com.spakbor.enums.TileState;
 
 public class StoreMap implements GameMap {
     private static final long serialVersionUID = 1L;
@@ -142,5 +144,9 @@ public class StoreMap implements GameMap {
 
     public NPC getShopkeeper() {
         return this.shopkeeper;
+    }
+    @Override
+    public List<Tile> getTiles() {
+        return tiles;
     }
 }

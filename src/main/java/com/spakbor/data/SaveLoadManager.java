@@ -40,7 +40,7 @@ public class SaveLoadManager {
 
     // Registrasi RuntimeTypeAdapterFactory untuk Item dan turunannya
     private static final RuntimeTypeAdapterFactory<Item> itemAdapterFactory = RuntimeTypeAdapterFactory
-            .of(Item.class, "type")
+            .of(Item.class, "$itemType")
             .registerSubtype(Equipment.class, "Equipment")
             .registerSubtype(Seeds.class, "Seeds")
             .registerSubtype(Food.class, "Food")
@@ -51,7 +51,7 @@ public class SaveLoadManager {
 
     // Registrasi RuntimeTypeAdapterFactory untuk GameMap dan turunannya
     private static final RuntimeTypeAdapterFactory<GameMap> mapAdapterFactory = RuntimeTypeAdapterFactory
-            .of(GameMap.class, "type")
+            .of(GameMap.class, "$mapType")
             .registerSubtype(FarmMap.class, "FarmMap")
             .registerSubtype(TownMap.class, "TownMap")
             .registerSubtype(CoastalMap.class, "CoastalMap")
@@ -81,7 +81,7 @@ public class SaveLoadManager {
             }
 
             try (FileWriter writer = new FileWriter(new File(dir, filename))) {
-                writer.write(json);
+                gson.toJson(saveData, writer);
             }
 
             System.out.println("Game berhasil disimpan ke '" + filename + "'.");
@@ -99,7 +99,7 @@ public class SaveLoadManager {
         }
 
         try (FileReader reader = new FileReader(file)) {
-            System.out.println("Loading game from: " + filename);
+            System.out.println("Memuat: " + filename);
 
             GameSaveData saveData = gson.fromJson(reader, GameSaveData.class);
 
@@ -117,6 +117,26 @@ public class SaveLoadManager {
                 if (saveData.playerInventoryEntries != null) {
                     saveData.player.getInventory().loadFromSerializableList(saveData.playerInventoryEntries);
                 }
+            }
+
+            if (saveData.farm != null) {
+                // Jika Farm memiliki referensi ke Player, pastikan itu adalah instance Player yang benar
+                saveData.farm.setPlayer(saveData.player); // Asumsi Farm punya setPlayer()
+
+                // Panggil metode untuk konversi objek di tile (seperti yang Anda diskusikan)
+                saveData.farm.performFullPostLoadObjectConversion(gson);
+
+                // Inisialisasi ulang TimeController di Farm setelah load
+                if (saveData.farm.getTimeController() != null) {
+                    saveData.farm.getTimeController().resetTime(); // Atau metode re-sync yang lebih baik
+                } else {
+                     System.err.println("Peringatan: TimeController di Farm adalah null setelah load.");
+                     // saveData.farm.setTimeController(new TimeController()); // Buat baru jika perlu
+                }
+                // Lakukan hal serupa untuk SeasonController, WeatherController jika state mereka tidak tersimpan dengan baik
+                // atau jika mereka memiliki field transient yang perlu diinisialisasi.
+            } else {
+                throw new IOException("Data farm tidak ada di save file.");
             }
 
             System.out.println("Game berhasil dimuat dari " + filename);
@@ -183,5 +203,9 @@ public class SaveLoadManager {
 
         // Constructor kosong untuk Gson
         public GameSaveData() {}
+    }
+
+    public static Gson getGsonInstance() {
+        return gson;
     }
 }

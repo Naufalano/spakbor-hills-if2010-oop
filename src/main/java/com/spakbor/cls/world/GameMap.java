@@ -1,6 +1,8 @@
 package com.spakbor.cls.world;
-import com.spakbor.cls.core.*;
 import java.io.Serializable;
+import java.util.List;
+
+import com.spakbor.cls.core.Player;
 
 public interface GameMap extends Serializable{
     /**
@@ -66,4 +68,6 @@ public interface GameMap extends Serializable{
      * @return An array [x, y] representing the entry coordinates on this map.
      */
     int[] getEntryPoint(String comingFromMapName);
+
+    List<Tile> getTiles();
 }

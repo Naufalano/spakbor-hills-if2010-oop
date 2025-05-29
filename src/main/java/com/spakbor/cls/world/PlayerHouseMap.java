@@ -1,8 +1,9 @@
 package com.spakbor.cls.world;
-import com.spakbor.cls.core.*;
-import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.spakbor.cls.core.Player;
+import com.spakbor.enums.TileState;
 
 public class PlayerHouseMap implements GameMap {
     private static final long serialVersionUID = 1L;
@@ -136,5 +137,9 @@ public class PlayerHouseMap implements GameMap {
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
         return new int[]{MAP_WIDTH / 2, MAP_HEIGHT - 2};
+    }
+
+    public List<Tile> getTiles() {
+        return tiles;
     }
 }
