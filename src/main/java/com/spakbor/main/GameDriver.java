@@ -1171,6 +1171,7 @@ public class GameDriver {
         Thread.sleep(750);
         System.out.println("Terima kasih telah bermain!");
         System.out.println("---------------");
+        Thread.sleep(3000);
     }
 
     private static void displayInGameHelp() {
