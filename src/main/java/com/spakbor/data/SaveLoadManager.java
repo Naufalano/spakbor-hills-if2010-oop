@@ -7,6 +7,7 @@ import com.spakbor.cls.core.Farm;
 import com.spakbor.cls.core.Inventory;
 import com.spakbor.cls.core.Player;
 import com.spakbor.cls.items.*;
+import com.spakbor.cls.world.*;
 import com.spakbor.utils.RuntimeTypeAdapterFactory;
 
 import java.io.File;
@@ -22,7 +23,7 @@ import java.util.List;
 public class SaveLoadManager {
     private static final String SAVE_FOLDER = "saves";
 
-    // Registrasi RuntimeTypeAdapterFactory untuk polymorphic serialization Item dan turunannya
+    // Registrasi RuntimeTypeAdapterFactory untuk Item dan turunannya
     private static final RuntimeTypeAdapterFactory<Item> itemAdapterFactory = RuntimeTypeAdapterFactory
             .of(Item.class, "type")
             .registerSubtype(Equipment.class, "Equipment")
@@ -33,12 +34,25 @@ public class SaveLoadManager {
             .registerSubtype(Crop.class, "Crop")
             .registerSubtype(Fish.class, "Fish");
 
-    // Gson instance dengan adapter factory ini
+    // Registrasi RuntimeTypeAdapterFactory untuk GameMap dan turunannya
+    private static final RuntimeTypeAdapterFactory<GameMap> mapAdapterFactory = RuntimeTypeAdapterFactory
+            .of(GameMap.class, "type")
+            .registerSubtype(FarmMap.class, "FarmMap")
+            .registerSubtype(TownMap.class, "TownMap")
+            .registerSubtype(CoastalMap.class, "CoastalMap")
+            .registerSubtype(ForestMap.class, "ForestMap")
+            .registerSubtype(MountainMap.class, "MountainMap")
+            .registerSubtype(PlayerHouseMap.class, "PlayerHouseMap")
+            .registerSubtype(StoreMap.class, "StoreMap")
+            .registerSubtype(GenericInteriorMap.class, "GenericInteriorMap");
+
+    // Gson instance dengan adapter factory
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapterFactory(itemAdapterFactory)
+            .registerTypeAdapterFactory(mapAdapterFactory)
             .setPrettyPrinting()
             .enableComplexMapKeySerialization()
-            .serializeNulls() // Handle null values properly
+            .serializeNulls()
             .create();
 
     public static void saveGame(Player player, Farm farm, String filename) throws IOException {
@@ -54,7 +68,7 @@ public class SaveLoadManager {
             try (FileWriter writer = new FileWriter(new File(dir, filename))) {
                 writer.write(json);
             }
-            
+
             System.out.println("Game berhasil disimpan ke " + filename);
         } catch (Exception e) {
             System.err.println("Error saat menyimpan game: " + e.getMessage());
@@ -71,39 +85,38 @@ public class SaveLoadManager {
 
         try (FileReader reader = new FileReader(file)) {
             System.out.println("Loading game from: " + filename);
-            
+
             GameSaveData saveData = gson.fromJson(reader, GameSaveData.class);
-            
+
             if (saveData == null) {
                 throw new IOException("Save file kosong atau corrupt");
             }
-            
+
             // Initialize player inventory jika null
             if (saveData.player != null) {
                 if (saveData.player.getInventory() == null) {
                     saveData.player.setInventory(new Inventory());
                 }
-                
+
                 // Load inventory dari serialized entries
                 if (saveData.playerInventoryEntries != null) {
                     System.out.println("Loading " + saveData.playerInventoryEntries.size() + " inventory items...");
                     saveData.player.getInventory().loadFromSerializableList(saveData.playerInventoryEntries);
                 }
             }
-            
+
             System.out.println("Game berhasil dimuat dari " + filename);
             return saveData;
-            
+
         } catch (JsonSyntaxException e) {
             System.err.println("Error parsing JSON: " + e.getMessage());
             System.err.println("Save file mungkin corrupt atau format lama.");
-            
-            // Try to handle legacy format or provide better error info
+
             if (e.getMessage().contains("Not a JSON Object") && e.getMessage().contains("@")) {
                 System.err.println("Detected old save format. Please delete the save file and create a new game.");
                 throw new IOException("Save file menggunakan format lama yang tidak compatible. Silakan hapus file save dan buat game baru.", e);
             }
-            
+
             throw new IOException("Gagal parsing save file: " + e.getMessage(), e);
         } catch (Exception e) {
             System.err.println("Error loading game: " + e.getMessage());
@@ -112,7 +125,6 @@ public class SaveLoadManager {
         }
     }
 
-    // Utility methods
     public static boolean saveFileExists(String filename) {
         File file = new File(SAVE_FOLDER, filename);
         return file.exists() && file.isFile();
@@ -135,7 +147,6 @@ public class SaveLoadManager {
         if (!dir.exists() || !dir.isDirectory()) {
             return new String[0];
         }
-        
         return dir.list((dir1, name) -> name.toLowerCase().endsWith(".json"));
     }
 
