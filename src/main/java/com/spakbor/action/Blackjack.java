@@ -180,7 +180,7 @@ public class Blackjack {
     public Blackjack(Player player) {
         this.player = player;
         deck = new Deck();
-        playerHand = new Hand("Pemain");
+        playerHand = new Hand(player.getName());
         dealerHand = new Hand("Dealer");
         scanner = new Scanner(System.in);
     }
