@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 import com.spakbor.action.Action;
+import com.spakbor.action.Blackjack;
 import com.spakbor.action.ChatAction;
 import com.spakbor.action.CookingAction;
 import com.spakbor.action.EatingAction;
@@ -664,7 +666,7 @@ public class GameDriver {
         System.out.println("======================================================");
     }
 
-    private static void handleInteractCommand() {
+    private static void handleInteractCommand() throws InterruptedException {
         GameMap currentMap = farm.getCurrentMap();
         if (currentMap == null) { System.out.println("Tidak bisa berinteraksi: peta saat ini tidak diketahui."); return; }
 
@@ -842,7 +844,7 @@ public class GameDriver {
         return null;
     }
 
-    private static void handleNPCInteractionSubMenu(NPC npc) {
+    private static void handleNPCInteractionSubMenu(NPC npc) throws InterruptedException{
         System.out.println("\nBerinteraksi dengan " + npc.getName() + " (Suka: " + npc.getAffection() + ", Status: " + npc.getStatus() + ")");
         System.out.println("Pilih aksi:");
         System.out.println("1. Chat");
@@ -851,6 +853,9 @@ public class GameDriver {
         System.out.println("4. Marry");
         if (npc.getName().equalsIgnoreCase("Emily") && player.getCurrentLocationName().equals("Store")) {
             System.out.println("5. Shop");
+        }
+        if (npc.getName().equalsIgnoreCase("Dasco")) {
+            System.out.println("5. Gamble");
         }
         System.out.println("0. Kembali");
         System.out.print("Pilihan Anda > ");
@@ -884,6 +889,9 @@ public class GameDriver {
             case "5":
                 if (npc.getName().equalsIgnoreCase("Emily") && player.getCurrentLocationName().equals("Store")) {
                     handleShopInteraction(npc); 
+                } else if (npc.getName().equalsIgnoreCase("Dasco")) {
+                    clearConsole();
+                    handleGambling();
                 } else {
                     System.out.println("Opsi tidak valid.");
                 }
@@ -996,6 +1004,102 @@ public class GameDriver {
         }
     }
 
+    private static void handleGambling() throws InterruptedException{
+        System.out.println("Wilkommen in Dascos Verbotenem Versteck!");
+        boolean gambling = true;
+        while (gambling) {
+            System.out.println();
+            System.out.println("Pick your nestapa:");
+            System.out.println("1. Selot");
+            System.out.println("2. Jack Hitam");
+            System.out.println("3. Cek Saldo");
+            System.out.println("0. Tobat");
+            System.out.print("Obviously Considered Choice > ");
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    farm.getTimeController().pauseGameTime();
+                    slotMinigame();
+                    farm.getTimeController().resumeGameTime();
+                    GameDriver.savedSession = false;
+                    continue;
+                case "2":
+                    clearConsole();
+                    farm.getTimeController().pauseGameTime();
+                    Blackjack session = new Blackjack(player);
+                    session.playRound();
+                    farm.getTimeController().resumeGameTime();
+                    GameDriver.savedSession = false;
+                    continue;
+                case "3":
+                    clearConsole();
+                    System.out.println("Saldo: " + player.getGold() + "g | Mending tobat sebelum rungkat.");
+                    continue;
+                case "0":
+                    gambling = false;
+                    clearConsole();
+                    System.out.println("Akhirnya sadar dan tobat.");
+                    continue;
+                default:
+                    System.out.println("Pilihan tidak bijak.");
+                    continue;
+            }
+        }
+    }
+
+    private static void slotMinigame() throws InterruptedException {
+        clearConsole();
+        String[] reels = new String[3];
+        int[] ctr = new int[4];
+        Random random = new Random();
+        System.out.println();
+        System.out.println("\nPLACE YOUR BET!");
+        System.out.print("Uang yang ingin dihamburkan: ");
+        String moneyGambled = scanner.nextLine().trim();
+        int money = Integer.parseInt(moneyGambled);
+        if (player.getGold() >= money) {
+            player.spendGold(money);
+        } else {
+            System.out.println("Kalo miskin jangan judi bleug. Kerja sono!");
+            return;
+        }
+        
+        System.out.println("\nThe Result is...");
+        for (int i = 0; i < 3; i++) {
+            if (random.nextDouble() < 0.25) {
+                reels[i] = "hati"; ctr[0]++;
+            } else if (random.nextDouble() < 0.5) {
+                reels[i] = "buah"; ctr[1]++;
+            } else if (random.nextDouble() < 0.75) {
+                reels[i] = "lonceng"; ctr[2]++;
+            } else {
+                reels[i] = "7"; ctr[3]++;
+            }
+            
+            Thread.sleep(1000);
+            System.out.println(reels[i]);
+        }
+
+        System.out.println();
+        if (ctr[1] == 2) {
+            System.out.println("Selamat! Anda win 2x lipat uang anda!");
+            player.setGold(player.getGold() + (money * 2));
+        } else if (ctr[1] == 3) {
+            System.out.println("Selamat! Anda win 3x lipat uang anda!");
+            player.setGold(player.getGold() + (money * 3));
+        } else if (ctr[2] == 3 || ctr[0] == 3) {
+            System.out.println("Beuh win 5x uang anda! Bakal rungkad Dasco mah.");
+            player.setGold(player.getGold() + (money * 5));
+        } else if (ctr[3] == 3) {
+            System.out.println("GACORRR KINGG! Menang 10x lipat Dasco rungkad parah!");
+            player.setGold(player.getGold() + (money * 10));
+        } else {
+            System.out.println("Yah kalah. Kata aing mending tobat sih. Mending kerja halal.");
+        }
+        System.out.println();
+    }
+
     private static void displayMainMenu() {
         clearConsole();
         System.out.println("\n=========================");
@@ -1021,7 +1125,7 @@ public class GameDriver {
         System.out.println("- Gunakan perintah seperti 'move', 'till', 'plant', 'water', 'harvest' untuk mengelola kebunmu! Jangan lupa equip item yang sesuai.");
         System.out.println("- 'interact' dengan objek dalam rumahmu untuk tidur dan memasak, Shipping Bin untuk menjual, atau perairan untuk memancing!");
         System.out.println("- Kelola energi dan waktumu. Tidur memulihkan energi!");
-        System.out.println("- Jelajahi area berbeda dengan bergerak ke pojok peta.");
+        System.out.println("- Jelajahi area berbeda dengan bergerak ke pojok atas peta.");
         System.out.println("- Ketik 'help' di dalam game untuk daftar perintah aksi spesifik.");
         System.out.println("-----------------");
         
