@@ -17,7 +17,6 @@ public class PlayerHouseMap implements GameMap {
     public static final String DOOR_TO_FARM_ID = "HouseDoor_ExitToFarm";
 
     private List<Tile> tiles;
-    // private Random random = new Random();
 
     public PlayerHouseMap() {
         this.tiles = new ArrayList<>();
@@ -66,14 +65,6 @@ public class PlayerHouseMap implements GameMap {
     @Override
     public void display(Player player) {
         System.out.println("\n--- " + getMapName() + " ---");
-        // if (player != null) {
-        //     System.out.println("[DEBUG PlayerHouseMap.display] Info Pemain -> Nama Lokasi: '" + player.getCurrentLocationName() +
-        //                     "', Koordinat: (" + player.getX() + "," + player.getY() + ")");
-        //     System.out.println("[DEBUG PlayerHouseMap.display] Nama Peta Ini (getMapName()): '" + getMapName() + "'");
-        //     System.out.println("[DEBUG PlayerHouseMap.display] Hasil perbandingan nama: " + player.getCurrentLocationName().equals(getMapName()));
-        // } else {
-        //     System.out.println("[DEBUG PlayerHouseMap.display] Objek player yang diterima adalah null!");
-        // }
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 Tile tile = getTileAtPosition(x, y);

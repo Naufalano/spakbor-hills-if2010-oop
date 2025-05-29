@@ -92,12 +92,9 @@ public class FishingAction implements Action {
         String fishingLocationName = getFishingSpot(adjacentWaterObjectId);
 
         if (fishingLocationName == null) {
-            // System.out.println("Could not determine the fishing spot. Action failed.");
             player.setEnergy(player.getEnergy() + ENERGY_COST);
             return;
         }
-        // System.out.println(player.getName() + " casts the line into the " + fishingLocationName + "... Energy: " + player.getEnergy());
-
 
         SeasonType currentSeason = farm.getCurrentSeason();
         int currentHour = farm.getTimeController().getGameTime().getHour();

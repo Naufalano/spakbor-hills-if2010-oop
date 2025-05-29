@@ -160,7 +160,6 @@ public class MovingAction implements Action {
 
         if (finalXOnThisMap != currentX || finalYOnThisMap != currentY) {
             player.setLocation(finalXOnThisMap, finalYOnThisMap);
-            // System.out.println(player.getName() + " bergerak ke (" + finalXOnThisMap + "," + finalYOnThisMap + ") di " + player.getCurrentLocationName() + ".");
         }
     }
 }

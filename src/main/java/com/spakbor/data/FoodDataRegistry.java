@@ -19,7 +19,7 @@ public class FoodDataRegistry {
         ALL_FOOD_ITEMS.add(new Food("Spakbor Salad", 70, 0, 250));
         ALL_FOOD_ITEMS.add(new Food("Fish Sandwich", 50, 200, 180));
         ALL_FOOD_ITEMS.add(new Food("The Legends of Spakbor", 100, 0, 2000));
-        ALL_FOOD_ITEMS.add(new Food("Cooked Pig's Head", 100, 1000, 0)); // Sell price is 0g
+        ALL_FOOD_ITEMS.add(new Food("Cooked Pig's Head", 100, 1000, 0));
     }
 
     /**

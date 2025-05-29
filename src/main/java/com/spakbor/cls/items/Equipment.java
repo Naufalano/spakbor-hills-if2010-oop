@@ -13,8 +13,5 @@ public class Equipment extends Item {
     }
 
     @Override
-    public void use() {
-        // Logika penggunaan equipment jika diperlukan
-        System.out.println(getName() + " digunakan (tidak ada efek saat ini).");
-    }
+    public void use() {}
 }

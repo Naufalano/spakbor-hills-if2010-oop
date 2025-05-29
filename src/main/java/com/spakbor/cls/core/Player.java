@@ -111,7 +111,6 @@ public class Player implements Serializable{
         for (Recipe recipe : allRecipes) {
             if ("Default/Bawaan".equalsIgnoreCase(recipe.getUnlockConditionDescription())) {
                 this.learnedRecipeIds.add(recipe.getRecipeId());
-                // System.out.println("Resep default dipelajari: " + recipe.getCookedItemName()); // Debug
             }
         }
     }
@@ -147,7 +146,6 @@ public class Player implements Serializable{
         }
         this.inventory.addItem(item, quantity);
         this.itemsEverObtained.add(item.getName().toLowerCase());
-        // System.out.println("[DEBUG Player.obtainItem] Mencatat: " + item.getName()); // Debug
     }
 
     /**
@@ -202,7 +200,7 @@ public class Player implements Serializable{
         if (fishInstance != null) {
             obtainItem(fishInstance, 1);
         } else {
-            System.err.println("Peringatan: Ikan '" + fishName + "' tidak ditemukan di registry saat mencatat tangkapan.");
+            System.err.println("Ikan '" + fishName + "' tidak ditemukan di registry saat mencatat tangkapan.");
         }
     }
 

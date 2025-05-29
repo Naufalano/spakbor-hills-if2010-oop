@@ -155,7 +155,7 @@ public class TownMap implements GameMap {
 
         Tile accessTile = getTileAtPosition(doorX, doorY + 1);
         if (accessTile == null || (accessTile.isOccupied() && !ROAD_ID.equals(accessTile.getObjectOnTile()) )) {
-            System.err.println("Peringatan: Akses ke pintu " + entranceId + " mungkin terhalang.");
+            System.err.println("Akses ke pintu " + entranceId + " mungkin terhalang.");
         }
 
         removeObjectFromTile(doorX, doorY);
@@ -218,6 +218,7 @@ public class TownMap implements GameMap {
                         String objId = (String) obj;
                         if (objId.contains("DOOR")) charToDisplay = DOOR_CHAR;
                         else if (objId.equals(TOWN_EXIT_TO_FARM_ID)) charToDisplay = 'F';
+                        else if (objId.contains("Dasco")) charToDisplay = 'C';
                         else if (objId.equals(BUILDING_WALL_ID) || objId.contains("Eksterior")) charToDisplay = BUILDING_CHAR;
                         else if (objId.equals(STORE_WALL_ID) || objId.contains("Eksterior")) charToDisplay = STORE_CHAR;
                         else if (objId.equals(ROAD_ID)) charToDisplay = ROAD_CHAR;
@@ -232,7 +233,7 @@ public class TownMap implements GameMap {
             }
             System.out.println();
         }
-        System.out.println("P:Pemain, F:Farm, B:Bangunan, S:Toko, D:Pintu, #:Jalan, ,:Tanah, N:NPC, X:Lainnya");
+        System.out.println("P:Pemain, F:Farm, B:Bangunan, S:Toko, C:Casino, D:Pintu, #:Jalan, ,:Tanah, N:NPC, X:Lainnya");
     }
 
     @Override

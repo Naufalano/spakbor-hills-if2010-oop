@@ -123,10 +123,9 @@ public class FarmMap implements GameMap {
         Tile doorTile = getTileAtPosition(this.houseEntranceX, this.houseEntranceY);
         if (doorTile != null) {
             doorTile.setObjectOnTile(HOUSE_ENTRANCE_EXTERIOR_ID);
-            doorTile.setOccupied(false); // Pintu tidak solid, bisa diinteraksikan
+            doorTile.setOccupied(false);
             doorTile.setState(TileState.DEFAULT);
         }
-        System.out.println("Rumah ditempatkan di: (" + houseStartX + "," + houseStartY + ") Pintu: ("+this.houseEntranceX+","+this.houseEntranceY+").");
     }
     
     private void placeIndividualTileObject(int x, int y, String objectId, TileState state, boolean occupied) {
@@ -182,7 +181,6 @@ public class FarmMap implements GameMap {
         }
         this.pondLocation = new PlacedObject(pondX, pondY, POND_WIDTH, POND_HEIGHT, POND_ID);
         placedStructures.add(this.pondLocation);
-        System.out.println("Kolam ditempatkan di: (" + pondX + "," + pondY + ")");
     }
 
     private void placeShippingBin() {
@@ -204,7 +202,6 @@ public class FarmMap implements GameMap {
             placedStructures.add(this.shippingBinLocation);
             return;
         }
-        System.err.println("Tidak dapat menemukan spot untuk Shipping Bin dekat rumah.");
         int binX, binY, attempts = 0;
         do {
             binX = random.nextInt(MAP_WIDTH - SHIPPING_BIN_WIDTH + 1);
@@ -218,7 +215,6 @@ public class FarmMap implements GameMap {
         }
         this.shippingBinLocation = new PlacedObject(binX, binY, SHIPPING_BIN_WIDTH, SHIPPING_BIN_HEIGHT, SHIPPING_BIN_ID);
         placedStructures.add(this.shippingBinLocation);
-        System.out.println("Shipping Bin ditempatkan di: (" + binX + "," + binY + ")");
     }
 
     @Override

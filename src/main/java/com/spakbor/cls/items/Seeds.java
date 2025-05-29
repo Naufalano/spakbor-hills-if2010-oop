@@ -45,9 +45,7 @@ public class Seeds extends Item{
     }
 
     @Override
-    public void use() {
-        // Penanaman dilakukan melalui mekanisme eksternal (tile / farming system)
-    }
+    public void use() {}
 
     public List<SeasonType> getPlantableSeasons() {
         return new ArrayList<>(plantableSeasons);

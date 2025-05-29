@@ -71,7 +71,6 @@ public class Tile implements Serializable{
                 try {
                     this.objectOnTile = gsonInstance.fromJson(jsonObject, NPC.class);
                     if (this.objectOnTile instanceof NPC) {
-                        // System.out.println("  Berhasil dikonversi ke NPC: " + ((NPC)this.objectOnTile).getName());
                     } else {
                         System.err.println("  Konversi ke NPC menghasilkan tipe tak terduga: " + (this.objectOnTile != null ? this.objectOnTile.getClass().getName() : "null") + " untuk data: " + jsonObject.toString());
                         this.objectOnTile = originalObjectBeforeConversion;
@@ -88,7 +87,6 @@ public class Tile implements Serializable{
                     
                     this.objectOnTile = gsonInstance.fromJson(jsonObject, Item.class);
                      if (this.objectOnTile instanceof Item) {
-                        // System.out.println("  Berhasil dikonversi ke Item: " + ((Item)this.objectOnTile).getName() + " Tipe: " + this.objectOnTile.getClass().getSimpleName());
                     } else {
                         System.err.println("  Konversi ke Item menghasilkan tipe tak terduga: " + (this.objectOnTile != null ? this.objectOnTile.getClass().getName() : "null") + " untuk data: " + jsonObject.toString());
                         this.objectOnTile = originalObjectBeforeConversion;

@@ -131,10 +131,7 @@ public class SaveLoadManager {
                     saveData.farm.getTimeController().resetTime(); // Atau metode re-sync yang lebih baik
                 } else {
                      System.err.println("Peringatan: TimeController di Farm adalah null setelah load.");
-                     // saveData.farm.setTimeController(new TimeController()); // Buat baru jika perlu
                 }
-                // Lakukan hal serupa untuk SeasonController, WeatherController jika state mereka tidak tersimpan dengan baik
-                // atau jika mereka memiliki field transient yang perlu diinisialisasi.
             } else {
                 throw new IOException("Data farm tidak ada di save file.");
             }

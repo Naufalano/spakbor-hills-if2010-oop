@@ -55,7 +55,6 @@ public class HarvestingAction implements Action {
         Crop cropToHarvest = CropDataRegistry.getCropByName(cropName); 
 
         if (cropToHarvest == null) {
-            // System.err.println("Could not find crop '" + cropName + "' in registry during harvest. Aborting harvest.");
             player.setEnergy(player.getEnergy() + 5);
             return;
         }

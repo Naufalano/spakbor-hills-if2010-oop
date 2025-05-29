@@ -78,11 +78,6 @@ public class RecipeDataRegistry {
         return new ArrayList<>(ALL_RECIPES);
     }
 
-    /**
-     * Gets a specific recipe by its exact item ID (e.g., "recipe_1").
-     * @param recipeId The ID of the recipe.
-     * @return The Recipe object if found, otherwise null.
-     */
     public static Recipe getRecipeById(String recipeId) {
         for (Recipe recipe : ALL_RECIPES) {
             if (recipe.getRecipeId().equalsIgnoreCase(recipeId)) {
@@ -92,11 +87,6 @@ public class RecipeDataRegistry {
         return null;
     }
 
-    /**
-     * Gets a specific recipe by the name of the item it produces.
-     * @param cookedItemName The name of the cooked food item.
-     * @return The Recipe object if found, otherwise null.
-     */
     public static Recipe getRecipeByCookedItemName(String cookedItemName) {
         for (Recipe recipe : ALL_RECIPES) {
             if (recipe.getCookedItemName().equalsIgnoreCase(cookedItemName)) {

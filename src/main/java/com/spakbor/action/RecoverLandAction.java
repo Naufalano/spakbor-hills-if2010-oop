@@ -71,18 +71,14 @@ public class RecoverLandAction implements Action {
         if (currentTile == null) { // Pengecekan keamanan tambahan
             System.err.println("Tile pemain tidak valid.");
             player.setEnergy(player.getEnergy() + ENERGY_COST_PER_TILE);
-            // farm.advanceGameTime(-TIME_COST_PER_TILE_MINUTES);
             return;
         }
 
         String message = "";
         if (currentTile.getState() == TileState.PLANTED) {
-            // Jika ada tanaman, tanaman akan hilang dan tile menjadi TILLED
             Object plant = currentTile.getObjectOnTile();
             String plantName = "tanaman";
-            if (plant instanceof PlantedCrop) {
-                // plantName = ((PlantedCrop) plant).getCropType().getName();
-            }
+            
             currentTile.setObjectOnTile(null); 
             currentTile.setOccupied(false);
             currentTile.setState(TileState.TILLED);

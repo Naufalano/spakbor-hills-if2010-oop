@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Diasumsikan Misc.java dan Item.java sudah dapat diakses
-
 public class MiscDataRegistry {
     private static final List<Misc> ALL_MISC_ITEMS = new ArrayList<>();
 
