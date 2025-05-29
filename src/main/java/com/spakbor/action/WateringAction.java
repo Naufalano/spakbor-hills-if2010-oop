@@ -1,15 +1,17 @@
-package action;
-import cls.core.Farm;
-import cls.core.PlantedCrop;
-import cls.core.Player;
-import cls.items.Equipment;
-import cls.items.Item;
-import cls.world.FarmMap;
-import cls.world.GameMap;
-import cls.world.Tile;
-import enums.TileState;
+package com.spakbor.action;
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.PlantedCrop;
+import com.spakbor.cls.core.Player;
+import com.spakbor.cls.items.Equipment;
+import com.spakbor.cls.items.Item;
+import com.spakbor.cls.world.FarmMap;
+import com.spakbor.cls.world.GameMap;
+import com.spakbor.cls.world.Tile;
+import com.spakbor.enums.TileState;
 
 public class WateringAction implements Action {
+    private static final long serialVersionUID = 1L;
+
     private Item wateringCan;
 
     public WateringAction() {

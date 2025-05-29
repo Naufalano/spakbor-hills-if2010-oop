@@ -1,6 +1,8 @@
-package cls.items;
+package com.spakbor.cls.items;
 
 public class Food extends Item implements EdibleItem {
+    private static final long serialVersionUID = 1L;
+
     private int energyRestoration;
     private int buyPrice;
     private int sellPrice;

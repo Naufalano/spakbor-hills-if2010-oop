@@ -1,62 +1,62 @@
-package main;
+package com.spakbor.main;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
-import action.Action;
-import action.ChatAction;
-import action.CookingAction;
-import action.EatingAction;
-import action.FishingAction;
-import action.GiftAction;
-import action.HarvestingAction;
-import action.LearnRecipeAction;
-import action.MarryAction;
-import action.MovingAction;
-import action.PlantingAction;
-import action.ProposeAction;
-import action.RecoverLandAction;
-import action.SellingAction;
-import action.SleepingAction;
-import action.TillingAction;
-import action.WateringAction;
-import cls.core.Farm;
-import cls.core.Inventory;
-import cls.core.NPC;
-import cls.core.NPCInteractionStats;
-import cls.core.OngoingCooking;
-import cls.core.Player;
-import cls.core.Recipe;
-import cls.core.ShippingBin;
-import cls.items.EdibleItem;
-import cls.items.Equipment;
-import cls.items.Food;
-import cls.items.Item;
-import cls.items.Misc;
-import cls.items.RecipeItem;
-import cls.items.Seeds;
-import cls.world.CoastalMap;
-import cls.world.FarmMap;
-import cls.world.ForestMap;
-import cls.world.GameMap;
-import cls.world.GenericInteriorMap;
-import cls.world.MountainMap;
-import cls.world.PlayerHouseMap;
-import cls.world.StoreMap;
-import cls.world.Tile;
-import cls.world.TownMap;
-import data.FoodDataRegistry;
-import data.MiscDataRegistry;
-import data.NPCFactory;
-import data.RecipeDataRegistry;
-import data.SeedDataRegistry;
-import enums.Direction;
-import enums.FishRarity;
-import system.Time;
-import utils.InteractionHelper;
+import com.spakbor.action.Action;
+import com.spakbor.action.Blackjack;
+import com.spakbor.action.ChatAction;
+import com.spakbor.action.CookingAction;
+import com.spakbor.action.EatingAction;
+import com.spakbor.action.FishingAction;
+import com.spakbor.action.GiftAction;
+import com.spakbor.action.HarvestingAction;
+import com.spakbor.action.LearnRecipeAction;
+import com.spakbor.action.MarryAction;
+import com.spakbor.action.MovingAction;
+import com.spakbor.action.PlantingAction;
+import com.spakbor.action.ProposeAction;
+import com.spakbor.action.RecoverLandAction;
+import com.spakbor.action.SellingAction;
+import com.spakbor.action.SleepingAction;
+import com.spakbor.action.TillingAction;
+import com.spakbor.action.WateringAction;
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.Inventory;
+import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.NPCInteractionStats;
+import com.spakbor.cls.core.OngoingCooking;
+import com.spakbor.cls.core.Player;
+import com.spakbor.cls.core.Recipe;
+import com.spakbor.cls.core.ShippingBin;
+import com.spakbor.cls.items.EdibleItem;
+import com.spakbor.cls.items.Equipment;
+import com.spakbor.cls.items.Food;
+import com.spakbor.cls.items.Item;
+import com.spakbor.cls.items.Misc;
+import com.spakbor.cls.items.RecipeItem;
+import com.spakbor.cls.items.Seeds;
+import com.spakbor.cls.world.CoastalMap;
+import com.spakbor.cls.world.FarmMap;
+import com.spakbor.cls.world.ForestMap;
+import com.spakbor.cls.world.GameMap;
+import com.spakbor.cls.world.MountainMap;
+import com.spakbor.cls.world.PlayerHouseMap;
+import com.spakbor.cls.world.Tile;
+import com.spakbor.data.FoodDataRegistry;
+import com.spakbor.data.MiscDataRegistry;
+import com.spakbor.data.NPCFactory;
+import com.spakbor.data.RecipeDataRegistry;
+import com.spakbor.data.SaveLoadManager;
+import com.spakbor.data.SeedDataRegistry;
+import com.spakbor.enums.Direction;
+import com.spakbor.enums.FishRarity;
+import com.spakbor.system.Time;
+import com.spakbor.utils.InteractionHelper;
 
 enum GameState {
     MAIN_MENU,
@@ -71,11 +71,11 @@ public class GameDriver {
     private static Scanner scanner = new Scanner(System.in);
     private static Thread gameTimeThread;
     private static volatile boolean gameIsPlaying = true;
-    private static volatile boolean timeDisplayEnabled = false;
     private static GameState currentGameState = GameState.MAIN_MENU;
     private static boolean milestoneReachedGold = false;
     private static boolean milestoneReachedMarriage = false;
     private static final int GOLD_MILESTONE_TARGET = 17209;
+    private static boolean savedSession = false;
 
     public static void main(String[] args) throws IOException, InterruptedException{
         while (currentGameState != GameState.EXITING) {
@@ -103,18 +103,8 @@ public class GameDriver {
     }
 
     private static void mainMenuLoop() throws InterruptedException {
-        clearConsole();
-        System.out.println("\n=========================");
-        System.out.println("    SPAKBOR HILLS RPG");
-        System.out.println("=========================");
-        System.out.println("        MENU UTAMA");
-        System.out.println("-------------------------");
-        System.out.println("1. New Game");
-        System.out.println("2. Help");
-        System.out.println("3. Credits");
-        System.out.println("4. Exit");
-        System.out.println("-------------------------");
-        System.out.print("Pilih opsi (1-4): ");
+        displayMainMenu();
+        System.out.print("Pilih opsi (1-5): ");
 
         String choice = scanner.nextLine().trim();
         switch (choice) {
@@ -128,17 +118,40 @@ public class GameDriver {
                 }
                 break;
             case "2":
-                displayHelpScreen();
+                System.out.print("Masukkan nama file save untuk dimuat (misal: bas.json): ");
+                String loadFilename = scanner.nextLine().trim();
+                if (loadFilename.isEmpty()) {
+                    System.out.println("Nama file tidak boleh kosong. Load dibatalkan.");
+                    break;
+                }
+                try {
+                    SaveLoadManager.GameSaveData loadedData = SaveLoadManager.loadGame(loadFilename);
+                    if (loadedData != null) {
+                        farm = loadedData.farm;
+                        player = farm.getPlayer();
+                        npcFactory = farm.getNpcFactory();
+                        if (farm != null) {
+                            farm.performFullPostLoadObjectConversion(SaveLoadManager.getGsonInstance());
+                        }
+                        currentGameState = GameState.IN_GAME;
+                        startGameTimer();
+                        System.out.println("Game berhasil dimuat dari '" + loadFilename + "'!");
+                    } else {
+                        System.out.println("Tidak ada data game yang ditemukan di file '" + loadFilename + "'.");
+                    }
+                } catch (IOException e) {
+                    System.err.println("Gagal memuat game dari '" + loadFilename + "': " + e.getMessage());
+                }
                 break;
             case "3":
-                displayCredits();
+                displayHelpScreen();
                 break;
             case "4":
+                displayCredits();
+                break;
+            case "5":
                 clearConsole();
                 currentGameState = GameState.EXITING;
-                break;
-            default:
-                System.out.println("Opsi tidak valid. Silakan coba lagi.");
                 break;
         }
     }
@@ -170,12 +183,305 @@ public class GameDriver {
         playerInventory.addItem(new Equipment("Pickaxe"),1);
         
         Misc coal = MiscDataRegistry.getMiscItemByName("Coal");
-        if (coal != null) playerInventory.addItem(coal, 10);
+        if (coal != null) playerInventory.addItem(coal, 5);
 
         Seeds parsnipSeeds = SeedDataRegistry.getSeedByName("Parsnip Seeds");
         if (parsnipSeeds != null) playerInventory.addItem(parsnipSeeds, 15);
 
         System.out.println("\nGame baru dimulai untuk " + player.getName() + " di " + farm.getName() + "!");
+    }
+    
+    private static void inGameLoop() throws IOException {
+        clearConsole();
+        System.out.println("\n--- Selamat datang di " + player.getCurrentLocationName() + "! ---");
+        displayFullStatus();
+
+        boolean inGamePlaying = true;
+        while (inGamePlaying && currentGameState == GameState.IN_GAME) {
+            if (player.getEnergy() == -20) {
+                farm.scheduleAutomaticSleep();
+            }
+            if (farm.isAutomaticSleepScheduled()) {
+                clearConsole();
+                if (player.getCurrentLocationName().equals("Player's House")) {
+                    System.out.println("Ambruk di rumah sendiri cik.");
+                } else {
+                    System.out.println(player.getName() + " tepar brutal. Lupa istirahat jadi digotong pulang.");
+                }
+                System.out.println("\nNguorok karena sudah larut malam...");
+                player.performAction(new SleepingAction(true), farm);
+                farm.clearAutomaticSleepSchedule();
+                if (!player.getCurrentLocationName().equals("Player's House")) {
+                    farm.loadMap("Farm", null);
+                }
+                displayFullStatus();
+            }
+
+            checkAndDisplayMilestones();
+
+            System.out.println("\nAksi Dalam Game (Ketik 'help' untuk perintah, 'mainmenu' untuk kembali):");
+            System.out.print(player.getCurrentLocationName() + " > ");
+
+            if (!scanner.hasNextLine()) {
+                currentGameState = GameState.EXITING;
+                break;
+            }
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.isEmpty()) continue;
+
+            String[] parts = input.split("\\s+");
+            String command = parts[0];
+            Action actionToPerform = null;
+
+            try {
+                if (command.equals("mainmenu")) {
+                    if (!GameDriver.savedSession) {
+                        System.out.println("Sesi belum disimpan. Kembali ke menu? [Y/N]:");
+                        String ans = scanner.nextLine();
+                        if (ans.equalsIgnoreCase("y")) {
+                            clearConsole();
+                            System.out.println("Kembali ke Menu Utama...");
+                            stopGameTimer();
+                            player = null;
+                            farm = null;
+                            currentGameState = GameState.MAIN_MENU;
+                            inGamePlaying = false;
+                            continue;
+                        } else {
+                            break;
+                        }
+                    }
+                    clearConsole();
+                    System.out.println("Kembali ke Menu Utama...");
+                    stopGameTimer();
+                    player = null;
+                    farm = null;
+                    currentGameState = GameState.MAIN_MENU;
+                    inGamePlaying = false;
+                    continue;
+                }
+
+                switch (command) {
+                    case "move":
+                        if (parts.length == 3) {
+                            try {
+                                Direction dir = Direction.valueOf(parts[1].toUpperCase());
+                                int steps = Integer.parseInt(parts[2]);
+                                actionToPerform = new MovingAction(dir, steps);
+                                GameDriver.savedSession = false;
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Arah atau langkah tidak valid. Contoh: move up 1");
+                            }
+                        } else if (parts.length == 2) {
+                            try {
+                                Direction dir = Direction.valueOf(parts[1].toUpperCase());
+                                int steps = 1;
+                                actionToPerform = new MovingAction(dir, steps);
+                                GameDriver.savedSession = false;
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Arah tidak valid. Contoh: move up");
+                            }
+                        } else {
+                            System.out.println("Format: move [up|down|left|right] [langkah]");
+                        }
+                        break;
+
+                    case "interact":
+                        handleInteractCommand();
+                        break;
+
+                    case "till":
+                        actionToPerform = new TillingAction();
+                        GameDriver.savedSession = false;
+                        break;
+
+                    case "plant":
+                        if (parts.length >= 2) {
+                            String seedName = combineParts(parts, 1);
+                            Item seedItem = player.getInventory().getItemByName(seedName);
+                            if (seedItem instanceof Seeds) {
+                                actionToPerform = new PlantingAction((Seeds) seedItem);
+                                GameDriver.savedSession = false;
+                            } else {
+                                System.out.println("'" + seedName + "' bukan benih valid atau tidak ada di inventaris.");
+                            }
+                        } else {
+                            System.out.println("Format: plant [nama_benih]");
+                        }
+                        break;
+
+                    case "recover":
+                        actionToPerform = new RecoverLandAction();
+                        GameDriver.savedSession = false;
+                        break;
+
+                    case "water":
+                        actionToPerform = new WateringAction();
+                        GameDriver.savedSession = false;
+                        break;
+
+                    case "harvest":
+                        actionToPerform = new HarvestingAction();
+                        GameDriver.savedSession = false;
+                        break;
+
+                    case "eat":
+                        if (parts.length >= 2) {
+                            String foodName = combineParts(parts, 1);
+                            Item foodItem = player.getInventory().getItemByName(foodName);
+                            if (foodItem instanceof EdibleItem) {
+                                actionToPerform = new EatingAction(foodItem);
+                                GameDriver.savedSession = false;
+                            } else {
+                                System.out.println("'" + foodName + "' tidak bisa dimakan atau tidak ada di inventaris.");
+                            }
+                        } else {
+                            System.out.println("Format: eat [nama_makanan]");
+                        }
+                        break;
+
+                    case "learn":
+                        if (parts.length >= 2) {
+                            String recipeItemName = combineParts(parts, 1);
+                            Item itemInInventory = player.getInventory().getItemByName(recipeItemName);
+                            if (itemInInventory instanceof RecipeItem) {
+                                actionToPerform = new LearnRecipeAction((RecipeItem) itemInInventory);
+                                GameDriver.savedSession = false;
+                            } else {
+                                System.out.println("'" + recipeItemName + "' bukan item resep yang bisa dipelajari atau tidak ada di inventory.");
+                            }
+                        } else {
+                            System.out.println("Format: learn [nama_item_resep_dari_inventory]");
+                        }
+                        break;
+
+                    case "sleep":
+                        actionToPerform = new SleepingAction();
+                        GameDriver.savedSession = false;
+                        break;
+                        
+                    case "inv":
+                        displayInventory();
+                        break;
+                        
+                    case "equip":
+                        if (parts.length >= 2) {
+                            String itemName = combineParts(parts, 1);
+                            Item itemToEquip = player.getInventory().getItemByName(itemName);
+                            if (itemToEquip != null) {
+                                if (itemToEquip instanceof Equipment) {
+                                    clearConsole();
+                                    player.holdItem(itemToEquip);
+                                    displayFullStatus();
+                                    GameDriver.savedSession = false;
+                                } else {
+                                    System.out.println(itemToEquip.getName() + " bukan peralatan yang bisa dipegang untuk aksi ini.");
+                                }
+                            } else {
+                                System.out.println("Item '" + itemName + "' tidak ditemukan di inventaris.");
+                            }
+                        } else {
+                            System.out.println("Format: equip [nama_peralatan]");
+                        }
+                        break;
+                        
+                    case "unequip":
+                        player.unequipItem();
+                        GameDriver.savedSession = false;
+                        break;
+                        
+                    case "viewbin":
+                        displayShippingBinContents();
+                        break;
+                        
+                    case "info":
+                        displayPlayerStatusDetailed();
+                        break;
+                        
+                    case "stats":
+                        displayPlayerStatistics();
+                        break;
+                        
+                    case "map":
+                        clearConsole();
+                        displayFullStatus();
+                        break;
+                        
+                    case "help":
+                        displayInGameHelp();
+                        break;
+                        
+                    case "save":
+                        farm.getTimeController().pauseGameTime();
+                        if (player != null && farm != null) {
+                            System.out.print("Masukkan nama file save (misal: savegame.json): ");
+                            String filename = scanner.nextLine().trim();
+                            if (filename.isEmpty()) {
+                                System.out.println("Nama file tidak boleh kosong. Simpan dibatalkan.");
+                                break;
+                            }
+                            try {
+                                SaveLoadManager.saveGame(player, farm, filename);
+                                GameDriver.savedSession = true;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            System.out.println("Belum ada game untuk disimpan.");
+                        }
+                        farm.getTimeController().resumeGameTime();
+                        break;
+                        
+                    case "quit":
+                        if (!GameDriver.savedSession) {
+                            System.out.print("Permainan tidak disimpan. Yakin ingin keluar? [Y/N]: ");
+                            String ans = scanner.nextLine();
+                            if (ans.equalsIgnoreCase("y")) {
+                                clearConsole();
+                                currentGameState = GameState.EXITING;
+                                inGamePlaying = false;
+                                break;
+                            } else {
+                                break;
+                            }
+                        }
+                        clearConsole();
+                        currentGameState = GameState.EXITING;
+                        inGamePlaying = false;
+                        break;
+
+                    case "nd":
+                        clearConsole();
+                        farm.nextDay();
+                        displayFullStatus();
+                        break;
+
+                    default:
+                        System.out.println("Perintah tidak dikenal. Ketik 'help' untuk opsi.");
+                        break;
+                }
+
+                if (actionToPerform != null) {
+                    boolean actionSuccess = player.performAction(actionToPerform, farm);
+                    if (actionSuccess) {
+                        GameMap mapBeforeAction = farm.getCurrentMap();
+                        String locBeforeAction = player.getCurrentLocationName();
+
+                        clearConsole();
+                        displayFullStatus();
+
+                        if (!locBeforeAction.equals(player.getCurrentLocationName()) || farm.getCurrentMap() != mapBeforeAction) {
+                            clearConsole();
+                            System.out.println("\n--- Selamat datang di " + player.getCurrentLocationName() + "! ---");
+                            displayFullStatus();
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Terjadi kesalahan tak terduga dalam game loop: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void clearConsole() {
@@ -225,9 +531,6 @@ public class GameDriver {
                         System.out.println("\nSudah jam 2:00 PAGI! Waktunya turu cik. (Tekan enter)");
                         farm.scheduleAutomaticSleep();
                     }
-                    if (timeDisplayEnabled) {
-                        System.out.println("[Jam Real-time (Thread): " + farm.getFormattedTime() + "]");
-                    }
 
                 } catch (InterruptedException e) {
                     // System.out.println("Game Time Thread diinterupsi.");
@@ -260,167 +563,6 @@ public class GameDriver {
         gameTimeThread = null;
     }
 
-    private static void inGameLoop() throws IOException{
-        clearConsole();
-        System.out.println("\n--- Selamat datang di " + player.getCurrentLocationName() + "! ---");
-        displayFullStatus();
-
-        boolean inGamePlaying = true;
-        while (inGamePlaying && currentGameState == GameState.IN_GAME) {
-            if (player.getEnergy() == -20) {
-                clearConsole();
-                System.out.println(player.getName() + " tepar brutal. Lupa istirahat jadi digotong pulang.");
-                farm.scheduleAutomaticSleep();
-            }
-            if (farm.isAutomaticSleepScheduled()) {
-                System.out.println("\nMemproses tidur otomatis karena sudah larut malam...");
-                player.performAction(new SleepingAction(true), farm); 
-                farm.clearAutomaticSleepSchedule();
-                farm.loadMap("Farm", null);
-                displayFullStatus();
-            }
-
-            checkAndDisplayMilestones();
-
-            System.out.println("\nAksi Dalam Game (Ketik 'help' untuk perintah, 'mainmenu' untuk kembali):");
-            System.out.print(player.getCurrentLocationName() + " > ");
-
-            if (!scanner.hasNextLine()) { currentGameState = GameState.EXITING; break; }
-            String input = scanner.nextLine().trim().toLowerCase();
-            if (input.isEmpty()) continue;
-            
-            String[] parts = input.split("\\s+");
-            String command = parts[0];
-            Action actionToPerform = null;
-
-            try {
-                if (command.equals("mainmenu")) {
-                    clearConsole();
-                    System.out.println("Kembali ke Menu Utama...");
-                    stopGameTimer();
-                    player = null; farm = null; // Bersihkan state game saat ini
-                    currentGameState = GameState.MAIN_MENU;
-                    inGamePlaying = false;
-                    continue;
-                }
-
-                switch (command) {
-                    case "move":
-                        if (parts.length == 3) {
-                            try {
-                                Direction dir = Direction.valueOf(parts[1].toUpperCase());
-                                int steps = Integer.parseInt(parts[2]);
-                                actionToPerform = new MovingAction(dir, steps);
-                            } catch (IllegalArgumentException e) { System.out.println("Arah atau langkah tidak valid. Contoh: move up 1"); }
-                        } else if (parts.length == 2) {
-                            try {
-                                Direction dir = Direction.valueOf(parts[1].toUpperCase());
-                                int steps = 1;
-                                actionToPerform = new MovingAction(dir, steps);
-                            } catch (IllegalArgumentException e) { System.out.println("Arah tidak valid. Contoh: move up"); }
-                        } else { System.out.println("Format: move [up|down|left|right] [langkah]"); }
-                        break;
-                    case "interact":
-                        handleInteractCommand();
-                        break;
-                    case "till": actionToPerform = new TillingAction(); break;
-                    case "plant":
-                        if (parts.length >= 2) {
-                            String seedName = combineParts(parts, 1);
-                            Item seedItem = player.getInventory().getItemByName(seedName);
-                            if (seedItem instanceof Seeds) { actionToPerform = new PlantingAction((Seeds) seedItem); }
-                            else { System.out.println("'" + seedName + "' bukan benih valid atau tidak ada di inventaris."); }
-                        } else { System.out.println("Format: plant [nama_benih]");}
-                        break;
-                    case "recover": // Atau "pulihkanlahan"
-                        actionToPerform = new RecoverLandAction();
-                        break;
-                    case "water": actionToPerform = new WateringAction(); break;
-                    case "harvest": actionToPerform = new HarvestingAction(); break;
-                    case "eat":
-                        if (parts.length >= 2) {
-                            String foodName = combineParts(parts, 1);
-                            Item foodItem = player.getInventory().getItemByName(foodName);
-                            if (foodItem instanceof EdibleItem) { actionToPerform = new EatingAction(foodItem); }
-                            else { System.out.println("'" + foodName + "' tidak bisa dimakan atau tidak ada di inventaris."); }
-                        } else { System.out.println("Format: eat [nama_makanan]");}
-                        break;
-                    case "learn":
-                        if (parts.length >= 2) {
-                            String recipeItemName = combineParts(parts, 1);
-                            Item itemInInventory = player.getInventory().getItemByName(recipeItemName);
-                            if (itemInInventory instanceof RecipeItem) {
-                                actionToPerform = new LearnRecipeAction((RecipeItem) itemInInventory);
-                            } else {
-                                System.out.println("'" + recipeItemName + "' bukan item resep yang bisa dipelajari atau tidak ada di inventory.");
-                            }
-                        } else {
-                            System.out.println("Format: learn [nama_item_resep_dari_inventory]");
-                        }
-                        break;
-                    case "sleep": actionToPerform = new SleepingAction(); break;
-                    case "inv": displayInventory(); break;
-                    case "equip":
-                        if (parts.length >= 2) {
-                            String itemName = combineParts(parts, 1);
-                            Item itemToEquip = player.getInventory().getItemByName(itemName);
-                            if (itemToEquip != null) {
-                                if (itemToEquip instanceof Equipment) { 
-                                    player.holdItem(itemToEquip);
-                                } else {
-                                    System.out.println(itemToEquip.getName() + " bukan peralatan yang bisa dipegang untuk aksi ini.");
-                                }
-                            } else {
-                                System.out.println("Item '" + itemName + "' tidak ditemukan di inventaris.");
-                            }
-                        } else {
-                            System.out.println("Format: equip [nama_peralatan]");
-                        }
-                        break;
-                    case "unequip":
-                        player.unequipItem();
-                        break;
-                    case "viewbin":
-                        displayShippingBinContents();
-                        break;
-                    case "info": displayPlayerStatusDetailed(); break;
-                    case "stats": displayPlayerStatistics(); break;
-                    case "map": clearConsole(); if (farm.getCurrentMap() != null) farm.getCurrentMap().display(player); displayFarmStatus(); break;
-                    case "toggletime": timeDisplayEnabled = !timeDisplayEnabled; System.out.println("Tampilan jam periodik " + (timeDisplayEnabled ? "diaktifkan." : "dinonaktifkan.")); break;
-                    case "help": displayInGameHelp(); break;
-                    case "quit": 
-                        System.out.print("Permainan tidak disimpan. Yakin ingin keluar? [Y/N]: ");
-                        String ans = scanner.nextLine();
-                        if (ans.equals("Y") || ans.equals("y")) {
-                            clearConsole();
-                            currentGameState = GameState.EXITING; inGamePlaying = false; break;
-                        }
-                        break;
-                    case "nd": clearConsole(); farm.nextDay(); displayFullStatus(); break;
-                    default: System.out.println("Perintah tidak dikenal. Ketik 'help' untuk opsi."); break;
-                }
-
-                if (actionToPerform != null) {
-                    boolean actionSuccess = player.performAction(actionToPerform, farm);
-                    if (actionSuccess) {
-                        GameMap mapBeforeAction = farm.getCurrentMap();
-                        String locBeforeAction = player.getCurrentLocationName();
-
-                        displayFullStatus();
-
-                        if (!locBeforeAction.equals(player.getCurrentLocationName()) || farm.getCurrentMap() != mapBeforeAction) {
-                            clearConsole();
-                            System.out.println("\n--- Selamat datang di " + player.getCurrentLocationName() + "! ---");
-                            displayFullStatus();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Terjadi kesalahan tak terduga dalam game loop: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
 
     private static void checkAndDisplayMilestones() {
         if (player == null || farm == null) return;
@@ -524,7 +666,7 @@ public class GameDriver {
         System.out.println("======================================================");
     }
 
-    private static void handleInteractCommand() {
+    private static void handleInteractCommand() throws InterruptedException {
         GameMap currentMap = farm.getCurrentMap();
         if (currentMap == null) { System.out.println("Tidak bisa berinteraksi: peta saat ini tidak diketahui."); return; }
 
@@ -539,6 +681,7 @@ public class GameDriver {
             if (PlayerHouseMap.BED_ID.equals(adjacentObjectInHouse)) {
                 System.out.println("Beranjak tidur...");
                 player.performAction(new SleepingAction(), farm);
+                GameDriver.savedSession = false;
                 displayFullStatus(); return;
             } else if (PlayerHouseMap.STOVE_ID.equals(adjacentObjectInHouse)) {
                 System.out.println("Memasak...");
@@ -546,19 +689,7 @@ public class GameDriver {
                 handleStoveInteraction();
                 farm.getTimeController().resumeGameTime();
                 return;
-            } else if (PlayerHouseMap.DOOR_TO_FARM_ID.equals(adjacentObjectInHouse)) {
-                farm.loadMap("Farm", "Player's House");
-                displayFullStatus(); return;
             } 
-        } else if (player.getCurrentLocationName().equals("Store")) {
-            String adjacentObjectId = InteractionHelper.getAdjacentInteractableObject(player, currentMap);
-            if (StoreMap.DOOR_ID.equals(adjacentObjectId)) {
-                farm.loadMap("Town", "Store");
-                displayFullStatus(); return;
-            }
-        } else if (GenericInteriorMap.DOOR_ID.equals(InteractionHelper.getAdjacentInteractableObject(player, currentMap)) && farm.getCurrentMap() instanceof GenericInteriorMap) {
-            farm.loadMap("Town", player.getCurrentLocationName());
-            displayFullStatus(); return;
         }
 
         String adjacentObjectId = InteractionHelper.getAdjacentInteractableObject(player, currentMap);
@@ -602,6 +733,7 @@ public class GameDriver {
 
                     if (quantityToSell > 0 && quantityToSell <= availableQty) {
                         player.performAction(new SellingAction(itemToSell, quantityToSell), farm);
+                        GameDriver.savedSession = false;
                     } else if (quantityToSell > availableQty) {
                         System.out.println("Tidak memiliki " + itemToSell.getName() + " untuk dijual sebanyak itu.");
                     } else {
@@ -622,12 +754,8 @@ public class GameDriver {
                 farm.getTimeController().pauseGameTime();
                 player.performAction(new FishingAction(), farm);
                 farm.getTimeController().resumeGameTime();
-            }
-            else if (TownMap.TOWN_EXIT_TO_FARM_ID.equals(adjacentObjectId) && player.getCurrentLocationName().equals("Town")) {
-                System.out.println("Kembali ke Farm...");
-                farm.loadMap("Farm", "Town"); displayFullStatus();
-            }
-            else {
+                GameDriver.savedSession = false;
+            } else {
                 System.out.println("Anda bersebelahan dengan '" + adjacentObjectId + "', tapi interaksi spesifik belum didefinisikan.");
             }
         } else {
@@ -645,22 +773,23 @@ public class GameDriver {
                 String claimChoice = scanner.nextLine().trim().toLowerCase();
                 if (claimChoice.equals("y")) {
                     Food claimedFood = farm.claimCookedFood(player);
+                    GameDriver.savedSession = false;
                     if (claimedFood != null) {
                         System.out.print("Ingin memasak sesuatu yang baru? (y/n) > ");
                         if (scanner.nextLine().trim().toLowerCase().equals("y")) {
                             handleStartCookingProcess();
                         }
                     } else {
-                        System.out.println("Gagal mengambil makanan (seharusnya tidak terjadi jika sudah siap).");
+                        System.out.println("Gagal mengambil makanan.");
                     }
                 } else {
-                    System.out.println(currentTask.getCookedItemName() + " tetap di kompor.");
+                    System.out.println(currentTask.getCookedItemName() + " tetap di Stove.");
                 }
             } else {
                 System.out.println(currentTask.getCookedItemName() + " sedang dimasak. Periksa lagi nanti.");
             }
         } else {
-            System.out.println("Kompor tidak sedang digunakan.");
+            System.out.println("Stove tidak sedang digunakan.");
             handleStartCookingProcess();
         }
     }
@@ -696,6 +825,7 @@ public class GameDriver {
             if (choice > 0 && choice <= availableRecipes.size()) {
                 Recipe selectedRecipe = availableRecipes.get(choice - 1);
                 player.performAction(new CookingAction(selectedRecipe), farm);
+                GameDriver.savedSession = false;
             } else { System.out.println("Pilihan resep tidak valid."); }
         } catch (NumberFormatException e) { System.out.println("Input tidak valid, masukkan nomor."); }
     }
@@ -714,7 +844,7 @@ public class GameDriver {
         return null;
     }
 
-    private static void handleNPCInteractionSubMenu(NPC npc) {
+    private static void handleNPCInteractionSubMenu(NPC npc) throws InterruptedException{
         System.out.println("\nBerinteraksi dengan " + npc.getName() + " (Suka: " + npc.getAffection() + ", Status: " + npc.getStatus() + ")");
         System.out.println("Pilih aksi:");
         System.out.println("1. Chat");
@@ -724,6 +854,9 @@ public class GameDriver {
         if (npc.getName().equalsIgnoreCase("Emily") && player.getCurrentLocationName().equals("Store")) {
             System.out.println("5. Shop");
         }
+        if (npc.getName().equalsIgnoreCase("Dasco")) {
+            System.out.println("5. Gamble");
+        }
         System.out.println("0. Kembali");
         System.out.print("Pilihan Anda > ");
         String choice = scanner.nextLine().trim();
@@ -732,6 +865,7 @@ public class GameDriver {
         switch (choice) {
             case "1":
                 npcAction = new ChatAction(npc);
+                GameDriver.savedSession = false;
                 break;
             case "2": 
                 System.out.print("Masukkan nama item untuk diberikan: ");
@@ -739,19 +873,25 @@ public class GameDriver {
                 Item itemToGift = player.getInventory().getItemByName(itemName);
                 if (itemToGift != null) {
                     npcAction = new GiftAction(npc, itemToGift, 1);
+                    GameDriver.savedSession = false;
                 } else {
-                    System.out.println("Item '" + itemName + "' tidak ditemukan di inventaris.");
+                    System.out.println("Item '" + itemName + "' tidak ditemukan di inventory.");
                 }
                 break;
             case "3":
                 npcAction = new ProposeAction(npc);
+                GameDriver.savedSession = false;
                 break;
             case "4": 
                 npcAction = new MarryAction(npc);
+                GameDriver.savedSession = false;
                 break;
             case "5":
                 if (npc.getName().equalsIgnoreCase("Emily") && player.getCurrentLocationName().equals("Store")) {
                     handleShopInteraction(npc); 
+                } else if (npc.getName().equalsIgnoreCase("Dasco")) {
+                    clearConsole();
+                    handleGambling();
                 } else {
                     System.out.println("Opsi tidak valid.");
                 }
@@ -795,13 +935,6 @@ public class GameDriver {
                     break;
                 case "3":
                     List<Misc> purchasableMisc = MiscDataRegistry.getPurchasableMiscItems();
-                    // Filter RecipeItem dari Misc
-                    // List<RecipeItem> purchasableRecipeItems = purchasableMisc.stream()
-                    // .filter(item -> item instanceof RecipeItem)
-                    // .map(item -> (RecipeItem) item)
-                    // .filter(rItem -> !player.hasLearnedRecipe(rItem.getRecipeIdToUnlock()))
-                    // .collect(Collectors.toList());
-                    // itemsForSale = purchasableRecipeItems;
                     
                     itemsForSale = purchasableMisc;
                     categoryName = "Lain-lain & Resep";
@@ -827,7 +960,6 @@ public class GameDriver {
                 if (item instanceof Seeds) buyPrice = ((Seeds)item).getBuyPrice();
                 else if (item instanceof Food) buyPrice = ((Food)item).getBuyPrice();
                 else if (item instanceof Misc) buyPrice = ((Misc)item).getBuyPrice();
-                // else if (item instanceof Equipment) buyPrice = ((Equipment)item).getBuyPrice();
 
                 System.out.println((i + 1) + ". " + item.getName() + " - " + buyPrice + "g");
             }
@@ -854,14 +986,9 @@ public class GameDriver {
                         if (player.getGold() >= totalCost) {
                             player.spendGold(totalCost);
                             player.obtainItem(selectedItemToBuy, quantity);
+                            GameDriver.savedSession = false;
                             System.out.println("Beli " + quantity + " " + selectedItemToBuy.getName() + " seharga " + totalCost + "g.");
                             System.out.println("Sisa gold: " + player.getGold() + "g.");
-
-                            if (selectedItemToBuy instanceof RecipeItem) {
-                                System.out.println("Karena beli resep, langsung sikat!");
-                                player.learnRecipe(((RecipeItem) selectedItemToBuy).getRecipeIdToUnlock());
-                            }
-
                         } else {
                             System.out.println("Gold tidak cukup untuk membeli " + quantity + " " + selectedItemToBuy.getName() + ".");
                         }
@@ -877,6 +1004,117 @@ public class GameDriver {
         }
     }
 
+    private static void handleGambling() throws InterruptedException{
+        System.out.println("Wilkommen in Dascos Verbotenem Versteck!");
+        boolean gambling = true;
+        while (gambling) {
+            System.out.println();
+            System.out.println("Pick your nestapa:");
+            System.out.println("1. Selot");
+            System.out.println("2. Jack Hitam");
+            System.out.println("3. Cek Saldo");
+            System.out.println("0. Tobat");
+            System.out.print("Obviously Considered Choice > ");
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    farm.getTimeController().pauseGameTime();
+                    slotMinigame();
+                    farm.getTimeController().resumeGameTime();
+                    GameDriver.savedSession = false;
+                    continue;
+                case "2":
+                    clearConsole();
+                    farm.getTimeController().pauseGameTime();
+                    Blackjack session = new Blackjack(player);
+                    session.playRound();
+                    farm.getTimeController().resumeGameTime();
+                    GameDriver.savedSession = false;
+                    continue;
+                case "3":
+                    clearConsole();
+                    System.out.println("Saldo: " + player.getGold() + "g | Mending tobat sebelum rungkat.");
+                    continue;
+                case "0":
+                    gambling = false;
+                    clearConsole();
+                    System.out.println("Akhirnya sadar dan tobat.");
+                    continue;
+                default:
+                    System.out.println("Pilihan tidak bijak.");
+                    continue;
+            }
+        }
+    }
+
+    private static void slotMinigame() throws InterruptedException {
+        clearConsole();
+        String[] reels = new String[3];
+        int[] ctr = new int[4];
+        Random random = new Random();
+        System.out.println();
+        System.out.println("\nPLACE YOUR BET!");
+        System.out.print("Uang yang ingin dihamburkan: ");
+        String moneyGambled = scanner.nextLine().trim();
+        int money = Integer.parseInt(moneyGambled);
+        if (player.getGold() >= money) {
+            player.spendGold(money);
+        } else {
+            System.out.println("Kalo miskin jangan judi bleug. Kerja sono!");
+            return;
+        }
+        
+        System.out.println("\nThe Result is...");
+        for (int i = 0; i < 3; i++) {
+            if (random.nextDouble() < 0.25) {
+                reels[i] = "hati"; ctr[0]++;
+            } else if (random.nextDouble() < 0.5) {
+                reels[i] = "buah"; ctr[1]++;
+            } else if (random.nextDouble() < 0.75) {
+                reels[i] = "lonceng"; ctr[2]++;
+            } else {
+                reels[i] = "7"; ctr[3]++;
+            }
+            
+            Thread.sleep(1000);
+            System.out.println(reels[i]);
+        }
+
+        System.out.println();
+        if (ctr[1] == 2) {
+            System.out.println("Selamat! Anda win 2x lipat uang anda!");
+            player.setGold(player.getGold() + (money * 2));
+        } else if (ctr[1] == 3) {
+            System.out.println("Selamat! Anda win 3x lipat uang anda!");
+            player.setGold(player.getGold() + (money * 3));
+        } else if (ctr[2] == 3 || ctr[0] == 3) {
+            System.out.println("Beuh win 5x uang anda! Bakal rungkad Dasco mah.");
+            player.setGold(player.getGold() + (money * 5));
+        } else if (ctr[3] == 3) {
+            System.out.println("GACORRR KINGG! Menang 10x lipat Dasco rungkad parah!");
+            player.setGold(player.getGold() + (money * 10));
+        } else {
+            System.out.println("Yah kalah. Kata aing mending tobat sih. Mending kerja halal.");
+        }
+        System.out.println();
+    }
+
+    private static void displayMainMenu() {
+        clearConsole();
+        System.out.println("\n=========================");
+        System.out.println("    SPAKBOR HILLS RPG");
+        System.out.println("=========================");
+        System.out.println("        MENU UTAMA");
+        System.out.println("-------------------------");
+        System.out.println("1. New Game");
+        System.out.println("2. Load Game");
+        System.out.println("3. Help");
+        System.out.println("4. Credits");
+        System.out.println("5. Exit");
+        System.out.println("-------------------------");
+    }
+
     private static void displayHelpScreen() {
         clearConsole();
         System.out.println("\n--- Bantuan Game ---");
@@ -887,9 +1125,10 @@ public class GameDriver {
         System.out.println("- Gunakan perintah seperti 'move', 'till', 'plant', 'water', 'harvest' untuk mengelola kebunmu! Jangan lupa equip item yang sesuai.");
         System.out.println("- 'interact' dengan objek dalam rumahmu untuk tidur dan memasak, Shipping Bin untuk menjual, atau perairan untuk memancing!");
         System.out.println("- Kelola energi dan waktumu. Tidur memulihkan energi!");
-        System.out.println("- Jelajahi area berbeda dengan bergerak ke pojok peta.");
+        System.out.println("- Jelajahi area berbeda dengan bergerak ke pojok atas peta.");
         System.out.println("- Ketik 'help' di dalam game untuk daftar perintah aksi spesifik.");
         System.out.println("-----------------");
+        
     }
 
     private static void displayShippingBinContents() {
@@ -926,7 +1165,7 @@ public class GameDriver {
         Thread.sleep(1000);
         System.out.println("HE DOPE JOKE COW WE!");
         Thread.sleep(1000);
-        System.out.println("Wi kod de kod, not onle prom de kod. Wi ret de kod, not nowing hau to komben.");
+        System.out.println("Wi kod de kod, not onle prom de kod. Wi ret de kod, not nowing hau tu komben.");
         Thread.sleep(1000);
         System.out.println("Send help pls bug everywhere. My glock looks kinda tempting lately.");
         Thread.sleep(750);
@@ -954,7 +1193,7 @@ public class GameDriver {
         System.out.println("  stats                     - Lihat statistik pemain.");
         System.out.println("  map                       - Tampilkan peta dan waktu saat ini.");
         System.out.println("  sleep                     - Lanjut ke hari berikutnya.");
-        System.out.println("  toggletime                - Aktifkan/nonaktifkan tampilan jam periodik di konsol.");
+        System.out.println("  save                      - Simpan sesi saat ini.");
         System.out.println("  mainmenu                  - Kembali ke Menu Utama (sesi game saat ini akan berakhir).");
         System.out.println("  quit                      - Keluar dari aplikasi.");
         System.out.println("------------------------");
@@ -1000,7 +1239,6 @@ public class GameDriver {
         } else {
             System.out.println("Memegang: Tidak ada");
         }
-        if (farm != null && farm.getTimeController() != null) System.out.println("Waktu: " + farm.getFormattedTime()); else System.out.println("Waktu: N/A");
         System.out.println("--------------");
     }
 
@@ -1026,8 +1264,7 @@ public class GameDriver {
         System.out.println("-----------------------------");
     }
 
-    private static void displayFullStatus() { 
-        clearConsole();
+    private static void displayFullStatus() {
         displayPlayerStatus();
         displayFarmStatus();
         if(farm != null && farm.getCurrentMap() != null && player != null) farm.getCurrentMap().display(player);

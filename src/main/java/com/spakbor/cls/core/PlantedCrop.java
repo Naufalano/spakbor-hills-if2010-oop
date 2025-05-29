@@ -1,10 +1,11 @@
-package cls.core;
+package com.spakbor.cls.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import cls.items.*;
-import data.*;
-import enums.*;
+import com.spakbor.cls.items.Crop;
+import com.spakbor.cls.items.Seeds;
+import com.spakbor.data.CropDataRegistry;
+import com.spakbor.enums.SeasonType;
 
 public class PlantedCrop {
     private String resultingCropName;
@@ -35,8 +36,7 @@ public class PlantedCrop {
         if (cropDefinition != null) {
             this.yieldAmountPerHarvest = cropDefinition.getYieldAmount();
         } else {
-            System.err.println("Warning: No crop definition found in registry for: " + this.resultingCropName +
-                               ". Defaulting yield to 1.");
+            System.err.println("Warning: No crop definition found in registry for: " + this.resultingCropName + ". Defaulting yield to 1.");
             this.yieldAmountPerHarvest = 1;
         }
     }

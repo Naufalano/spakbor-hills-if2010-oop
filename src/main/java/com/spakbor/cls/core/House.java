@@ -1,6 +1,10 @@
-package cls.core;
+package com.spakbor.cls.core;
+import java.io.Serializable;
 
-public class House {
+
+public class House implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int posX;
     private int posY;
     private int width;

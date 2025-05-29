@@ -1,8 +1,9 @@
-package action;
-import cls.core.*;
-import cls.items.*;
+package com.spakbor.action;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.items.*;
 
 public class LearnRecipeAction implements Action {
+    private static final long serialVersionUID = 1L;
     private RecipeItem recipeItemToLearn;
 
     public LearnRecipeAction(RecipeItem recipeItem) {

@@ -1,18 +1,21 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.Player;
+import com.spakbor.enums.TileState;
+
 public class MountainMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 25;
     public static final int MAP_HEIGHT = 20;
     public static final String MOUNTAIN_WALL_ID = "MountainWall"; 
     public static final String LAKE_WATER_ID = "LakeWater";
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
 
     public MountainMap() {
         this.tiles = new ArrayList<>();
@@ -85,6 +88,10 @@ public class MountainMap implements GameMap {
     public int getHeight() { return MAP_HEIGHT; }
     @Override
     public String getMapName() { return "Mountain Area"; }
+    @Override
+    public List<Tile> getTiles() {
+        return tiles;
+    }
 
     @Override
     public void placeObjectOnTile(Object obj, int x, int y) {

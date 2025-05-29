@@ -1,19 +1,28 @@
-package cls.items;
-import enums.*;
+package com.spakbor.cls.items;
+
+import com.spakbor.enums.FishRarity;
+import com.spakbor.enums.SeasonType;
+import com.spakbor.enums.WeatherType;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class Fish extends Item implements EdibleItem {
+    private static final long serialVersionUID = 1L;
+
     private FishRarity rarity;
-    private Set<SeasonType> availableSeasons; 
+    private Set<SeasonType> availableSeasons;
     private List<TimeWindow> availableTimeWindows;
-    private Set<WeatherType> availableWeathers; 
+    private Set<WeatherType> availableWeathers;
     private Set<String> locations;
 
-    public static class TimeWindow {
-        int startHour; 
-        int endHour;  
+    public static class TimeWindow implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        int startHour;
+        int endHour;
 
         public TimeWindow(int startHour, int endHour) {
             this.startHour = startHour;
@@ -74,65 +83,48 @@ public class Fish extends Item implements EdibleItem {
     }
 
     public boolean canCatch(SeasonType currentSeason, int currentHour, WeatherType currentWeather, String currentLocation) {
-        if (!locations.contains(currentLocation)) {
-            return false;
-        }
-        if (!availableSeasons.contains(SeasonType.ANY) && !availableSeasons.contains(currentSeason)) {
-            return false;
-        }
-        if (!availableWeathers.contains(WeatherType.ANY) && !availableWeathers.contains(currentWeather)) {
-            return false;
+        if (!locations.contains(currentLocation)) return false;
+        if (!availableSeasons.contains(SeasonType.ANY) && !availableSeasons.contains(currentSeason)) return false;
+        if (!availableWeathers.contains(WeatherType.ANY) && !availableWeathers.contains(currentWeather)) return false;
+
+        if (availableTimeWindows.isEmpty() || 
+            (availableTimeWindows.size() == 1 && availableTimeWindows.get(0).startHour == 0 && availableTimeWindows.get(0).endHour == 0)) {
+            return true;
         }
 
-        boolean timeMatch = false;
-        if (availableTimeWindows.isEmpty() || (availableTimeWindows.size() == 1 && availableTimeWindows.get(0).startHour == 0 && availableTimeWindows.get(0).endHour == 0)) { // Represents "Any" time
-            timeMatch = true;
-        } else {
-            for (TimeWindow window : availableTimeWindows) {
-                if (window.isTimeWithin(currentHour)) {
-                    timeMatch = true;
-                    break;
-                }
+        for (TimeWindow window : availableTimeWindows) {
+            if (window.isTimeWithin(currentHour)) {
+                return true;
             }
         }
-        return timeMatch;
+        return false;
     }
-
 
     @Override
     public int getSellPrice() {
-        double numSeasons = availableSeasons.contains(SeasonType.ANY) ? 4.0 : (double) availableSeasons.size();
-        if (numSeasons == 0) numSeasons = 4; 
-
+        double numSeasons = availableSeasons.contains(SeasonType.ANY) ? 4.0 : availableSeasons.size();
         double totalHours = 0;
-        if (availableTimeWindows.isEmpty() || (availableTimeWindows.size() == 1 && availableTimeWindows.get(0).startHour == 0 && availableTimeWindows.get(0).endHour == 0)) { // "Any" time
+
+        if (availableTimeWindows.isEmpty() ||
+            (availableTimeWindows.size() == 1 && availableTimeWindows.get(0).startHour == 0 && availableTimeWindows.get(0).endHour == 0)) {
             totalHours = 24.0;
         } else {
             for (TimeWindow window : availableTimeWindows) {
                 totalHours += window.getDurationHours();
             }
         }
-        if (totalHours == 0) totalHours = 24;
 
-        double numWeatherVariations = availableWeathers.contains(WeatherType.ANY) ? 2.0 : (double) availableWeathers.size();
-        if (numWeatherVariations == 0) numWeatherVariations = 2;
-
-        double numLocations = (double) locations.size();
-        if (numLocations == 0) numLocations = 1;
+        double numWeatherVariations = availableWeathers.contains(WeatherType.ANY) ? 2.0 : availableWeathers.size();
+        double numLocations = locations.size();
 
         double cValue;
         switch (rarity) {
-            case COMMON:    cValue = 10.0; break;
-            case REGULAR:   cValue = 5.0;  break;
+            case COMMON: cValue = 10.0; break;
+            case REGULAR: cValue = 5.0; break;
             case LEGENDARY: cValue = 25.0; break;
-            default:        cValue = 1.0;  break; 
+            default: cValue = 1.0; break;
         }
 
-        if (numSeasons == 0 || totalHours == 0 || numWeatherVariations == 0 || numLocations == 0) {
-            System.err.println("Warning: Division by zero avoided in sell price calculation for " + getName());
-            return (int) cValue;
-        }
-        
         double price = (4.0 / numSeasons) * (24.0 / totalHours) * (2.0 / numWeatherVariations) * (4.0 / numLocations) * cValue;
         return (int) Math.round(price);
     }
@@ -150,10 +142,10 @@ public class Fish extends Item implements EdibleItem {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Fish)) return false;
         if (!super.equals(o)) return false;
         Fish fish = (Fish) o;
-        return rarity == fish.rarity; 
+        return rarity == fish.rarity;
     }
 
     @Override

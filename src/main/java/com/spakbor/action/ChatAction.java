@@ -1,7 +1,10 @@
-package action;
-import cls.core.*;
+package com.spakbor.action;
+
+import com.spakbor.cls.core.*;
 
 public class ChatAction implements Action {
+    private static final long serialVersionUID = 1L;
+
     private NPC targetNpc;
 
     private static final int ENERGY_COST = 10;
@@ -22,7 +25,6 @@ public class ChatAction implements Action {
             System.out.println("Energi tidak cukup untuk chat (-" + ENERGY_COST + ").");
             return false;
         }
-        
         return true;
     }
 
@@ -31,17 +33,16 @@ public class ChatAction implements Action {
         player.setEnergy(player.getEnergy() - ENERGY_COST);
         farm.advanceGameTime(TIME_COST_MINUTES);
 
-        
         System.out.println("Ngobrol dengan " + targetNpc.getName() + ".");
-        
-        if (targetNpc.getStatus().equals("Spouse")) {
+
+        if ("Spouse".equals(targetNpc.getStatus())) {
             System.out.println(targetNpc.getName() + ": \"Halo, Sayang! Cerita hari ini...\"");
-        } else if (targetNpc.getStatus().equals("Fiance")) {
+        } else if ("Fiance".equals(targetNpc.getStatus())) {
             System.out.println(targetNpc.getName() + ": \"Halo, " + player.getName() + "! Cerita hari ini...\"");
         } else {
             System.out.println(targetNpc.getName() + ": \"Halo, " + player.getName() + "! Senang bertemu denganmu.\"");
         }
-        
+
         targetNpc.setAffection(targetNpc.getAffection() + AFFECTION_GAIN);
         player.recordChatWithNPC(targetNpc.getName());
 

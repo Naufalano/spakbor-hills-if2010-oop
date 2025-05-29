@@ -1,11 +1,14 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.Player;
+import com.spakbor.enums.TileState;
+
 public class GenericInteriorMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 12;
     public static final int MAP_HEIGHT = 10;
     public static final String WALL_ID = "HouseWall";
@@ -13,7 +16,7 @@ public class GenericInteriorMap implements GameMap {
     public static final String DOOR_ID = "HouseDoor_ExitToTown"; 
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
     private String mapDisplayName; 
     private NPC resident; 
 
@@ -103,6 +106,10 @@ public class GenericInteriorMap implements GameMap {
     public int getHeight() { return MAP_HEIGHT; }
     @Override
     public String getMapName() { return this.mapDisplayName; }
+    @Override
+    public List<Tile> getTiles() {
+        return tiles;
+    }
 
     @Override
     public void placeObjectOnTile(Object obj, int x, int y) {

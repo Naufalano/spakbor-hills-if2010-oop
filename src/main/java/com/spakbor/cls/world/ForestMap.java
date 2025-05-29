@@ -1,11 +1,14 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.Player;
+import com.spakbor.enums.TileState;
+
 public class ForestMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 25; 
     public static final int MAP_HEIGHT = 18; 
     public static final String TREE_ID = "Tree"; 
@@ -15,7 +18,7 @@ public class ForestMap implements GameMap {
     public static final String RIVER_CHAR = "W";
 
     private List<Tile> tiles;
-    private Random random = new Random();
+    private transient Random random = new Random();
 
     public ForestMap() {
         this.tiles = new ArrayList<>();
@@ -95,9 +98,7 @@ public class ForestMap implements GameMap {
                 }
                 else if (tile.isOccupied()) {
                     Object objOnTile = tile.getObjectOnTile();
-                    if (y == MAP_HEIGHT / 2 && x == MAP_WIDTH - 1) {
-                        charToDisplay = 'D';
-                    } else if (RIVER_WATER_ID.equals(objOnTile)) {
+                    if (RIVER_WATER_ID.equals(objOnTile)) {
                         charToDisplay = RIVER_CHAR.charAt(0);
                     } else if (objOnTile instanceof NPC) { 
                         charToDisplay = 'N';
@@ -106,15 +107,16 @@ public class ForestMap implements GameMap {
                     } else {
                         charToDisplay = 'X';
                     }
-                }
-                else {
+                } else if (y == MAP_HEIGHT / 2 && x == MAP_WIDTH - 1) {
+                        charToDisplay = 'D';
+                } else {
                     charToDisplay = FOREST_GROUND_CHAR.charAt(0);
                 }
                 System.out.print(" " + charToDisplay + " ");
             }
             System.out.println();
         }
-        System.out.println("P: Player, T: Tree, W: River Water, -: Ground, N: NPC, X: Obstacle");
+        System.out.println("P: Player, T: Tree, W: River Water, .: Ground, X: Obstacle");
     }
 
     @Override
@@ -130,6 +132,11 @@ public class ForestMap implements GameMap {
     @Override
     public String getMapName() {
         return "Forest Zone"; 
+    }
+
+    @Override
+    public List<Tile> getTiles() {
+        return tiles;
     }
 
     @Override

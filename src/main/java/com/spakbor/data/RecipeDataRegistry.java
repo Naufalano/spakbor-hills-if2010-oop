@@ -1,6 +1,6 @@
-package data;
-import cls.core.*;
-import cls.items.*;
+package com.spakbor.data;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.items.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

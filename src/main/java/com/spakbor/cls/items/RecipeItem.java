@@ -1,6 +1,8 @@
-package cls.items;
+package com.spakbor.cls.items;
 
 public class RecipeItem extends Misc {
+    private static final long serialVersionUID = 1L;
+
     private String recipeIdToUnlock;
 
     /**

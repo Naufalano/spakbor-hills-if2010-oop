@@ -1,5 +1,5 @@
-package data;
-import cls.items.*;
+package com.spakbor.data;
+import com.spakbor.cls.items.*;
 import java.util.ArrayList;
 import java.util.List;
 

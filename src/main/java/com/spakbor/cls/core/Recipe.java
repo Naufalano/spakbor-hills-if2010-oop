@@ -1,6 +1,7 @@
-package cls.core;
-import cls.items.*;
+package com.spakbor.cls.core;
 import java.util.Map;
+
+import com.spakbor.cls.items.Food;
 
 public class Recipe {
     private String recipeId; 
@@ -9,15 +10,13 @@ public class Recipe {
     private Food resultItem;
     private String unlockConditionDescription;
 
-    public static final String ANY_FISH_INGREDIENT = "Any Fish";
-    // public static final String ANY_CROP_INGREDIENT = "Any Crop"; 
+    public static final String ANY_FISH_INGREDIENT = "Any Fish"; 
 
     public static final int COOKING_DURATION_MINUTES = 60;
     public static final int COOKING_INITIATION_ENERGY = 10;
 
 
-    public Recipe(String recipeId, String cookedItemName, Map<String, Integer> ingredients,
-                  Food resultItem, String unlockConditionDescription) {
+    public Recipe(String recipeId, String cookedItemName, Map<String, Integer> ingredients, Food resultItem, String unlockConditionDescription) {
         this.recipeId = recipeId;
         this.cookedItemName = cookedItemName;
         this.ingredients = ingredients;

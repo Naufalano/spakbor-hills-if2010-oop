@@ -1,5 +1,7 @@
-package action;
-import cls.core.*;
+package com.spakbor.action;
+
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.Player;
 
 public interface Action {
     /**
@@ -7,7 +9,7 @@ public interface Action {
      * @param player The player performing the action.
      * @param farm The farm context, providing access to map, time, etc.
      */
-    public void execute(Player player, Farm farm);
+    void execute(Player player, Farm farm);
 
     /**
      * Validates if the action can be performed.
@@ -15,5 +17,5 @@ public interface Action {
      * @param farm The farm context.
      * @return true if the action is valid, false otherwise.
      */
-    public boolean validate(Player player, Farm farm);
+    boolean validate(Player player, Farm farm);
 }

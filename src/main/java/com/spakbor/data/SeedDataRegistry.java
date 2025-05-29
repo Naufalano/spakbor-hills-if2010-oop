@@ -1,6 +1,6 @@
-package data;
-import cls.items.*;
-import enums.*;
+package com.spakbor.data;
+import com.spakbor.cls.items.*;
+import com.spakbor.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,10 @@
-package cls.world;
-import cls.core.*;
+package com.spakbor.cls.world;
+import java.io.Serializable;
+import java.util.List;
 
-public interface GameMap {
+import com.spakbor.cls.core.Player;
+
+public interface GameMap extends Serializable{
     /**
      * Retrieves the tile at the given coordinates.
      * @param x The x-coordinate.
@@ -65,4 +68,6 @@ public interface GameMap {
      * @return An array [x, y] representing the entry coordinates on this map.
      */
     int[] getEntryPoint(String comingFromMapName);
+
+    List<Tile> getTiles();
 }

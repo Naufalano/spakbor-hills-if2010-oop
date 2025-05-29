@@ -1,7 +1,7 @@
-package utils;
-import cls.core.*;
-import cls.world.*;
-import data.*;
+package com.spakbor.utils;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.world.*;
+import com.spakbor.data.*;
 
 public class InteractionHelper {
 

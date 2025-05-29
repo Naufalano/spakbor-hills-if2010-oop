@@ -1,10 +1,12 @@
-package cls.world;
-import cls.core.*;
-import enums.*;
+package com.spakbor.cls.world;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.spakbor.cls.core.Player;
+import com.spakbor.enums.TileState;
+
 public class PlayerHouseMap implements GameMap {
+    private static final long serialVersionUID = 1L;
     public static final int MAP_WIDTH = 10;
     public static final int MAP_HEIGHT = 8;
 
@@ -135,5 +137,9 @@ public class PlayerHouseMap implements GameMap {
     @Override
     public int[] getEntryPoint(String comingFromMapName) {
         return new int[]{MAP_WIDTH / 2, MAP_HEIGHT - 2};
+    }
+
+    public List<Tile> getTiles() {
+        return tiles;
     }
 }

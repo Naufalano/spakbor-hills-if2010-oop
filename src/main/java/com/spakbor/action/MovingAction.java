@@ -1,17 +1,19 @@
-package action;
-import cls.core.Farm;
-import cls.core.PlantedCrop;
-import cls.core.Player;
-import cls.world.FarmMap;
-import cls.world.GameMap;
-import cls.world.GenericInteriorMap;
-import cls.world.PlayerHouseMap;
-import cls.world.StoreMap;
-import cls.world.Tile;
-import cls.world.TownMap;
-import enums.Direction;
+package com.spakbor.action;
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.PlantedCrop;
+import com.spakbor.cls.core.Player;
+import com.spakbor.cls.world.FarmMap;
+import com.spakbor.cls.world.GameMap;
+import com.spakbor.cls.world.GenericInteriorMap;
+import com.spakbor.cls.world.PlayerHouseMap;
+import com.spakbor.cls.world.StoreMap;
+import com.spakbor.cls.world.Tile;
+import com.spakbor.cls.world.TownMap;
+import com.spakbor.enums.Direction;
 
 public class MovingAction implements Action {
+    private static final long serialVersionUID = 1L;
+
     private Direction direction;
     private int steps;
 
@@ -76,7 +78,7 @@ public class MovingAction implements Action {
                 isTransitionViaEdge = true;
             }
             else if (activeMapForStep instanceof FarmMap) {
-                if (attemptedNextX == ((FarmMap) activeMapForStep).gethouseDoorX() && attemptedNextY == ((FarmMap) activeMapForStep).gethouseDoorY() - 1) {
+                if (attemptedNextX == ((FarmMap) activeMapForStep).getHouseEntranceX() && attemptedNextY == ((FarmMap) activeMapForStep).getHouseEntranceY()) {
                     destinationMapName = "Player's House";
                 }
             }
@@ -104,15 +106,22 @@ public class MovingAction implements Action {
                 String transitionType = isTransitionViaEdge ? "tepi peta" : "pintu";
                 System.out.println(player.getName() + " mencapai " + transitionType + " di " + activeMapForStep.getMapName() + " menuju " + destinationMapName + "...");
                 
-                if (player.getEnergy() + 20 >= VISIT_ENERGY_COST && !destinationMapName.equals("Player's House")) {
+                if (player.getEnergy() + 20 >= VISIT_ENERGY_COST && !destinationMapName.equals("Player's House") && !player.getCurrentLocationName().equals("Player's House") && !(activeMapForStep instanceof GenericInteriorMap)) {
                     player.setEnergy(player.getEnergy() - VISIT_ENERGY_COST);
                     farm.advanceGameTime(VISIT_TIME_COST_MINUTES);
                     String oldLocationName = player.getCurrentLocationName();
                     farm.loadMap(destinationMapName, oldLocationName); 
                     return; 
+                } else if (activeMapForStep instanceof GenericInteriorMap) {
+                    String oldLocationName = player.getCurrentLocationName();
+                    farm.loadMap(destinationMapName, oldLocationName); 
+                    return;
                 } else if (destinationMapName.equals("Player's House")) {
                     String oldLocationName = player.getCurrentLocationName();
                     farm.loadMap(destinationMapName, oldLocationName); 
+                    return;
+                } else if (player.getCurrentLocationName().equals("Player's House")) {
+                    farm.loadMap("Farm", player.getCurrentLocationName());
                     return;
                 } else {
                     System.out.println("...tapi tidak punya cukup energi (" + VISIT_ENERGY_COST + ") untuk melanjutkan.");

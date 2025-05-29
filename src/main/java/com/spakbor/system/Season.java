@@ -1,5 +1,5 @@
-package system;
-import enums.*;
+package com.spakbor.system;
+import com.spakbor.enums.*;
 
 public class Season {
     private SeasonType currentSeason;

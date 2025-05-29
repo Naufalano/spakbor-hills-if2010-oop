@@ -1,10 +1,12 @@
-package action;
-import cls.core.*;
-import cls.items.*;
-import cls.world.*;
-import enums.*;
+package com.spakbor.action;
+import com.spakbor.cls.core.*;
+import com.spakbor.cls.items.*;
+import com.spakbor.cls.world.*;
+import com.spakbor.enums.*;
 
 public class RecoverLandAction implements Action {
+    private static final long serialVersionUID = 1L;
+
     private Item pickaxe; 
     
     private static final int ENERGY_COST_PER_TILE = 5;

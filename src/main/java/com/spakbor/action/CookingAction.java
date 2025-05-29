@@ -1,18 +1,19 @@
-package action;
+package com.spakbor.action;
 import java.util.Map;
 
-import cls.core.Farm;
-import cls.core.OngoingCooking;
-import cls.core.Player;
-import cls.core.Recipe;
-import cls.items.Food;
-import cls.items.Item;
-import cls.world.FarmMap;
-import cls.world.GameMap;
-import cls.world.PlayerHouseMap;
-import utils.InteractionHelper;
+import com.spakbor.cls.core.Farm;
+import com.spakbor.cls.core.OngoingCooking;
+import com.spakbor.cls.core.Player;
+import com.spakbor.cls.core.Recipe;
+import com.spakbor.cls.items.Food;
+import com.spakbor.cls.items.Item;
+import com.spakbor.cls.world.FarmMap;
+import com.spakbor.cls.world.GameMap;
+import com.spakbor.cls.world.PlayerHouseMap;
+import com.spakbor.utils.InteractionHelper;
 
 public class CookingAction implements  Action {
+    private static final long serialVersionUID = 1L;
     private Recipe recipeToCook;
     private static final String FIREWOOD_NAME = "Firewood";
     private static final String COAL_NAME = "Coal";
