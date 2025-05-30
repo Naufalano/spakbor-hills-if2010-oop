@@ -188,6 +188,8 @@ public class GameDriver {
         Seeds parsnipSeeds = SeedDataRegistry.getSeedByName("Parsnip Seeds");
         if (parsnipSeeds != null) playerInventory.addItem(parsnipSeeds, 15);
 
+        milestoneReachedGold = false; milestoneReachedMarriage = false;
+
         System.out.println("\nGame baru dimulai untuk " + player.getName() + " di " + farm.getName() + "!");
     }
     
@@ -461,12 +463,13 @@ public class GameDriver {
                         break;
 
                     case "aezakmi":
+                        player.obtainItem(MiscDataRegistry.getMiscItemByName("Proposal Ring"), 1);
                         NPC spouse = npcFactory.getNPC("Emily");
                         spouse.setAffection(150);
                         spouse.propose();
                         spouse.setEngaged(1);
                         player.setEnergy(100);
-                        spouse.marry();
+                        actionToPerform = new MarryAction(spouse);
                         break;
 
                     default:
