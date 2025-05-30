@@ -284,7 +284,6 @@ public class Farm implements Serializable {
             System.err.println("Farm.performFullPostLoadObjectConversion: worldMaps atau gsonInstance null. Melewatkan.");
             return;
         }
-        System.out.println("Farm: Memulai konversi objek pasca-pemuatan untuk semua tile...");
         int convertedCount = 0;
         for (GameMap map : worldMaps.values()) {
             if (map != null && map.getTiles() != null) {

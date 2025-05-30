@@ -13,6 +13,7 @@ public class TownMap implements GameMap {
     public static final int MAP_HEIGHT = 25;
 
     public static final String BUILDING_WALL_ID = "BuildingWall";
+    public static final String CASINO_WALL_ID = "CasinoWall";
     public static final String STORE_WALL_ID = "StoreWall";
     public static final String ROAD_ID = "Road";
 
@@ -108,7 +109,9 @@ public class TownMap implements GameMap {
         for (int y = startY; y < startY + height; y++) {
             for (int x = startX; x < startX + width; x++) {
                 Tile currentTile = getTileAtPosition(x,y);
-                if (currentTile != null && (currentTile.getObjectOnTile() == null || !ROAD_ID.equals(currentTile.getObjectOnTile()))) {
+                if (currentTile != null && (currentTile.getObjectOnTile() == null || !ROAD_ID.equals(currentTile.getObjectOnTile())) && destinationMapKey.equals("Dasco's Lair")) {
+                    placeObjectOnTile(CASINO_WALL_ID, x, y, true);
+                } else if (currentTile != null && (currentTile.getObjectOnTile() == null || !ROAD_ID.equals(currentTile.getObjectOnTile()))) {
                     placeObjectOnTile(BUILDING_WALL_ID, x, y, true);
                 } else if (currentTile != null && ROAD_ID.equals(currentTile.getObjectOnTile())) {
                     placeObjectOnTile(BUILDING_WALL_ID, x, y, true);
@@ -121,7 +124,7 @@ public class TownMap implements GameMap {
 
         Tile accessTile = getTileAtPosition(doorX, doorY + 1);
         if (accessTile == null || (accessTile.isOccupied() && !ROAD_ID.equals(accessTile.getObjectOnTile()) )) {
-            System.err.println("Peringatan: Akses ke pintu " + entranceId + " mungkin terhalang.");
+            System.err.println("Akses ke pintu " + entranceId + " mungkin terhalang.");
         }
 
         removeObjectFromTile(doorX, doorY);
@@ -218,7 +221,7 @@ public class TownMap implements GameMap {
                         String objId = (String) obj;
                         if (objId.contains("DOOR")) charToDisplay = DOOR_CHAR;
                         else if (objId.equals(TOWN_EXIT_TO_FARM_ID)) charToDisplay = 'F';
-                        else if (objId.contains("Dasco")) charToDisplay = 'C';
+                        else if (objId.equals(CASINO_WALL_ID)) charToDisplay = 'C';
                         else if (objId.equals(BUILDING_WALL_ID) || objId.contains("Eksterior")) charToDisplay = BUILDING_CHAR;
                         else if (objId.equals(STORE_WALL_ID) || objId.contains("Eksterior")) charToDisplay = STORE_CHAR;
                         else if (objId.equals(ROAD_ID)) charToDisplay = ROAD_CHAR;

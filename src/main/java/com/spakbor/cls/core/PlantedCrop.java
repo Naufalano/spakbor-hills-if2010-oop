@@ -1,4 +1,5 @@
 package com.spakbor.cls.core;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,8 @@ import com.spakbor.cls.items.Seeds;
 import com.spakbor.data.CropDataRegistry;
 import com.spakbor.enums.SeasonType;
 
-public class PlantedCrop {
+public class PlantedCrop implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String resultingCropName;
     private Crop cropPrototype;
     private int yieldAmountPerHarvest;

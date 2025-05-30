@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.spakbor.cls.core.NPC;
+import com.spakbor.cls.core.PlantedCrop;
 import com.spakbor.cls.items.Item;
 import com.spakbor.enums.TileState;
 
@@ -94,6 +95,20 @@ public class Tile implements Serializable{
                     return true;
                 } catch (JsonSyntaxException e) {
                     System.err.println("  JsonSyntaxException saat konversi Item untuk " + jsonObject.toString() + ": " + e.getMessage());
+                    this.objectOnTile = originalObjectBeforeConversion;
+                }
+            }
+
+            if (jsonObject.has("resultingCropName") && jsonObject.has("growthDays") && jsonObject.has("daysToMature")) {
+                try {
+
+                    this.objectOnTile = gsonInstance.fromJson(jsonObject, PlantedCrop.class);
+                    if (this.objectOnTile instanceof PlantedCrop) {
+                    } else {
+                        System.err.println("  Konversi ke PlantedCrop menghasilkan menghasilkan tipe tak terduga: " + (this.objectOnTile != null ? this.objectOnTile.getClass().getName() : "null") + " untuk data: " + jsonObject.toString());
+                    }
+                } catch (Exception e) {
+                    System.err.println("  JsonSyntaxException saat konversi PlantedCrop untuk " + jsonObject.toString() + ": " + e.getMessage());
                     this.objectOnTile = originalObjectBeforeConversion;
                 }
             }
