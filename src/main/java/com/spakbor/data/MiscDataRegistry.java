@@ -1,8 +1,10 @@
 package com.spakbor.data;
-import com.spakbor.cls.items.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.spakbor.cls.items.Misc;
+import com.spakbor.cls.items.RecipeItem;
 
 public class MiscDataRegistry {
     private static final List<Misc> ALL_MISC_ITEMS = new ArrayList<>();
@@ -11,6 +13,8 @@ public class MiscDataRegistry {
         ALL_MISC_ITEMS.add(new Misc("Firewood", 20, 5));
 
         ALL_MISC_ITEMS.add(new Misc("Coal", 20, 15));
+
+        ALL_MISC_ITEMS.add(new Misc("Egg", 30, 10));
 
         ALL_MISC_ITEMS.add(new Misc("Proposal Ring", 10000, 2000));
 
