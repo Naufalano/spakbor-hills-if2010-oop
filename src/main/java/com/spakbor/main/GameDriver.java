@@ -1164,9 +1164,9 @@ public class GameDriver {
     private static void displayCredits() throws InterruptedException {
         clearConsole();
         System.out.println("\n--- Credits ---");
-        System.out.println("Game Concept & Design: Team 11 of Section 01");
+        System.out.println("Codes and Classes: Team 11 of Section 01");
         Thread.sleep(1000);
-        System.out.println("Lead Programmer: Dr. Asep Spakbor");
+        System.out.println("Lead Customer: Asep Spakbor");
         Thread.sleep(1000);
         System.out.println("Susah banget integrasi apalagi GUI T_T");
         Thread.sleep(1000);
@@ -1174,7 +1174,23 @@ public class GameDriver {
         Thread.sleep(1000);
         System.out.println("Wi kod de kod, not onle prom de kod. Wi ret de kod, not nowing hau tu komben.");
         Thread.sleep(1000);
+        System.out.println("PRESS IT THEN GO PLAY!");
+        Thread.sleep(1000);
         System.out.println("Send help pls bug everywhere. My glock looks kinda tempting lately.");
+        Thread.sleep(1000);
+        System.out.print("Eat.");
+        Thread.sleep(500);
+        System.out.print(" Code.");
+        Thread.sleep(500);
+        System.out.print(" Crash");
+        Thread.sleep(500);
+        System.out.print(" Debug.");
+        Thread.sleep(500);
+        System.out.print(" Prompt.");
+        Thread.sleep(500);
+        System.out.println(" Repeat.");
+        Thread.sleep(1000);
+        System.out.println("You thought you can sleep? Haha now get back to your IDE.");
         Thread.sleep(750);
         System.out.println("Terima kasih telah bermain!");
         System.out.println("---------------");
