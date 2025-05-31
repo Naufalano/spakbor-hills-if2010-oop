@@ -1182,7 +1182,7 @@ public class GameDriver {
         Thread.sleep(500);
         System.out.print(" Code.");
         Thread.sleep(500);
-        System.out.print(" Crash");
+        System.out.print(" Crash.");
         Thread.sleep(500);
         System.out.print(" Debug.");
         Thread.sleep(500);
